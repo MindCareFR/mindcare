@@ -1,0 +1,52 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-center">
+            <span class="inline-flex items-center text-gray-700">
+                Profitez de votre espace personnel MindCare
+                <svg class="h-8 w-8 text-red-500 inline-block" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z"/>
+                    <path d="M12 20l-7 -7a4 4 0 0 1 6.5 -6a.9 .9 0 0 0 1 0a4 4 0 0 1 6.5 6l-7 7" />
+                </svg>
+            </span>
+        </h2>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+            <div class="form-group">
+                <label for="email" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
+                <input id="email" type="email" formControlName="email"
+                    class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Entrez votre adresse e-mail" />
+            </div>
+            <div class="form-group">
+                <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                <input id="password" type="password" formControlName="password"
+                    class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Entrez votre mot de passe" />
+            </div>
+            <div class="form-group">
+                <label for="remember" class="flex items-center">
+                    <input id="remember" type="checkbox" formControlName="remember"
+                        class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
+                    <span class="ml-2 text-sm text-gray-700">Se souvenir de moi</span>
+                </label>
+            </div>
+            <div *ngIf="loginForm.errors?.['invalidCredentials']" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">Les informations d'identification fournies sont invalides.</span>
+            </div>              
+            <div class="form-group">
+                <button type="submit"
+                    class="w-full px-4 py-2 text-white bg-indigo-600 cursor-pointer rounded-md hover:bg-indigo-700"
+                    [disabled]="loginForm.invalid">Me connecter</button>
+            </div>
+
+            <hr class="my-4" />
+            <div class="flex items-center justify-between">
+                <a routerLink="/auth/forgot-password"
+                    class="block text-right text-indigo-600 cursor-pointer hover:text-indigo-800">Mot de passe oublié
+                    ?</a>
+                <a routerLink="/auth/register"
+                    class="block text-right text-indigo-600 cursor-pointer hover:text-indigo-800">Je n'ai pas de
+                    compte</a>
+            </div>
+        </form>
+    </div>
+</div>
