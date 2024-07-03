@@ -1,6 +1,43 @@
 <app-navbar></app-navbar>
-<div class="flex items-center justify-center min-h-screen bg-[#FFFBF5]">
-    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold text-center">{{title}}</h2>
+
+<div class="relative" id="home">
+    <div aria-hidden="true" class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+        <div class="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700"></div>
+        <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
+    </div>
+    <div class="max-w-7xl h-full flex flex-col justify-center mx-auto px-6 md:px-12 xl:px-6 md:h-screen">
+        <div class="relative pt-36 mx-auto">
+            <div class="lg:w-2/3 text-center mx-auto my-auto">
+                <h1 class="text-gray-900 dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl">
+                    Ensemble, rendons<br />le suivi psychologique<br /><span class="text-primary">plus
+                        accessible</span>.
+                </h1>
+                <div class="mt-8">
+                    <p class="mt-8 text-gray-700 dark:text-gray-300">
+                        Nous sommes une équipe d'étudiants en informatique passionnés, déterminés à créer une plateforme
+                        innovante dédiée à la santé mentale. Notre projet de fin d'année, <span
+                            class="text-primary font-bold">MindCare</span>, vise à offrir des outils et des ressources qui
+                        soutiennent efficacement tant les utilisateurs que les professionnels de santé mentale.
+                    </p>
+                    <p class="mt-4 text-gray-700 dark:text-gray-300">
+                        Avec <span class="text-primary font-bold">MindCare</span>, nous voulons révolutionner le suivi
+                        psychologique en le rendant plus accessible, plus efficace et parfaitement adapté à chaque individu.
+                    </p>
+                </div>
+                <div class="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
+                    <a href="#keep-in-touch"
+                        class="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
+                        <span class="relative text-base font-semibold text-white">Rester informé</span>
+                    </a>
+                    <a href="#solution"
+                        class="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
+                        <span class="relative text-base font-semibold text-primary dark:text-white">En savoir
+                            plus</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<app-footer></app-footer>

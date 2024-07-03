@@ -1,54 +1,28 @@
 <app-navbar></app-navbar>
-<div class="flex items-center justify-center min-h-screen bg-[#FFFBF5]">
-    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold text-center">
-            <span class="inline-flex items-center text-gray-700">
-                Profitez de votre espace personnel MindCare
-                <svg class="h-8 w-8 text-red-500 inline-block" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z"/>
-                    <path d="M12 20l-7 -7a4 4 0 0 1 6.5 -6a.9 .9 0 0 0 1 0a4 4 0 0 1 6.5 6l-7 7" />
-                </svg>
-            </span>
-        </h2>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
-            <div class="form-group">
-                <label for="email" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
-                <input id="email" type="email" formControlName="email"
-                    class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#206E95] focus:border-[#206E95]"
-                    placeholder="Entrez votre adresse e-mail" />
-            </div>
-            <div class="form-group">
-                <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
-                <input id="password" type="password" formControlName="password"
-                    class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#206E95] focus:border-[#206E95]"
-                    placeholder="Entrez votre mot de passe" />
-            </div>
-            <div class="form-group">
-                <label for="remember" class="flex items-center">
-                    <input id="remember" type="checkbox" formControlName="remember"
-                        class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-[#206E95]" />
-                    <span class="ml-2 text-sm text-gray-700">Se souvenir de moi</span>
-                </label>
-            </div>
-            <div *ngIf="loginForm.errors?.['invalidCredentials']" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                <span class="block sm:inline">Les informations d'identification fournies sont invalides.</span>
-            </div>
-            <div class="form-group">
-                <button type="submit"
-                    class="w-full px-4 py-2 text-white bg-[#206E95] cursor-pointer rounded-md hover:bg-white hover:text-[#206E95] hover:border-[#206E95] border border-[#206E95] focus:outline-none focus:ring-[#206E95] focus:border-[#206E95]"
-                    [disabled]="loginForm.invalid">Me connecter</button>
-            </div>
 
-            <hr class="my-4" />
-            <div class="flex items-center justify-between">
-                <a routerLink="/auth/forgot-password"
-                    class="block text-right text-[#206E95] cursor-pointer hover:text-[#206E95]">Mot de passe oublié
-                    ?</a>
-                <a routerLink="/auth/register"
-                    class="block text-right text-[#206E95] cursor-pointer hover:text-[#206E95]">
-                    Je n'ai pas de compte
-                </a>
+<div class="relative" id="home">
+    <div aria-hidden="true" class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+        <div class="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700"></div>
+        <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
+    </div>
+    <div class="max-w-7xl h-full flex flex-col justify-center mx-auto px-6 md:px-12 xl:px-6 md:h-screen">
+        <div class="relative pt-36 mx-auto">
+            <div class="lg:w-2/3 mx-auto my-auto space-y-20 mb-28">
+                <h1 class="text-gray-900 text-center dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl">
+                    <div class="flex items-center justify-center -space-x-2 mb-6">
+                        <img src="/headbrain_b.webp" alt="logo" class="block h-20 w-20 dark:hidden" />
+                        <img src="/headbrain_w.webp" alt="logo" class="hidden h-20 w-20 dark:block" />
+                    </div>
+                    Profitez de votre espace personnel <span class="text-primary">MindCare</span>
+                </h1>
+                <div class="w-full max-w-md mx-auto p-[2.5px] bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700 rounded-lg">
+                    <div class="w-full p-8 space-y-6 bg-white dark:bg-gray-800 rounded-lg">
+                        <app-form [config]="loginConfig" (formSubmit)="onFormSubmit($event)"></app-form>
+                    </div>
+                </div>                
             </div>
-        </form>
+        </div>
     </div>
 </div>
+
+<app-footer></app-footer>

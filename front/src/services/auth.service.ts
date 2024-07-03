@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import type { IUserData } from '../app/interfaces/userData';
+import type { IUserData } from '../app/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
