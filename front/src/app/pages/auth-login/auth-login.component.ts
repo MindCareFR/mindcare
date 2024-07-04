@@ -18,14 +18,14 @@ import type { IFormConfig, IFormFields } from '@interfaces/form.interface';
     FooterComponent,
     FormComponent,
     ReactiveFormsModule
-  ]
+  ],
 })
 export class AuthLoginComponent implements OnInit {
   loginConfig: IFormConfig = {
     fields: [
       { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },
-      { name: 'password', type: 'password', label: 'Mot de passe', placeholder: 'Entrez votre mot de passe', validators: [Validators.required, Validators.minLength(6), Validators.compose([Validators.pattern(/[a-z]/), Validators.pattern(/[A-Z]/), Validators.pattern(/[0-9]/)]), Validators.maxLength(20)] },
-      { name: 'remember', type: 'checkbox', label: 'Se souvenir de moi' }
+      { name: 'password', type: 'password', label: 'Mot de passe', placeholder: 'Entrez votre mot de passe', validators: [Validators.required, Validators.minLength(6), Validators.compose([Validators.pattern(/[a-z]/), Validators.pattern(/[A-Z]/), Validators.pattern(/[0-9]/)])] },
+      { name: 'remember', type: 'checkbox', label: 'Se souvenir de moi', validators: [] },
     ],
     submitLabel: 'Me connecter'
   };
