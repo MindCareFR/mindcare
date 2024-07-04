@@ -27,7 +27,8 @@ export class AuthLoginComponent implements OnInit {
       { name: 'password', type: 'password', label: 'Mot de passe', placeholder: 'Entrez votre mot de passe', validators: [Validators.required, Validators.minLength(6), Validators.compose([Validators.pattern(/[a-z]/), Validators.pattern(/[A-Z]/), Validators.pattern(/[0-9]/)])] },
       { name: 'remember', type: 'checkbox', label: 'Se souvenir de moi', validators: [] },
     ],
-    submitLabel: 'Me connecter'
+    submitLabel: 'Me connecter',
+    styles: 'space-y-4'
   };
 
   constructor(

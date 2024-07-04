@@ -11,4 +11,5 @@ export interface IFormFields {
 export interface IFormConfig {
   fields: IFormFields[];
   submitLabel: string;
+  styles: string;
 }
