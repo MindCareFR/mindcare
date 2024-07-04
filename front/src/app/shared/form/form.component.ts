@@ -14,6 +14,7 @@ export class FormComponent implements OnInit {
   @Output() formSubmit: EventEmitter<FormGroup<any>> = new EventEmitter<FormGroup>();
 
   form: FormGroup = this.fb.group({});
+  formSubmitted: boolean = false;
 
   constructor(private fb: FormBuilder) { }
 
@@ -25,10 +26,20 @@ export class FormComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.formSubmitted = true;
     if (this.form.valid) {
       this.formSubmit.emit(this.form);
     } else {
-      this.form.markAllAsTouched();
+      let controls = this.form.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          controls[name].markAsTouched();
+        }
+      }
     }
+  }
+
+  hasFormErrors(): boolean {
+    return this.config.fields.some(field => this.form.get(field.name)?.invalid);
   }
 }
