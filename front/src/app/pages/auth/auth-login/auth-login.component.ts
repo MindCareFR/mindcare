@@ -6,7 +6,7 @@ import { AuthService } from '@services/auth.service';
 import { NavbarComponent } from '@components/navbar/navbar.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
-import type { IFormConfig, IFormFields } from '@interfaces/form.interface';
+import type { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
 
 @Component({
   selector: 'app-auth-login',
@@ -23,12 +23,20 @@ import type { IFormConfig, IFormFields } from '@interfaces/form.interface';
 export class AuthLoginComponent implements OnInit {
   loginConfig: IFormConfig = {
     fields: [
-      { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },
-      { name: 'password', type: 'password', label: 'Mot de passe', placeholder: 'Entrez votre mot de passe', validators: [Validators.required, Validators.minLength(6), Validators.compose([Validators.pattern(/[a-z]/), Validators.pattern(/[A-Z]/), Validators.pattern(/[0-9]/)])] },
-      { name: 'remember', type: 'checkbox', label: 'Se souvenir de moi', validators: [] },
+      {
+        group: 'credentials',
+        label: 'Informations de connexion',
+        description: 'Veuillez saisir vos informations de connexion pour accéder à votre compte.',
+        fields: [
+          { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },
+          { name: 'password', type: 'password', label: 'Mot de passe', placeholder: 'Entrez votre mot de passe', validators: [Validators.required] },
+          { name: 'password', type: 'password', label: 'Mot de passe', placeholder: 'Entrez votre mot de passe', validators: [Validators.required] },
+          { name: 'remember', type: 'checkbox', label: 'Se souvenir de moi' }
+        ]
+      }
     ],
     submitLabel: 'Me connecter',
-    styles: 'space-y-4'
+    styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2'
   };
 
   constructor(
@@ -41,10 +49,13 @@ export class AuthLoginComponent implements OnInit {
     const email: string | null = localStorage.getItem('email');
     const password: string | null = localStorage.getItem('password');
     if (email && password) {
-      this.loginConfig.fields.forEach((field: IFormFields): void => {
-        if (field.name === 'email') field.defaultValue = email;
-        if (field.name === 'password') field.defaultValue = password;
-        if (field.name === 'remember') field.defaultValue = true;
+      const groups: IFormGroup[] = this.loginConfig.fields;
+
+      groups.forEach((group: IFormGroup): void => {
+        group.fields.forEach((field: IFormField): void => {
+          if (field.name === 'email' && email) field.defaultValue = email;
+          if (field.name === 'password' && password) field.defaultValue = password;
+        });
       });
     }
   }

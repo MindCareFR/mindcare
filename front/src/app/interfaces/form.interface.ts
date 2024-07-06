@@ -1,4 +1,4 @@
-export interface IFormFields {
+export interface IFormField {
   name: string;
   type: string;
   label: string;
@@ -8,8 +8,15 @@ export interface IFormFields {
   defaultValue?: any;
 }
 
+export interface IFormGroup {
+  group: string;
+  label?: string;
+  description?: string;
+  fields: IFormField[];
+}
+
 export interface IFormConfig {
-  fields: IFormFields[];
+  fields: IFormGroup[];
   submitLabel: string;
   styles: string;
 }
