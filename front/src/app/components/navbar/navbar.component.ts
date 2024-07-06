@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -9,8 +9,14 @@ import { Component, OnInit } from '@angular/core';
 export class NavbarComponent implements OnInit {
   appName: string = 'MindCare';
 
+  @ViewChild('navToggle', { static: true }) navToggle!: ElementRef<HTMLInputElement>;
+  @ViewChild('navBackground', { static: true }) navBackground!: ElementRef<HTMLDivElement>;
+
+  constructor(private renderer: Renderer2, private el: ElementRef) {}
+
   ngOnInit(): void {
     this.toggleThemeMode();
+    this.setupOutsideClickListener();
   }
 
   toggleThemeMode(): void {
@@ -60,5 +66,13 @@ export class NavbarComponent implements OnInit {
         document.documentElement.classList.add("dark");
         document.documentElement.classList.remove("light");
     }
+  }
+
+  setupOutsideClickListener(): void {
+    this.renderer.listen(this.navBackground.nativeElement, 'click', (event: Event) => {
+      if (this.navToggle.nativeElement.checked) {
+        this.navToggle.nativeElement.checked = false;
+      }
+    });
   }
 }

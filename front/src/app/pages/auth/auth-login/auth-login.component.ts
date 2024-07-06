@@ -30,7 +30,6 @@ export class AuthLoginComponent implements OnInit {
         fields: [
           { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },
           { name: 'password', type: 'password', label: 'Mot de passe', placeholder: 'Entrez votre mot de passe', validators: [Validators.required] },
-          { name: 'password', type: 'password', label: 'Mot de passe', placeholder: 'Entrez votre mot de passe', validators: [Validators.required] },
           { name: 'remember', type: 'checkbox', label: 'Se souvenir de moi' }
         ]
       }
