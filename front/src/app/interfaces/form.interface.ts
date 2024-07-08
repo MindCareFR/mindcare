@@ -18,5 +18,6 @@ export interface IFormGroup {
 export interface IFormConfig {
   fields: IFormGroup[];
   submitLabel: string;
+  cancelLabel?: string;
   styles: string;
 }

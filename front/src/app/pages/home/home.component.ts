@@ -9,8 +9,8 @@ import { FooterComponent } from '@components/footer/footer.component';
     NavbarComponent,
     FooterComponent
   ],
-  templateUrl: './app-home.component.html',
+  templateUrl: './home.component.html',
 })
 export class AppHomeComponent {
-  title = 'Hello World from Angular!';
+  title: string = 'Hello World from Angular!';
 }

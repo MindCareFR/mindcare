@@ -1,0 +1,53 @@
+<div class="relative w-full h-screen">
+  <div *ngIf="!callEnded">
+    <app-video [srcObject]="remoteStream" [controls]="false" class="absolute inset-0"></app-video>
+    <div [ngClass]="{'right-4': !isSideDashboardOpen, 'right-[92.5%]': isSideDashboardOpen }"
+      class="absolute top-4 transition-all duration-300 ease-in-out p-2">
+      <button (click)="toggleSideDashboard()"
+        class="w-12 h-12 bg-gray-600 text-white rounded-full hover:bg-gray-700 flex items-center justify-center">
+        <fa-icon [icon]="isSideDashboardOpen ? faTimes : faBars"></fa-icon>
+      </button>
+    </div>
+    <div
+      class="absolute bottom-4 left-4 w-64 h-48 border-2 border-gray-200 border-opacity-50 rounded-lg overflow-hidden">
+      <app-video [srcObject]="localStream" [controls]="false" class="w-full h-full"></app-video>
+    </div>
+    <div
+      class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-4 bg-gray-200 bg-opacity-50 p-2 rounded-full">
+      <button (click)="hangUp()"
+        class="w-12 h-12 bg-red-600 text-white rounded-full hover:bg-red-700 flex items-center justify-center">
+        <fa-icon [icon]="faPhone"></fa-icon>
+      </button>
+      <button (click)="toggleMute()"
+        class="w-12 h-12 bg-gray-600 text-white rounded-full hover:bg-gray-700 flex items-center justify-center">
+        <fa-icon [icon]="muted ? faMicrophoneSlash : faMicrophone"></fa-icon>
+      </button>
+    </div>
+    <div [ngClass]="{'translate-x-0': isSideDashboardOpen, 'translate-x-full': !isSideDashboardOpen }"
+      class="absolute top-0 right-0 w-[92%] h-full bg-white bg-opacity-90 text-black p-4 transition-transform duration-300 ease-in-out dark:bg-gray-800 dark:bg-opacity-90 dark:text-gray-300">
+      <p>Side Dashboard</p>
+    </div>
+  </div>
+  <div *ngIf="callEnded" class="absolute inset-0 flex items-center justify-center">
+    <div aria-hidden="true" class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+      <div class="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700"></div>
+      <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
+    </div>
+    <p class="text-2xl text-gray-700 dark:text-gray-300">La visioconférence est terminée.</p>
+  </div>
+  <div *ngIf="showSatisfactionForm" class="absolute inset-0 flex items-center justify-center">
+    <div aria-hidden="true" class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+      <div class="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700"></div>
+      <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
+    </div>
+    <div
+      class="z-10 flex justify-center items-center w-full max-w-xl my-auto mx-auto p-[2.5px] bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700 rounded-lg lg:mx-0">
+      <div class="w-full p-5 space-y-6 bg-white dark:bg-gray-800 rounded-md md:p-8">
+        <p class="text-gray-700 mb-10 dark:text-gray-300">
+          Votre avis est important pour nous. Veuillez remplir le formulaire de satisfaction ci-dessous.
+        </p>
+        <app-form [config]="satisfactionFormConfig['satisfaction']" (formSubmit)="onFormSubmit($event)"></app-form>
+      </div>
+    </div>
+  </div>
+</div>

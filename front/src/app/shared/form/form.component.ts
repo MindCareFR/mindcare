@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import type { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
@@ -14,15 +14,35 @@ export class FormComponent implements OnInit {
   @Input() config: IFormConfig = { fields: [], submitLabel: '', styles: '' };
   @Output() formSubmit: EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
 
-  form: FormGroup;
+  form: FormGroup = this.fb.group({});
   formSubmitted: boolean = false;
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({});
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.initForm();
+    this.createForm();
+  }
+
+  createForm(): void {
+    const group: any = {};
+    let control: FormControl<string | null> = this.fb.control(null);
+    this.config.fields.forEach(fieldGroup => {
+      fieldGroup.fields.forEach(field => {
+        if (field.options) {
+          control = this.fb.control(
+            field.type === 'select' ? field.options[0] : '', 
+            field.validators || []
+          );
+        } else {
+          control = this.fb.control('', field.validators || []);
+        }
+        if (!group[fieldGroup.group]) {
+          group[fieldGroup.group] = this.fb.group({});
+        }
+        group[fieldGroup.group].addControl(field.name, control);
+      });
+    });
+    this.form = this.fb.group(group);
   }
 
   ngOnChanges(): void {
@@ -54,6 +74,10 @@ export class FormComponent implements OnInit {
         }
       }
     }
+  }
+
+  onCancel(): void {
+    this.form.reset();
   }
 
   hasFormErrors(): boolean {

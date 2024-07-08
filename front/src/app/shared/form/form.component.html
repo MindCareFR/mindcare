@@ -1,18 +1,20 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="gap-y-6">
   <ng-container *ngFor="let group of config.fields; let i = index">
-    <h2 [ngClass]="{'text-xl font-semibold mb-4 dark:text-gray-300': true, 'mt-10': i !== 0}">
+    <h2 [ngClass]="{'text-xl font-semibold mb-4 text-gray-700 dark:text-gray-300': true, 'mt-10': i !== 0}">
       {{ group.label }}
     </h2>
     <p *ngIf="group.description" class="mb-4 text-primary dark:text-primary-light">{{ group.description }}</p>
     <div [formGroupName]="group.group" class="flex flex-col gap-4 md:grid md:grid-cols-2">
       <ng-container *ngFor="let field of group.fields">
-        <div class="form-group" [ngClass]="{'col-span-2 md:col-span-2': field.type === 'checkbox'}">
-          <label *ngIf="field.type !== 'checkbox'" [for]="field.name" class="block text-md font-medium text-gray-700 dark:text-gray-300">
+        <div class="form-group"
+          [ngClass]="{'col-span-2 md:col-span-2': field.type === 'checkbox' || group.fields.length === 2}">
+          <label *ngIf="field.type !== 'checkbox'" [for]="field.name"
+            class="block text-md font-medium text-gray-700 dark:text-gray-300">
             {{ field.label }}
           </label>
           <input *ngIf="field.type !== 'select' && field.type !== 'textarea' && field.type !== 'checkbox'"
             [id]="field.name" [type]="field.type" [formControlName]="field.name" [placeholder]="field.placeholder"
-            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-400 focus:border-purple-400" />
+            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-purple-400 focus:border-purple-400" />
 
           <div *ngIf="field.type === 'checkbox'" class="flex items-center">
             <input [id]="field.name" [type]="field.type" [formControlName]="field.name" />
@@ -23,28 +25,41 @@
 
           <textarea *ngIf="field.type === 'textarea'" [id]="field.name" [formControlName]="field.name"
             [placeholder]="field.placeholder"
-            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-400 focus:border-purple-400"></textarea>
+            class="w-full px-3 py-2 mt-1 border border-gray-300 resize-none rounded-md shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-purple-400 focus:border-purple-400"
+            rows="4">
+          </textarea>
           <select *ngIf="field.type === 'select'" [id]="field.name" [formControlName]="field.name"
-            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-400 focus:border-purple-400">
+            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-purple-400 focus:border-purple-400">
             <option *ngFor="let option of field.options" [value]="option">{{ option }}</option>
           </select>
-          <div *ngIf="form.get(group.group)?.get(field.name)?.invalid && form.get(group.group)?.get(field.name)?.touched" class="text-red-600 mt-1 text-md">
-            <div *ngIf="field.type === 'checkbox' && form.get(group.group)?.get(field.name)?.errors?.['requiredTrue']">Ce champ est obligatoire.</div>
-            <div *ngIf="field.type !== 'checkbox' && form.get(group.group)?.get(field.name)?.errors?.['required']">Ce champ est obligatoire</div>
-            <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['email']">Veuillez entrer une adresse e-mail valide.</div>
-            <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['minlength']">Ce champ doit contenir au moins {{
+          <div
+            *ngIf="form.get(group.group)?.get(field.name)?.invalid && form.get(group.group)?.get(field.name)?.touched"
+            class="text-red-600 mt-1 text-md">
+            <div *ngIf="field.type === 'checkbox' && form.get(group.group)?.get(field.name)?.errors?.['requiredTrue']">
+              Ce champ est obligatoire.</div>
+            <div *ngIf="field.type !== 'checkbox' && form.get(group.group)?.get(field.name)?.errors?.['required']">Ce
+              champ est obligatoire</div>
+            <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['email']">Veuillez entrer une adresse e-mail
+              valide.</div>
+            <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['minlength']">Ce champ doit contenir au moins
+              {{
               form.get(group.group)?.get(field.name)?.errors?.['minlength']?.requiredLength }} caractères.</div>
             <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['maxlength']">Ce champ doit contenir au plus {{
               form.get(group.group)?.get(field.name)?.errors?.['maxlength']?.requiredLength }} caractères.</div>
             <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['pattern']">
-              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['pattern'].requiredPattern === '/[a-z]/'">Le mot de passe doit
+              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['pattern'].requiredPattern === '/[a-z]/'">Le
+                mot de passe doit
                 contenir au moins une lettre minuscule.</div>
-              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['pattern'].requiredPattern === '/[A-Z]/'">Le mot de passe doit
+              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['pattern'].requiredPattern === '/[A-Z]/'">Le
+                mot de passe doit
                 contenir au moins une lettre majuscule.</div>
-              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['pattern'].requiredPattern === '/[0-9]/'">Le mot de passe doit
+              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['pattern'].requiredPattern === '/[0-9]/'">Le
+                mot de passe doit
                 contenir au moins un chiffre.</div>
             </div>
-            <div *ngIf="field.name === 'confirm_password' && form.get(group.group)?.get('confirm_password')?.errors?.['mismatch']">Les mots de passe ne correspondent pas.</div>
+            <div
+              *ngIf="field.name === 'confirm_password' && form.get(group.group)?.get('confirm_password')?.errors?.['mismatch']">
+              Les mots de passe ne correspondent pas.</div>
           </div>
         </div>
       </ng-container>
@@ -53,7 +68,11 @@
   <div *ngIf="formSubmitted && hasFormErrors()" class="text-red-600 mt-5 text-md">
     Veuillez remplir tous les champs correctement.
   </div>
-  <div class="form-group">
+  <div class="form-group md:flex md:items-center md:justify-center md:gap-4">
+    <button *ngIf="config.cancelLabel" type="button" (click)="onCancel()"
+      class="w-full px-6 py-2 mt-4 rounded-full bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition duration-300 dark:bg-gray-700 dark:text-gray-300 md:mt-10">
+      {{ config.cancelLabel }}
+    </button>
     <button type="submit"
       class="w-full px-6 py-2 mt-10 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition duration-300 disabled:bg-gray-400 dark:disabled:bg-gray-700">
       {{ config.submitLabel }}
