@@ -1,15 +1,15 @@
 <div class="relative w-full h-screen">
   <div *ngIf="!callEnded">
     <app-video [srcObject]="remoteStream" [controls]="false" class="absolute inset-0"></app-video>
-    <div [ngClass]="{'right-4': !isSideDashboardOpen, 'md:right-[92.5%]': isSideDashboardOpen }"
-      class="absolute top-4 z-20 p-2 transition-none md:transition-all md:duration-300 md:ease-in-out md:right-4">
-      <button (click)="toggleSideDashboard()"
-        class="w-12 h-12 z-10 bg-gray-600 text-white rounded-full hover:bg-gray-700 flex items-center justify-center">
-        <fa-icon [icon]="isSideDashboardOpen ? faTimes : faBars"></fa-icon>
-      </button>
+    <div [ngClass]="{'right-4': true, 'md:right-[92.5%]': isSideDashboardOpen, 'md:right-4': !isSideDashboardOpen }"
+      class="absolute top-4 z-20 p-2 transition-none md:transition-all md:duration-300 md:ease-in-out">
+    <button (click)="toggleSideDashboard()"
+            class="w-12 h-12 z-10 bg-gray-600 text-white rounded-full hover:bg-gray-700 flex items-center justify-center">
+      <fa-icon [icon]="isSideDashboardOpen ? faTimes : faBars"></fa-icon>
+    </button>
     </div>
     <div
-      class="absolute top-4 left-2 w-64 h-48 border-2 border-gray-200 border-opacity-50 rounded-lg overflow-hidden md:bottom-4 md:left-4">
+      class="absolute top-4 left-2 w-auto h-48 border-2 border-gray-200 border-opacity-50 rounded-lg overflow-hidden md:w-64 md:top-auto md:bottom-4 md:left-4">
       <app-video [srcObject]="localStream" [controls]="false" class="w-full h-full"></app-video>
     </div>
     <div
@@ -33,16 +33,16 @@
       <div class="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700"></div>
       <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
     </div>
-    <p class="text-2xl text-gray-700 dark:text-gray-300">La visioconférence est terminée.</p>
+    <p class="text-xl text-gray-700 dark:text-gray-300 md:text-2xl">La visioconférence est terminée.</p>
   </div>
-  <div *ngIf="showSatisfactionForm" class="absolute inset-0 flex items-center justify-center">
+  <div *ngIf="showSatisfactionForm" class="absolute inset-0 px-3 flex items-center justify-center">
     <div aria-hidden="true" class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
       <div class="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700"></div>
       <div class="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600"></div>
     </div>
     <div
       class="z-10 flex justify-center items-center w-full max-w-xl my-auto mx-auto p-[2.5px] bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700 rounded-lg lg:mx-0">
-      <div class="w-full p-5 space-y-6 bg-white dark:bg-gray-800 rounded-md md:p-8">
+      <div class="p-4 space-y-6 bg-white dark:bg-gray-800 rounded-md md:p-8">
         <p class="text-gray-700 mb-10 dark:text-gray-300">
           Votre avis est important pour nous. Veuillez remplir le formulaire de satisfaction ci-dessous.
         </p>
