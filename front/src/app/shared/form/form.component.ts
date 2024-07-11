@@ -11,10 +11,11 @@ import type { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.inter
   imports: [CommonModule, ReactiveFormsModule]
 })
 export class FormComponent implements OnInit {
-  @Input() config: IFormConfig = { fields: [], submitLabel: '', styles: '' };
+  @Input() config: IFormConfig = { fields: [], submitLabel: '', styles: '', isIndexed: false };
   @Output() formSubmit: EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
 
   form: FormGroup = this.fb.group({});
+  currentGroupIndex: number = 0;
   formSubmitted: boolean = false;
 
   constructor(private fb: FormBuilder) {}
@@ -78,6 +79,29 @@ export class FormComponent implements OnInit {
 
   onCancel(): void {
     this.form.reset();
+  }
+
+  onNext(): void {
+    const currentGroup = this.config.fields[this.currentGroupIndex].group;
+    if (this.form.get(currentGroup)?.invalid) {
+      this.form.get(currentGroup)?.markAllAsTouched();
+    } else {
+      this.currentGroupIndex++;
+    }
+  }
+
+  onPrevious(): void {
+    if (this.currentGroupIndex > 0) {
+      this.currentGroupIndex--;
+    }
+  }
+
+  isLastGroup(): boolean {
+    return this.currentGroupIndex === this.config.fields.length - 1;
+  }
+
+  isFirstGroup(): boolean {
+    return this.currentGroupIndex === 0;
   }
 
   hasFormErrors(): boolean {

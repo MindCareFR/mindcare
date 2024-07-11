@@ -60,7 +60,8 @@ export class ConferenceComponent implements OnInit {
       ],
       submitLabel: 'Envoyer',
       cancelLabel: 'Annuler',
-      styles: 'grid grid-cols-1 gap-4'
+      styles: 'grid grid-cols-1 gap-4',
+      isIndexed: false
     }
   };
 

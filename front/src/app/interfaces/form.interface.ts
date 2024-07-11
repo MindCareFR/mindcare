@@ -20,4 +20,5 @@ export interface IFormConfig {
   submitLabel: string;
   cancelLabel?: string;
   styles: string;
+  isIndexed: boolean;
 }

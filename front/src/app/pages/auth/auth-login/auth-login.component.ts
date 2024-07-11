@@ -35,7 +35,8 @@ export class AuthLoginComponent implements OnInit {
       }
     ],
     submitLabel: 'Me connecter',
-    styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2'
+    styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
+    isIndexed: false
   };
 
   constructor(

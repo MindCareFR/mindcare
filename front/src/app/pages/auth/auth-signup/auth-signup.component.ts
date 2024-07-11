@@ -57,7 +57,8 @@ export class AuthSignupComponent implements OnInit {
         }
       ],
       submitLabel: 'Je m\'inscris',
-      styles: 'grid grid-cols-1 gap-4 md:grid-cols-2'
+      styles: 'grid grid-cols-1 gap-4 md:grid-cols-2',
+      isIndexed: true
     },
     'professional': {
       fields: [
@@ -106,11 +107,13 @@ export class AuthSignupComponent implements OnInit {
         }
       ],
       submitLabel: 'Je m\'inscris',
-      styles: 'grid grid-cols-1 gap-4 md:grid-cols-2'
+      styles: 'grid grid-cols-1 gap-4 md:grid-cols-2',
+      isIndexed: true
     }
   };
 
   selectedAccount: 'user' | 'professional' = 'user';
+  currentGroupIndex: number = 0;
 
   constructor(
     private authService: AuthService,
@@ -124,6 +127,7 @@ export class AuthSignupComponent implements OnInit {
 
   onSelectAccount(account: 'user' | 'professional'): void {
     this.selectedAccount = account;
+    this.currentGroupIndex = 0;
     this.setInitialFormValues();
   }
 
@@ -140,8 +144,28 @@ export class AuthSignupComponent implements OnInit {
     });
   }
 
+  onNext(): void {
+    if (this.currentGroupIndex < this.signupConfig[this.selectedAccount].fields.length - 1) {
+      this.currentGroupIndex++;
+    }
+  }
+
+  onPrevious(): void {
+    if (this.currentGroupIndex > 0) {
+      this.currentGroupIndex--;
+    }
+  }
+
+  isLastGroup(): boolean {
+    return this.currentGroupIndex === this.signupConfig[this.selectedAccount].fields.length - 1;
+  }
+
+  isFirstGroup(): boolean {
+    return this.currentGroupIndex === 0;
+  }
+
   onFormSubmit(form: FormGroup): void {
-    console.log('Form submitted');
+    console.log('Form submitted', form.value);
     if (form.valid) {
       const { email, password, remember } = form.value.identity;
       if (remember) {
