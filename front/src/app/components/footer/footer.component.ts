@@ -8,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
   appName: string = 'MindCare';
+  currentYear: number = new Date().getFullYear();
 }
