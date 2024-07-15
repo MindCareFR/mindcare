@@ -13,12 +13,13 @@ export interface IFormGroup {
   label?: string;
   description?: string;
   fields: IFormField[];
+  styles?: string;
 }
 
 export interface IFormConfig {
   fields: IFormGroup[];
   submitLabel: string;
   cancelLabel?: string;
-  styles: string;
+  styles?: string;
   isIndexed: boolean;
 }
