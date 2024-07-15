@@ -1,11 +1,11 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="gap-y-6">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="gap-y-4">
   <ng-container *ngFor="let group of config.fields; let i = index">
     <ng-container *ngIf="!config.isIndexed || i === currentGroupIndex">
       <h2 [ngClass]="{'text-xl font-semibold mb-4 text-gray-700 dark:text-gray-300': true, 'mt-10': i !== 0 && !config.isIndexed}">
         {{ group.label }}
       </h2>
       <p *ngIf="group.description" class="mb-4 text-primary dark:text-primary-light">{{ group.description }}</p>
-      <div [formGroupName]="group.group" class="flex flex-col gap-4 md:grid md:grid-cols-2">
+      <div [formGroupName]="group.group" [ngClass]="group.styles || 'grid grid-cols-1 gap-4'">
         <ng-container *ngFor="let field of group.fields">
           <div class="form-group"
             [ngClass]="{'col-span-2 md:col-span-2': field.type === 'checkbox' || group.fields.length === 2}">
@@ -72,17 +72,17 @@
   </div>
 
   <div class="flex justify-between mt-4">
-    <button type="button" (click)="onPrevious()" [disabled]="isFirstGroup()"
+    <button type="button" *ngIf="config.isIndexed" (click)="onPrevious()" [disabled]="isFirstGroup()"
       class="relative flex h-11 w-full lg:w-auto items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-gray-300 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
       [ngClass]="{'opacity-50': isFirstGroup()}">
       <span class="relative text-base font-semibold text-gray-700 dark:text-gray-300">Précédent</span>
     </button>
-    <button type="button" *ngIf="!isLastGroup()" (click)="onNext()"
+    <button type="button" *ngIf="!isLastGroup() && config.isIndexed" (click)="onNext()"
       class="relative flex h-11 w-full lg:w-auto items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
       [ngClass]="{'opacity-50': isLastGroup()}">
       <span class="relative text-base font-semibold text-white">Suivant</span>
     </button>
-    <button type="submit" *ngIf="isLastGroup()"
+    <button type="submit" *ngIf="isLastGroup() || !config.isIndexed"
       class="relative flex h-11 w-full lg:w-auto items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
       <span class="relative text-base font-semibold text-white">{{ config.submitLabel }}</span>
     </button>
