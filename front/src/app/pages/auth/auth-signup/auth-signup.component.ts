@@ -33,7 +33,8 @@ export class AuthSignupComponent implements OnInit {
             { name: 'lastname', type: 'text', label: 'Nom de famille', placeholder: 'Entrez votre nom de famille', validators: [Validators.required] },
             { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },
             { name: 'birthdate', type: 'date', label: 'Date de naissance', placeholder: 'Entrez votre date de naissance', validators: [Validators.required] }
-          ]
+          ],
+          styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
         {
           group: 'address',
@@ -44,7 +45,8 @@ export class AuthSignupComponent implements OnInit {
             { name: 'city', type: 'text', label: 'Ville', placeholder: 'Ville de résidence', validators: [Validators.required] },
             { name: 'zipcode', type: 'text', label: 'Code postal', placeholder: 'Code postal de résidence', validators: [Validators.required] },
             { name: 'country', type: 'text', label: 'Pays', placeholder: 'Pays de résidence', validators: [Validators.required] }
-          ]
+          ],
+          styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
         {
           group: 'legal',
@@ -53,11 +55,11 @@ export class AuthSignupComponent implements OnInit {
           fields: [
             { name: 'cgu', type: 'checkbox', label: 'J\'accepte les conditions générales d\'utilisation, les conditions générales de ventes et la politique de confidentitalité', validators: [Validators.requiredTrue] },
             { name: 'contract', type: 'checkbox', label: 'Je m\'engage à respecter les règles de la plateforme', validators: [Validators.requiredTrue] }
-          ]
+          ],
+          styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         }
       ],
       submitLabel: 'Je m\'inscris',
-      styles: 'grid grid-cols-1 gap-4 md:grid-cols-2',
       isIndexed: true
     },
     'professional': {
@@ -71,7 +73,8 @@ export class AuthSignupComponent implements OnInit {
             { name: 'lastname', type: 'text', label: 'Nom de famille', placeholder: 'Entrez votre nom de famille', validators: [Validators.required] },
             { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },
             { name: 'birthdate', type: 'date', label: 'Date de naissance', placeholder: 'Entrez votre date de naissance', validators: [Validators.required] }
-          ]
+          ],
+          styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
         {
           group: 'address',
@@ -82,7 +85,8 @@ export class AuthSignupComponent implements OnInit {
             { name: 'city', type: 'text', label: 'Ville', placeholder: 'Ville de résidence professionnelle', validators: [Validators.required] },
             { name: 'zipcode', type: 'text', label: 'Code postal', placeholder: 'Code postal de résidence professionnelle', validators: [Validators.required] },
             { name: 'country', type: 'text', label: 'Pays', placeholder: 'Pays de résidence professionnelle', validators: [Validators.required] }
-          ]
+          ],
+          styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
         {
           group: 'professional',
@@ -94,7 +98,8 @@ export class AuthSignupComponent implements OnInit {
             { name: 'degree', type: 'text', label: 'Diplôme', placeholder: 'Entrez votre diplôme', validators: [Validators.required] },
             { name: 'experience', type: 'number', label: 'Années d\'expérience', placeholder: 'Entrez vos années d\'expérience', validators: [Validators.required, Validators.min(0)] },
             { name: 'languages', type: 'text', label: 'Langues parlées', placeholder: 'Entrez les langues parlées', validators: [Validators.required] },
-          ]
+          ],
+          styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
         {
           group: 'legal',
@@ -103,11 +108,11 @@ export class AuthSignupComponent implements OnInit {
           fields: [
             { name: 'cgu', type: 'checkbox', label: 'J\'accepte les conditions générales d\'utilisation, les conditions générales de ventes et la politique de confidentialité', validators: [Validators.requiredTrue] },
             { name: 'contract', type: 'checkbox', label: 'Je m\'engage à respecter les règles de la plateforme', validators: [Validators.requiredTrue] }
-          ]
+          ],
+          styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         }
       ],
       submitLabel: 'Je m\'inscris',
-      styles: 'grid grid-cols-1 gap-4 md:grid-cols-2',
       isIndexed: true
     }
   };
