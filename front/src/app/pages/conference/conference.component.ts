@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { VideoComponent } from '@shared/video/video.component';
-import { FormComponent } from '@shared/form/form.component';
-import { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
 import { faMicrophone, faMicrophoneSlash, faPhone, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { VideoComponent } from '@shared/video/video.component';
+import { FormComponent } from '@shared/form/form.component';
+import { MedicalRecordComponent } from '@shared/medical-record/medical-record.component';
+import { ProgressStatComponent } from '@shared/progress-stat/progress-stat.component';
+import { ChatComponent } from '@shared/chat/chat.component';
+import { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
 
 @Component({
   selector: 'app-conference',
@@ -15,7 +18,10 @@ import { faMicrophone, faMicrophoneSlash, faPhone, faBars, faTimes } from '@fort
     FontAwesomeModule,
     CommonModule,
     FormComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MedicalRecordComponent,
+    ProgressStatComponent,
+    ChatComponent
   ],
   templateUrl: './conference.component.html',
 })
@@ -46,13 +52,7 @@ export class ConferenceComponent implements OnInit {
               label: 'Note',
               placeholder: 'Sélectionnez une note',
               validators: [Validators.required],
-              options: [
-                '1 - Très mauvais',
-                '2 - Mauvais',
-                '3 - Moyen',
-                '4 - Bon',
-                '5 - Très bon'
-              ]
+              options: [ '1 - Très mauvais', '2 - Mauvais', '3 - Moyen', '4 - Bon', '5 - Très bon' ]
             },
             { name: 'comment', type: 'textarea', label: 'Commentaire', placeholder: 'Laissez un commentaire sur la qualité de la communication', validators: [] }
           ]
@@ -65,11 +65,35 @@ export class ConferenceComponent implements OnInit {
     }
   };
 
-  constructor(
-    private fb: FormBuilder
-  ) {}
+  prescriptionForm: FormGroup;
+  prescriptionFormSubmitted: boolean = false;
+  @Output() prescriptionSubmit: EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
+  showPrescriptionForm: boolean = false;
 
-  async ngOnInit() {
+  constructor(private fb: FormBuilder) {
+    this.prescriptionForm = this.fb.group({
+      prescriptions: this.fb.array([this.createPrescriptionGroup()])
+    });
+  }
+
+  ngOnInit() {
+    this.initializeMedia();
+  }
+
+  createPrescriptionGroup(): FormGroup {
+    return this.fb.group({
+      drug: ['', Validators.required],
+      dosage: ['', Validators.required],
+      duration: ['', Validators.required],
+      comment: ['']
+    });
+  }
+
+  get prescriptions(): FormArray {
+    return this.prescriptionForm.get('prescriptions') as FormArray;
+  }
+
+  async initializeMedia() {
     try {
       this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       console.log('Local stream obtained:', this.localStream);
@@ -101,6 +125,53 @@ export class ConferenceComponent implements OnInit {
   }
 
   onFormSubmit(form: FormGroup): void {
-    console.log('Form submitted');
+    if (form.valid) {
+      console.log('Form submitted', form.value);
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+
+  onPrescriptionFormSubmit(form: FormGroup): void {
+    if (form.valid) {
+      console.log('Subscription form submitted', form.value);
+    } else {
+      console.log('Subscription form is invalid 2');
+    }
+  }
+
+  togglePrescriptionSection(): void {
+    this.showPrescriptionForm = !this.showPrescriptionForm;
+  }
+
+  addPrescription(): void {
+    this.prescriptions.push(this.createPrescriptionGroup());
+  }
+
+  removePrescription(index: number): void {
+    this.prescriptions.removeAt(index);
+  }
+
+  onSubmitPrescription(): void {
+    this.prescriptionFormSubmitted = true;
+    if (this.prescriptionForm.valid) {
+      console.log('Prescription form submitted', this.prescriptionForm.value);
+      this.prescriptionSubmit.emit(this.prescriptionForm);
+    } else {
+      console.log('Prescription form is invalid');
+      const controls = this.prescriptionForm.get('prescriptions') as FormArray;
+      controls.controls.forEach(control => {
+        if (control.invalid) {
+          control.markAllAsTouched();
+        }
+      });
+    }
+  }  
+
+  hasPrescriptionFormErrors(): boolean {
+    return Object.keys(this.prescriptionForm.controls).some(group => {
+      const groupControl = this.prescriptionForm.get(group) as FormGroup;
+      return Object.keys(groupControl.controls).some(field => groupControl.get(field)?.invalid);
+    });
   }
 }
