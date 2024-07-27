@@ -3,6 +3,7 @@
 ### Java ###
 # Compiled class file
 *.class
+/api/.gradle/*
 
 # Log file
 *.log
