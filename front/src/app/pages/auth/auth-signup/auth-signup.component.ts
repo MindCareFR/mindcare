@@ -29,6 +29,7 @@ export class AuthSignupComponent implements OnInit {
           label: 'Identité',
           description: 'Nous ne divulguerons jamais vos informations personnelles à des tiers. Vous avez la possibilité à tout moment d\'apparaître en mode privé.',
           fields: [
+            { name: 'gender', type: 'select', label: 'Civilité', placeholder: 'Sélectionnez votre civilité', options: ['Monsieur', 'Madame', 'Autre'], validators: [Validators.required] },
             { name: 'firstname', type: 'text', label: 'Prénom', placeholder: 'Entrez votre prénom', validators: [Validators.required] },
             { name: 'lastname', type: 'text', label: 'Nom de famille', placeholder: 'Entrez votre nom de famille', validators: [Validators.required] },
             { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },

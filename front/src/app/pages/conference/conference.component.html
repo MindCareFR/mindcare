@@ -47,7 +47,7 @@
           </div>
           <div [ngClass]="{'max-h-screen overflow-visible translate-y-0 opacity-100': showPrescriptionForm, 'max-h-0 overflow-hidden translate-y-8 opacity-0': !showPrescriptionForm}"
           class="transition-max-height duration-300 ease-in-out transform-gpu">
-            <form [formGroup]="prescriptionForm" (ngSubmit)="onSubmitPrescription()" class="grid grid-cols-1 gap-4">
+            <form [formGroup]="prescriptionForm" (ngSubmit)="onSubmitPrescription()" class="flex flex-col space-y-4">
               <div formArrayName="prescriptions" *ngFor="let prescription of prescriptions.controls; let i = index">
                 <div [formGroupName]="i" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                   <div class="col-span-3 lg:col-span-1">
