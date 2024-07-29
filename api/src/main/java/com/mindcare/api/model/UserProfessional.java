@@ -1,6 +1,7 @@
 package com.mindcare.api.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 @Entity
 @Table(name = "user_professional")
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class UserProfessional extends User {
 
   @Column(nullable = false)

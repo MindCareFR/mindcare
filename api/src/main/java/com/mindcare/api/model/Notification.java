@@ -2,7 +2,6 @@ package com.mindcare.api.model;
 
 import lombok.Data;
 import jakarta.persistence.*;
-import java.util.UUID;
 import java.time.LocalDateTime;
 
 @Entity
