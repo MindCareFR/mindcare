@@ -12,5 +12,5 @@ import { FooterComponent } from '@components/footer/footer.component';
   templateUrl: './home.component.html',
 })
 export class AppHomeComponent {
-  title: string = 'Hello World from Angular!';
+  title = 'Hello World from Angular!';
 }

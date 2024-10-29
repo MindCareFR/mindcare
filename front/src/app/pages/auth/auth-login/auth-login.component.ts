@@ -6,7 +6,7 @@ import { AuthService } from '@services/auth.service';
 import { NavbarComponent } from '@components/navbar/navbar.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
-import type { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
+import type { IFormConfig, IFormField, IFormGroup, ValidatorFn } from '@interfaces/form.interface';
 
 @Component({
   selector: 'app-auth-login',
@@ -28,15 +28,26 @@ export class AuthLoginComponent implements OnInit {
         label: 'Informations de connexion',
         description: 'Veuillez saisir vos informations de connexion pour accéder à votre compte.',
         fields: [
-          { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },
-          { name: 'password', type: 'password', label: 'Mot de passe', placeholder: 'Entrez votre mot de passe', validators: [Validators.required] },
+          { 
+            name: 'email', 
+            type: 'email', 
+            label: 'Adresse e-mail', 
+            placeholder: 'Entrez votre adresse e-mail', 
+            validators: [Validators.required, Validators.email] as unknown as ValidatorFn[]
+          },
+          { 
+            name: 'password', 
+            type: 'password', 
+            label: 'Mot de passe', 
+            placeholder: 'Entrez votre mot de passe', 
+            validators: [Validators.required] as unknown as ValidatorFn[]
+          },
           { name: 'remember', type: 'checkbox', label: 'Se souvenir de moi' }
         ],
         styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
       }
     ],
     submitLabel: 'Me connecter',
-    styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
     isIndexed: false
   };
 
@@ -62,7 +73,7 @@ export class AuthLoginComponent implements OnInit {
   }
 
   onFormSubmit(form: FormGroup): void {
-    console.log('Form submitted')
+    console.log('Form submitted');
     if (form.valid) {
       const { email, password, remember } = form.value;
       if (remember) {
@@ -74,18 +85,16 @@ export class AuthLoginComponent implements OnInit {
       }
       if (email && password) {
         this.authService.login(email, password)
-          .subscribe(
-            response => {
-              if (response) {
-                this.router.navigate(['/dashboard']);
-              } else {
-                form.setErrors({ invalidCredentials: true });
-              }
+          .subscribe(response => {
+            if (response) {
+              this.router.navigate(['/dashboard']);
+            } else {
+              form.setErrors({ invalidCredentials: true });
             }
-          );
+          });
       }
     } else {
-      console.log('Form is invalid')
+      console.log('Form is invalid');
       form.markAllAsTouched();
     }
   }

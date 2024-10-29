@@ -7,7 +7,7 @@ import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/co
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent implements OnInit {
-  appName: string = 'MindCare';
+  appName = 'MindCare';
 
   @ViewChild('navToggle', { static: true }) navToggle!: ElementRef<HTMLInputElement>;
   @ViewChild('navBackground', { static: true }) navBackground!: ElementRef<HTMLDivElement>;
@@ -69,7 +69,7 @@ export class NavbarComponent implements OnInit {
   }
 
   setupOutsideClickListener(): void {
-    this.renderer.listen(this.navBackground.nativeElement, 'click', (event: Event) => {
+    this.renderer.listen(this.navBackground.nativeElement, 'click', () => {
       if (this.navToggle.nativeElement.checked) {
         this.navToggle.nativeElement.checked = false;
       }

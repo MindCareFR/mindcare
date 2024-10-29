@@ -4,6 +4,7 @@
     <div [ngClass]="{'right-4': true, 'md:right-[92.5%]': isSideDashboardOpen, 'md:right-4': !isSideDashboardOpen }"
       class="absolute top-4 z-20 p-2 transition-none md:transition-all md:duration-300 md:ease-in-out">
     <button (click)="toggleSideDashboard()"
+            (keydown.enter)="toggleSideDashboard()"
             class="w-12 h-12 z-10 bg-gray-600 text-white rounded-full hover:bg-gray-700 flex items-center justify-center">
       <fa-icon [icon]="isSideDashboardOpen ? faTimes : faBars"></fa-icon>
     </button>
@@ -15,10 +16,12 @@
     <div
       class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-4 bg-gray-200 bg-opacity-50 p-2 rounded-full">
       <button (click)="hangUp()"
+        (keydown.enter)="hangUp()"
         class="w-12 h-12 bg-red-600 text-white rounded-full hover:bg-red-700 flex items-center justify-center">
         <fa-icon [icon]="faPhone"></fa-icon>
       </button>
       <button (click)="toggleMute()"
+        (keydown.enter)="toggleMute()"
         class="w-12 h-12 bg-gray-600 text-white rounded-full hover:bg-gray-700 flex items-center justify-center">
         <fa-icon [icon]="muted ? faMicrophoneSlash : faMicrophone"></fa-icon>
       </button>
@@ -37,11 +40,14 @@
         </div>
 
         <div class="bg-gray-100 p-4 rounded-lg dark:bg-gray-900">
-          <div class="flex justify-between items-center cursor-pointer" (click)="togglePrescriptionSection()">
+          <div class="flex justify-between items-center cursor-pointer" 
+            (click)="togglePrescriptionSection()"
+            tabindex="0" 
+            (keydown.enter)="togglePrescriptionSection()">
             <h3 class="text-xl font-semibold" [ngClass]="{'mb-4': showPrescriptionForm}">
               Créer une prescription
             </h3>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" [ngClass]="{'rotate-180': showPrescriptionForm, 'rotate-90': !showPrescriptionForm}" class="w-6 h-6 transition-transform duration-300">
+            <svg tabindex="0" (keydown.enter)="togglePrescriptionSection()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" [ngClass]="{'rotate-180': showPrescriptionForm, 'rotate-90': !showPrescriptionForm}" class="w-6 h-6 transition-transform duration-300">
               <path fill-rule="evenodd" d="M12 8a1 1 0 01.7.3l5 5a1 1 0 01-1.4 1.4L12 10.42l-4.3 4.3a1 1 0 01-1.4-1.4l5-5A1 1 0 0112 8z" clip-rule="evenodd" />
             </svg>
           </div>
@@ -51,39 +57,39 @@
               <div formArrayName="prescriptions" *ngFor="let prescription of prescriptions.controls; let i = index">
                 <div [formGroupName]="i" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                   <div class="col-span-3 lg:col-span-1">
-                    <label class="block text-gray-700 dark:text-gray-300">
+                    <label class="block text-gray-700 dark:text-gray-300" for="drug">
                       Médicament
                       <span *ngIf="prescription.get('drug')?.errors?.['required'] && prescription.get('drug')?.touched"
                         class="text-red-600 text-md">*</span>
                     </label>
-                    <input formControlName="drug" type="text" placeholder="Nom du médicament"
+                    <input id="drug" formControlName="drug" type="text" placeholder="Nom du médicament"
                       class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-purple-400 focus:border-purple-400" />
                   </div>
                   <div class="col-span-3 lg:col-span-1">
-                    <label class="block text-gray-700 dark:text-gray-300">
+                    <label class="block text-gray-700 dark:text-gray-300" for="dosage">
                       Dosage
                       <span *ngIf="prescription.get('dosage')?.errors?.['required'] && prescription.get('dosage')?.touched"
                         class="text-red-600 text-md">*</span>
                     </label>
-                    <input formControlName="dosage" type="text" placeholder="Dosage du médicament"
+                    <input id="dosage" formControlName="dosage" type="text" placeholder="Dosage du médicament"
                       class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-purple-400 focus:border-purple-400" />
                   </div>
                   <div class="col-span-3 lg:col-span-1">
-                    <label class="block text-gray-700 dark:text-gray-300">
+                    <label class="block text-gray-700 dark:text-gray-300" for="duration">
                       Durée
                       <span *ngIf="prescription.get('duration')?.errors?.['required'] && prescription.get('duration')?.touched"
                         class="text-red-600 text-md">*</span>
                     </label>
-                    <input formControlName="duration" type="text" placeholder="Durée du traitement"
+                    <input id="duration" formControlName="duration" type="text" placeholder="Durée du traitement"
                       class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-purple-400 focus:border-purple-400" />
                   </div>
                   <div class="col-span-3">
-                    <label class="block text-gray-700 dark:text-gray-300">Commentaire</label>
-                    <textarea formControlName="comment" rows="1" placeholder="Laissez un commentaire sur la prise du médicament"
+                    <label class="block text-gray-700 dark:text-gray-300" for="comment">Commentaire</label>
+                    <textarea id="comment" formControlName="comment" rows="1" placeholder="Laissez un commentaire sur la prise du médicament"
                       class="w-full px-3 py-2 mt-1 border border-gray-300 resize md:resize-none rounded-md shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-purple-400 focus:border-purple-400"></textarea>
                   </div>
                   <div class="flex justify-end col-span-3 lg:col-span-3 flex justify-end">
-                    <button type="button" (click)="removePrescription(i)"
+                    <button type="button" (click)="removePrescription(i)" (keydown.enter)="removePrescription(i)"
                       class="relative flex h-11 w-full lg:w-auto items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-red-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
                       <span class="relative text-base font-semibold text-white">Supprimer</span>
                     </button>

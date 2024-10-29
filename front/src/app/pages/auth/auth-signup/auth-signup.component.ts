@@ -7,6 +7,7 @@ import { FormComponent } from '@shared/form/form.component';
 import { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
 import { AuthService } from '@services/auth.service';
 import { Router } from '@angular/router';
+import type { ValidatorFn } from '@interfaces/form.interface';
 
 @Component({
   selector: 'app-auth-signup',
@@ -21,7 +22,7 @@ import { Router } from '@angular/router';
   ],
 })
 export class AuthSignupComponent implements OnInit {
-  signupConfig: { [key: string]: IFormConfig } = {
+  signupConfig: Record<string, IFormConfig> = {
     'user': {
       fields: [
         {
@@ -29,11 +30,11 @@ export class AuthSignupComponent implements OnInit {
           label: 'Identité',
           description: 'Nous ne divulguerons jamais vos informations personnelles à des tiers. Vous avez la possibilité à tout moment d\'apparaître en mode privé.',
           fields: [
-            { name: 'gender', type: 'select', label: 'Civilité', placeholder: 'Sélectionnez votre civilité', options: ['Monsieur', 'Madame', 'Autre'], validators: [Validators.required] },
-            { name: 'firstname', type: 'text', label: 'Prénom', placeholder: 'Entrez votre prénom', validators: [Validators.required] },
-            { name: 'lastname', type: 'text', label: 'Nom de famille', placeholder: 'Entrez votre nom de famille', validators: [Validators.required] },
-            { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },
-            { name: 'birthdate', type: 'date', label: 'Date de naissance', placeholder: 'Entrez votre date de naissance', validators: [Validators.required] }
+            { name: 'gender', type: 'select', label: 'Civilité', placeholder: 'Sélectionnez votre civilité', options: ['Monsieur', 'Madame', 'Autre'], validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'firstname', type: 'text', label: 'Prénom', placeholder: 'Entrez votre prénom', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'lastname', type: 'text', label: 'Nom de famille', placeholder: 'Entrez votre nom de famille', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required as unknown as ValidatorFn, Validators.email as unknown as ValidatorFn] },
+            { name: 'birthdate', type: 'date', label: 'Date de naissance', placeholder: 'Entrez votre date de naissance', validators: [Validators.required as unknown as ValidatorFn] }
           ],
           styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
@@ -42,10 +43,10 @@ export class AuthSignupComponent implements OnInit {
           label: 'Adresse',
           description: 'Vos données de résidence sont nécessaires pour vous mettre en relation avec des professionnels de santé.',
           fields: [
-            { name: 'address', type: 'text', label: 'Adresse', placeholder: 'Numéro, nom de la rue', validators: [Validators.required] },
-            { name: 'city', type: 'text', label: 'Ville', placeholder: 'Ville de résidence', validators: [Validators.required] },
-            { name: 'zipcode', type: 'text', label: 'Code postal', placeholder: 'Code postal de résidence', validators: [Validators.required] },
-            { name: 'country', type: 'text', label: 'Pays', placeholder: 'Pays de résidence', validators: [Validators.required] }
+            { name: 'address', type: 'text', label: 'Adresse', placeholder: 'Numéro, nom de la rue', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'city', type: 'text', label: 'Ville', placeholder: 'Ville de résidence', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'zipcode', type: 'text', label: 'Code postal', placeholder: 'Code postal de résidence', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'country', type: 'text', label: 'Pays', placeholder: 'Pays de résidence', validators: [Validators.required as unknown as ValidatorFn] }
           ],
           styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
@@ -54,8 +55,8 @@ export class AuthSignupComponent implements OnInit {
           label: 'Informations légales',
           description: 'Pour garantir la sécurité de la plateforme, nous vous demandons de respecter les conditions et les règles qui régissent son utilisation.',
           fields: [
-            { name: 'cgu', type: 'checkbox', label: 'J\'accepte les conditions générales d\'utilisation, les conditions générales de ventes et la politique de confidentitalité', validators: [Validators.requiredTrue] },
-            { name: 'contract', type: 'checkbox', label: 'Je m\'engage à respecter les règles de la plateforme', validators: [Validators.requiredTrue] }
+            { name: 'cgu', type: 'checkbox', label: 'J\'accepte les conditions générales d\'utilisation, les conditions générales de ventes et la politique de confidentitalité', validators: [Validators.requiredTrue as unknown as ValidatorFn] },
+            { name: 'contract', type: 'checkbox', label: 'Je m\'engage à respecter les règles de la plateforme', validators: [Validators.requiredTrue as unknown as ValidatorFn] }
           ],
           styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         }
@@ -70,10 +71,10 @@ export class AuthSignupComponent implements OnInit {
           label: 'Identité',
           description: 'Nous ne divulguerons jamais vos informations personnelles à des tiers.',
           fields: [
-            { name: 'firstname', type: 'text', label: 'Prénom', placeholder: 'Entrez votre prénom', validators: [Validators.required] },
-            { name: 'lastname', type: 'text', label: 'Nom de famille', placeholder: 'Entrez votre nom de famille', validators: [Validators.required] },
-            { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required, Validators.email] },
-            { name: 'birthdate', type: 'date', label: 'Date de naissance', placeholder: 'Entrez votre date de naissance', validators: [Validators.required] }
+            { name: 'firstname', type: 'text', label: 'Prénom', placeholder: 'Entrez votre prénom', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'lastname', type: 'text', label: 'Nom de famille', placeholder: 'Entrez votre nom de famille', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'email', type: 'email', label: 'Adresse e-mail', placeholder: 'Entrez votre adresse e-mail', validators: [Validators.required as unknown as ValidatorFn, Validators.email as unknown as ValidatorFn] },
+            { name: 'birthdate', type: 'date', label: 'Date de naissance', placeholder: 'Entrez votre date de naissance', validators: [Validators.required as unknown as ValidatorFn] }
           ],
           styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
@@ -82,10 +83,10 @@ export class AuthSignupComponent implements OnInit {
           label: 'Adresse professionnelle',
           description: 'Vos données de résidence professionnelle sont nécessaires pour vous mettre en relation avec des patients.',
           fields: [
-            { name: 'address', type: 'text', label: 'Adresse', placeholder: 'Numéro et nom de la rue', validators: [Validators.required] },
-            { name: 'city', type: 'text', label: 'Ville', placeholder: 'Ville de résidence professionnelle', validators: [Validators.required] },
-            { name: 'zipcode', type: 'text', label: 'Code postal', placeholder: 'Code postal de résidence professionnelle', validators: [Validators.required] },
-            { name: 'country', type: 'text', label: 'Pays', placeholder: 'Pays de résidence professionnelle', validators: [Validators.required] }
+            { name: 'address', type: 'text', label: 'Adresse', placeholder: 'Numéro et nom de la rue', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'city', type: 'text', label: 'Ville', placeholder: 'Ville de résidence professionnelle', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'zipcode', type: 'text', label: 'Code postal', placeholder: 'Code postal de résidence professionnelle', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'country', type: 'text', label: 'Pays', placeholder: 'Pays de résidence professionnelle', validators: [Validators.required as unknown as ValidatorFn] }
           ],
           styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
@@ -94,11 +95,11 @@ export class AuthSignupComponent implements OnInit {
           label: 'Métier',
           description: 'Vos informations professionnelles sont nécessaires pour vous mettre en relation avec des patients. Votre inscription sera soumise à validation.',
           fields: [
-            { name: 'adeli_rpps', type: 'text', label: 'Numéro Adeli ou RPPS', placeholder: 'Entrez votre numéro Adeli ou RPPS', validators: [Validators.required] },
-            { name: 'speciality', type: 'text', label: 'Spécialité', placeholder: 'Entrez votre spécialité', validators: [Validators.required] },
-            { name: 'degree', type: 'text', label: 'Diplôme', placeholder: 'Entrez votre diplôme', validators: [Validators.required] },
-            { name: 'experience', type: 'number', label: 'Années d\'expérience', placeholder: 'Entrez vos années d\'expérience', validators: [Validators.required, Validators.min(0)] },
-            { name: 'languages', type: 'text', label: 'Langues parlées', placeholder: 'Entrez les langues parlées', validators: [Validators.required] },
+            { name: 'adeli_rpps', type: 'text', label: 'Numéro Adeli ou RPPS', placeholder: 'Entrez votre numéro Adeli ou RPPS', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'speciality', type: 'text', label: 'Spécialité', placeholder: 'Entrez votre spécialité', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'degree', type: 'text', label: 'Diplôme', placeholder: 'Entrez votre diplôme', validators: [Validators.required as unknown as ValidatorFn] },
+            { name: 'experience', type: 'number', label: 'Années d\'expérience', placeholder: 'Entrez vos années d\'expérience', validators: [Validators.required as unknown as ValidatorFn, Validators.min(0) as unknown as ValidatorFn] },
+            { name: 'languages', type: 'text', label: 'Langues parlées', placeholder: 'Entrez les langues parlées', validators: [Validators.required as unknown as ValidatorFn] },
           ],
           styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         },
@@ -107,8 +108,8 @@ export class AuthSignupComponent implements OnInit {
           label: 'Informations légales',
           description: 'Pour garantir la sécurité de la plateforme, nous vous demandons de respecter les conditions et les règles qui régissent son utilisation.',
           fields: [
-            { name: 'cgu', type: 'checkbox', label: 'J\'accepte les conditions générales d\'utilisation, les conditions générales de ventes et la politique de confidentialité', validators: [Validators.requiredTrue] },
-            { name: 'contract', type: 'checkbox', label: 'Je m\'engage à respecter les règles de la plateforme', validators: [Validators.requiredTrue] }
+            { name: 'cgu', type: 'checkbox', label: 'J\'accepte les conditions générales d\'utilisation, les conditions générales de ventes et la politique de confidentialité', validators: [Validators.requiredTrue as unknown as ValidatorFn] },
+            { name: 'contract', type: 'checkbox', label: 'Je m\'engage à respecter les règles de la plateforme', validators: [Validators.requiredTrue as unknown as ValidatorFn] }
           ],
           styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
         }
@@ -119,7 +120,7 @@ export class AuthSignupComponent implements OnInit {
   };
 
   selectedAccount: 'user' | 'professional' = 'user';
-  currentGroupIndex: number = 0;
+  currentGroupIndex = 0; // Removed the type annotation
 
   constructor(
     private authService: AuthService,
@@ -183,15 +184,13 @@ export class AuthSignupComponent implements OnInit {
       }
       if (email && password) {
         this.authService.login(email, password)
-          .subscribe(
-            response => {
-              if (response) {
-                this.router.navigate(['/dashboard']);
-              } else {
-                form.setErrors({ invalidCredentials: true });
-              }
+          .subscribe(response => {
+            if (response) {
+              this.router.navigate(['/dashboard']);
+            } else {
+              form.setErrors({ invalidCredentials: true });
             }
-          );
+          });
       }
     } else {
       console.log('Form is invalid');

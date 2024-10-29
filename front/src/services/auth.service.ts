@@ -4,6 +4,16 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import type { IUserData } from '../app/interfaces/user.interface';
 
+interface AuthResponse {
+  token: string;
+  user?: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,8 +22,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, { email, password }).pipe(
+  login(email: string, password: string): Observable<AuthResponse | null> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
       map(response => {
         localStorage.setItem('token', response.token);
         return response;
@@ -25,13 +35,13 @@ export class AuthService {
     );
   }
 
-  signup(data: IUserData): Observable<any> {
+  signup(data: IUserData): Observable<AuthResponse | null> {
     if (!this.checkInputsSignup(data)) {
       console.error('Invalid signup data');
       return of(null);
     }
 
-    return this.http.post<any>(`${this.apiUrl}/signup`, {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, {
       ...data,
       birthdate: new Date(data.birthdate).toISOString()
     }).pipe(

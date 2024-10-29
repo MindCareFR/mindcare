@@ -8,7 +8,7 @@ import { Component, Input, AfterViewInit, ViewChild, ElementRef, SimpleChanges, 
 })
 export class VideoComponent implements AfterViewInit, OnChanges {
   @Input() srcObject: MediaStream | null = null;
-  @Input() controls: boolean = false;
+  @Input() controls = false;
   @ViewChild('video', { static: true }) videoElementRef!: ElementRef<HTMLVideoElement>;
 
   ngAfterViewInit() {
