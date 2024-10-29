@@ -122,9 +122,9 @@ Pour tout les commit voicis les convention a respecter :
 
 ## Fermer les tickets automatiquement
 
-closes #<numéro>
-fixes #<numéro>
-resolves #<numéro>
+-closes #<numéro>
+-fixes #<numéro>
+-resolves #<numéro>
 
 ## Exemple concret sur les 3 possibilitées
 
