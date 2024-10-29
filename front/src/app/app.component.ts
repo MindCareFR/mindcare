@@ -5,10 +5,7 @@ import { RouterOutlet, RouterLink } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  imports: [
-    RouterOutlet,
-    RouterLink
-  ]
+  imports: [RouterOutlet, RouterLink],
 })
 export class AppComponent {
   title = 'Hello World from Angular!';

@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './progress-stat.component.html',
 })
-export class ProgressStatComponent {
-
-}
+export class ProgressStatComponent {}

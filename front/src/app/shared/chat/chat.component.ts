@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './chat.component.html',
 })
-export class ChatComponent {
-
-}
+export class ChatComponent {}
