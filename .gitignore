@@ -1,5 +1,5 @@
 **/.DS_Store
-
+.idea
 ### Java ###
 # Compiled class file
 *.class
