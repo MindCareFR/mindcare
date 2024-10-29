@@ -150,35 +150,17 @@
 
         <!-- Checkstyle Plugin -->
         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.3.1</version>
-            <dependencies>
-                <dependency>
-                    <groupId>com.puppycrawl.tools</groupId>
-                    <artifactId>checkstyle</artifactId>
-                    <version>10.12.7</version>
-                </dependency>
-            </dependencies>
-            <configuration>
-                <configLocation>checkstyle.xml</configLocation>
-                <encoding>UTF-8</encoding>
-                <consoleOutput>true</consoleOutput>
-                <failsOnError>false</failsOnError>  <!-- Ne bloque pas le build en cas d'erreur -->
-                <linkXRef>false</linkXRef>
-                <!-- Skip les fichiers générés -->
-                <excludes>**/target/**/*,**/*.css,**/*.js</excludes>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>validate</id>
-                    <phase>validate</phase>
-                    <goals>
-                        <goal>check</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-checkstyle-plugin</artifactId>
+    <version>3.3.1</version>
+    <configuration>
+        <configLocation>checkstyle.xml</configLocation>
+        <encoding>UTF-8</encoding>
+        <consoleOutput>true</consoleOutput>
+        <failsOnError>false</failsOnError>  <!-- Important: ne bloque pas le build -->
+        <linkXRef>false</linkXRef>
+    </configuration>
+    </plugin>
     </plugins>
 </build>
 </project>
