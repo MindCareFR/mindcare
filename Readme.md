@@ -99,6 +99,48 @@ mindcare/
 └── README.md
 ```
 
+## Linter & convention
+
+```bash
+# Voir si le code contient des problème de code ( a éxecuter dans le repertoire ./front/ sinon sa ne marche pas)
+npm run lint || npm run lint --fix
+```
+
+## Branch convention
+
+Pour toute création de branch voicis les conventions à respecter:
+-Feature/T-<numéros>
+-Bugfix/T-<numéros>
+-Draft/T-<numéros>
+
+## Commit convention
+
+Pour tout les commit voicis les convention a respecter :
+-feature(<fichiers>): <une explication claire de la feature>, closes #<numéro>.
+-fix(<fichiers>): <Une explication claire du fix>, closes #<numéro>.
+-draft(<fichiers>): <une explication de l'essaie>, closes #<numéro>.
+
+## Fermer les tickets automatiquement
+
+closes #<numéro>
+fixes #<numéro>
+resolves #<numéro>
+
+## Exemple concret sur les 3 possibilitées
+
+```bash
+# Nouvelle fonctionalitée
+git branch Feature/T-23 && git commit -m "feature(auth.api): Ajout du rafraichissement du token, closes #23"
+
+#Corection de bug
+git branch Bugfix/T-24 && git commit -m "fix(auth.api): Correction du rafraichissement du token, fixes #24"
+
+#Essaie d'une fonctionalitée pas encore pensée ou écrite
+git branch Draft/T-25 && git commit -m "draft(fixture): Ajout de fixtures pour les CRON du serveur, resolves #25"
+```
+
+### /!\ Toute branch ou commit or convention se verras refuser /!\
+
 ## 📋 Support
 
 Pour toute question ou problème, veuillez ouvrir une issue sur le dépôt GitHub.

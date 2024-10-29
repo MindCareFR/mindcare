@@ -1,0 +1,47 @@
+name: Frontend Linting
+
+on:
+  push:
+    paths:
+      - "front/**"
+    branches:
+      - main
+      - develop
+  pull_request:
+    paths:
+      - "front/**"
+    branches:
+      - main
+      - develop
+
+jobs:
+  lint:
+    name: Run ESLint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: front/package-lock.json
+
+      - name: Install Dependencies
+        working-directory: ./front
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./front
+        run: |
+          npm run lint
+        continue-on-error: false
+
+      - name: Run Prettier Check
+        working-directory: ./front
+        run: |
+          npx prettier --check "src/**/*.{ts,html,css,scss}"
+        continue-on-error: false
