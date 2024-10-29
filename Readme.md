@@ -109,22 +109,27 @@ npm run lint || npm run lint --fix
 ## Branch convention
 
 Pour toute création de branch voicis les conventions à respecter:
+```bash
 -Feature/T-<numéros>
 -Bugfix/T-<numéros>
 -Draft/T-<numéros>
+```
 
 ## Commit convention
 
 Pour tout les commit voicis les convention a respecter :
+```bash
 -feature(<fichiers>): <une explication claire de la feature>, closes #<numéro>.
 -fix(<fichiers>): <Une explication claire du fix>, closes #<numéro>.
 -draft(<fichiers>): <une explication de l'essaie>, closes #<numéro>.
+```
 
 ## Fermer les tickets automatiquement
-
+```bash
 -closes #<numéro>
 -fixes #<numéro>
 -resolves #<numéro>
+```
 
 ## Exemple concret sur les 3 possibilitées
 
