@@ -2,7 +2,7 @@
 
 Application de gestion et suivi médical développée avec Angular, Spring Boot et PostgreSQL.
 
-## 🚀 Installation
+## 🚀 Installation /!\
 
 ### Prérequis
 
