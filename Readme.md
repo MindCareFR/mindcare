@@ -1,6 +1,8 @@
 # MindCare Project
 
-Application de gestion et suivi médical développée avec Angular, Spring Boot et PostgreSQL...d
+
+Application de gestion et suivi médical développée avec Angular, Spring Boot et PostgreSQL...
+
 
 ## 🚀 Installation /!\
 
