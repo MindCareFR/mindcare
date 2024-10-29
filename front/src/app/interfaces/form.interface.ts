@@ -4,9 +4,11 @@ export interface IFormField {
   label: string;
   placeholder?: string;
   options?: string[];
-  validators?: any[];
-  defaultValue?: any;
+  validators?: ValidatorFn[];
+  defaultValue?: string | number | boolean;
 }
+
+export type ValidatorFn = (value: string | number | boolean) => boolean;
 
 export interface IFormGroup {
   group: string;

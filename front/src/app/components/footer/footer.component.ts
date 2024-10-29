@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './footer.component.html',
 })
 export class FooterComponent {
-  appName: string = 'MindCare';
+  appName = 'MindCare';
   currentYear: number = new Date().getFullYear();
 }

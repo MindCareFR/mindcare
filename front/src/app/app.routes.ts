@@ -9,5 +9,5 @@ export const routes: Routes = [
   { path: 'auth/signup', component: AuthSignupComponent },
   { path: 'conference', component: ConferenceComponent },
   { path: '', component: AppHomeComponent },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
