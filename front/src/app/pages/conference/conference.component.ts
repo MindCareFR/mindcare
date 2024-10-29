@@ -1,8 +1,23 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
-import { faMicrophone, faMicrophoneSlash, faPhone, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormArray,
+} from '@angular/forms';
+import {
+  FontAwesomeModule,
+  IconDefinition,
+} from '@fortawesome/angular-fontawesome';
+import {
+  faMicrophone,
+  faMicrophoneSlash,
+  faPhone,
+  faBars,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 import { VideoComponent } from '@shared/video/video.component';
 import { FormComponent } from '@shared/form/form.component';
 import { MedicalRecordComponent } from '@shared/medical-record/medical-record.component';
@@ -21,7 +36,7 @@ import type { IFormConfig, ValidatorFn } from '@interfaces/form.interface';
     ReactiveFormsModule,
     MedicalRecordComponent,
     ProgressStatComponent,
-    ChatComponent
+    ChatComponent,
   ],
   templateUrl: './conference.component.html',
 })
@@ -39,46 +54,55 @@ export class ConferenceComponent implements OnInit {
   faTimes: IconDefinition = faTimes;
 
   satisfactionFormConfig: Record<string, IFormConfig> = {
-    'satisfaction': {
+    satisfaction: {
       fields: [
         {
           group: 'satisfaction',
           label: 'Satisfaction',
-          description: 'Merci de nous donner votre avis sur la qualité de la communication.',
+          description:
+            'Merci de nous donner votre avis sur la qualité de la communication.',
           fields: [
-            { 
-              name: 'rating', 
+            {
+              name: 'rating',
               type: 'select',
               label: 'Note',
               placeholder: 'Sélectionnez une note',
               validators: [Validators.required as unknown as ValidatorFn],
-              options: [ '1 - Très mauvais', '2 - Mauvais', '3 - Moyen', '4 - Bon', '5 - Très bon' ]
+              options: [
+                '1 - Très mauvais',
+                '2 - Mauvais',
+                '3 - Moyen',
+                '4 - Bon',
+                '5 - Très bon',
+              ],
             },
-            { 
-              name: 'comment', 
-              type: 'textarea', 
-              label: 'Commentaire', 
-              placeholder: 'Laissez un commentaire sur la qualité de la communication', 
-              validators: [] 
-            }
-          ]
-        }
+            {
+              name: 'comment',
+              type: 'textarea',
+              label: 'Commentaire',
+              placeholder:
+                'Laissez un commentaire sur la qualité de la communication',
+              validators: [],
+            },
+          ],
+        },
       ],
       submitLabel: 'Envoyer',
       cancelLabel: 'Annuler',
       styles: 'grid grid-cols-1 gap-4',
-      isIndexed: false
-    }
+      isIndexed: false,
+    },
   };
 
   prescriptionForm: FormGroup;
   prescriptionFormSubmitted = false;
-  @Output() prescriptionSubmit: EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
+  @Output() prescriptionSubmit: EventEmitter<FormGroup> =
+    new EventEmitter<FormGroup>();
   showPrescriptionForm = false;
 
   constructor(private fb: FormBuilder) {
     this.prescriptionForm = this.fb.group({
-      prescriptions: this.fb.array([this.createPrescriptionGroup()])
+      prescriptions: this.fb.array([this.createPrescriptionGroup()]),
     });
   }
 
@@ -91,7 +115,7 @@ export class ConferenceComponent implements OnInit {
       drug: ['', Validators.required],
       dosage: ['', Validators.required],
       duration: ['', Validators.required],
-      comment: ['']
+      comment: [''],
     });
   }
 
@@ -101,7 +125,10 @@ export class ConferenceComponent implements OnInit {
 
   async initializeMedia(): Promise<void> {
     try {
-      this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      this.localStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
       this.remoteStream = new MediaStream(this.localStream.getVideoTracks());
     } catch (error) {
       console.error('Error accessing media devices:', error);
@@ -111,13 +138,15 @@ export class ConferenceComponent implements OnInit {
   toggleMute(): void {
     this.muted = !this.muted;
     if (this.localStream) {
-      this.localStream.getAudioTracks().forEach(track => track.enabled = !this.muted);
+      this.localStream
+        .getAudioTracks()
+        .forEach((track) => (track.enabled = !this.muted));
     }
   }
 
   hangUp(): void {
     if (this.localStream) {
-      this.localStream.getTracks().forEach(track => track.stop());
+      this.localStream.getTracks().forEach((track) => track.stop());
     }
     this.callEnded = true;
     setTimeout(() => {
@@ -164,18 +193,20 @@ export class ConferenceComponent implements OnInit {
       this.prescriptionSubmit.emit(this.prescriptionForm);
     } else {
       const controls = this.prescriptionForm.get('prescriptions') as FormArray;
-      controls.controls.forEach(control => {
+      controls.controls.forEach((control) => {
         if (control.invalid) {
           control.markAllAsTouched();
         }
       });
     }
-  }  
+  }
 
   hasPrescriptionFormErrors(): boolean {
-    return Object.keys(this.prescriptionForm.controls).some(group => {
+    return Object.keys(this.prescriptionForm.controls).some((group) => {
       const groupControl = this.prescriptionForm.get(group) as FormGroup;
-      return Object.keys(groupControl.controls).some(field => groupControl.get(field)?.invalid);
+      return Object.keys(groupControl.controls).some(
+        (field) => groupControl.get(field)?.invalid,
+      );
     });
   }
 }

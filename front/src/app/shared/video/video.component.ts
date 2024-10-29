@@ -1,4 +1,12 @@
-import { Component, Input, AfterViewInit, ViewChild, ElementRef, SimpleChanges, OnChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core';
 
 @Component({
   selector: 'app-video',
@@ -9,7 +17,8 @@ import { Component, Input, AfterViewInit, ViewChild, ElementRef, SimpleChanges, 
 export class VideoComponent implements AfterViewInit, OnChanges {
   @Input() srcObject: MediaStream | null = null;
   @Input() controls = false;
-  @ViewChild('video', { static: true }) videoElementRef!: ElementRef<HTMLVideoElement>;
+  @ViewChild('video', { static: true })
+  videoElementRef!: ElementRef<HTMLVideoElement>;
 
   ngAfterViewInit() {
     this.updateVideoSource();

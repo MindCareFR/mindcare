@@ -5,10 +5,7 @@ import { FooterComponent } from '@components/footer/footer.component';
 @Component({
   selector: 'app-app-home',
   standalone: true,
-  imports: [
-    NavbarComponent,
-    FooterComponent
-  ],
+  imports: [NavbarComponent, FooterComponent],
   templateUrl: './home.component.html',
 })
 export class AppHomeComponent {

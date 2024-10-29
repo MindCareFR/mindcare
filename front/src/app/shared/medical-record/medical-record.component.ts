@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './medical-record.component.html',
 })
-export class MedicalRecordComponent {
-
-}
+export class MedicalRecordComponent {}

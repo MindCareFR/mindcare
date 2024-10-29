@@ -1,5 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, OnChanges, SimpleChanges, Output } from '@angular/core';
-import { FormBuilder, FormGroup, AbstractControl, ValidationErrors, FormControl, ValidatorFn as AValidatorFn } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  Output,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  AbstractControl,
+  ValidationErrors,
+  FormControl,
+  ValidatorFn as AValidatorFn,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IFormConfig } from '@interfaces/form.interface';
@@ -11,10 +26,15 @@ type FormGroups = Record<string, FormGroup>;
   selector: 'app-form',
   templateUrl: './form.component.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class FormComponent implements OnInit, OnChanges {
-  @Input() config: IFormConfig = { fields: [], submitLabel: '', styles: '', isIndexed: false };
+  @Input() config: IFormConfig = {
+    fields: [],
+    submitLabel: '',
+    styles: '',
+    isIndexed: false,
+  };
   @Output() formSubmit: EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
 
   form: FormGroup = this.fb.group({});
@@ -37,16 +57,19 @@ export class FormComponent implements OnInit, OnChanges {
   createForm(): void {
     const group: FormGroups = {};
     let control: FormControl<string | null> = this.fb.control(null);
-    
-    this.config.fields.forEach(fieldGroup => {
-      fieldGroup.fields.forEach(field => {
+
+    this.config.fields.forEach((fieldGroup) => {
+      fieldGroup.fields.forEach((field) => {
         if (field.options) {
           control = this.fb.control(
-            field.type === 'select' ? field.options[0] : '', 
-            field.validators as unknown as AValidatorFn || []
+            field.type === 'select' ? field.options[0] : '',
+            (field.validators as unknown as AValidatorFn) || [],
           );
         } else {
-          control = this.fb.control('', field.validators as unknown as AValidatorFn || []);
+          control = this.fb.control(
+            '',
+            (field.validators as unknown as AValidatorFn) || [],
+          );
         }
         if (!group[fieldGroup.group]) {
           group[fieldGroup.group] = this.fb.group({});
@@ -59,15 +82,23 @@ export class FormComponent implements OnInit, OnChanges {
 
   initForm(): void {
     const formGroups = this.config.fields.reduce((groups, group) => {
-      const formControls = group.fields.reduce<FormControls>((controls, field) => {
-        controls[field.name] = this.fb.control('', field.validators as unknown as AValidatorFn || []);
-        return controls;
-      }, {});
+      const formControls = group.fields.reduce<FormControls>(
+        (controls, field) => {
+          controls[field.name] = this.fb.control(
+            '',
+            (field.validators as unknown as AValidatorFn) || [],
+          );
+          return controls;
+        },
+        {},
+      );
       groups[group.group] = this.fb.group(formControls);
       return groups;
     }, {} as FormGroups);
 
-    this.form = this.fb.group(formGroups, { validators: this.passwordMatchValidator });
+    this.form = this.fb.group(formGroups, {
+      validators: this.passwordMatchValidator,
+    });
   }
 
   onSubmit(): void {
@@ -114,16 +145,24 @@ export class FormComponent implements OnInit, OnChanges {
   }
 
   hasFormErrors(): boolean {
-    return Object.keys(this.form.controls).some(group => {
+    return Object.keys(this.form.controls).some((group) => {
       const groupControl = this.form.get(group) as FormGroup;
-      return Object.keys(groupControl.controls).some(field => groupControl.get(field)?.invalid);
+      return Object.keys(groupControl.controls).some(
+        (field) => groupControl.get(field)?.invalid,
+      );
     });
   }
 
-  passwordMatchValidator: AValidatorFn = (form: AbstractControl): ValidationErrors | null => {
+  passwordMatchValidator: AValidatorFn = (
+    form: AbstractControl,
+  ): ValidationErrors | null => {
     const password = form.get('identity.password');
     const confirmPassword = form.get('identity.confirm_password');
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
+    if (
+      password &&
+      confirmPassword &&
+      password.value !== confirmPassword.value
+    ) {
       confirmPassword.setErrors({ mismatch: true });
       return { mismatch: true };
     } else {
