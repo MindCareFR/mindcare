@@ -16,6 +16,7 @@ import java.util.UUID;
 import java.util.Set;
 import java.util.HashSet;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -28,10 +29,10 @@ public class User {
   private UUID uuid;
 
   @Column(nullable = false)
-  private String firstName;
+  private String firstname;
 
   @Column(nullable = false)
-  private String lastName;
+  private String lastname;
 
   @Column(nullable = false, unique = true)
   private String email;
@@ -40,10 +41,28 @@ public class User {
   private String password;
 
   @Column(nullable = false)
+  private LocalDate birthdate;
+
+  @Column(nullable = false)
   private String phone;
 
   @Column(nullable = false)
+  private String token;
+
+  @Column(nullable = false)
   private String address;
+
+  @Column(nullable = true)
+  private String addressComplement;
+
+  @Column(nullable = false)
+  private String zipcode;
+
+  @Column(nullable = false)
+  private String city;
+
+  @Column(nullable = false)
+  private String country;
 
   @OneToMany(mappedBy = "user")
   private Set<Notification> notifications = new HashSet<>();
@@ -53,11 +72,11 @@ public class User {
   private Role role;
 
   @Column(nullable = false)
-  private Boolean isActive = true;
-
-  @Column(nullable = false)
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Column(nullable = true)
   private LocalDateTime updatedAt;
+
+  @Column(nullable = true)
+  private LocalDateTime deletedAt;
 }
