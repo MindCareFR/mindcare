@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Entity
-@Table(name = "session_logs")
+@Table(name = "mail_logs")
 @Data
-public class SessionLogs {
+public class MailLogs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class SessionLogs {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private String message;
+    private String object;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uuid", referencedColumnName = "uuid", nullable = false)

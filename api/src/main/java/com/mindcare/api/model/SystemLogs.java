@@ -22,9 +22,9 @@ public class SystemLogs {
     @Column(nullable = false)
     private String message;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "relation", columnDefinition = "UUID")
+    @Column(nullable = false)
     private UUID relation;
 }
