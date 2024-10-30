@@ -77,7 +77,10 @@ export class FormComponent implements OnInit, OnChanges {
         group[fieldGroup.group].addControl(field.name, control);
       });
     });
-    this.form = this.fb.group(group);
+
+    this.form = this.fb.group(group, {
+      validators: this.passwordMatchValidator,
+    });
   }
 
   initForm(): void {
