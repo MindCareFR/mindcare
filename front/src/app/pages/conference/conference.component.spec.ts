@@ -22,7 +22,7 @@ describe('ConferenceComponent', (): void => {
         MedicalRecordComponent,
         ProgressStatComponent,
         ChatComponent,
-        ConferenceComponent
+        ConferenceComponent,
       ],
     }).compileComponents();
   });
@@ -55,7 +55,7 @@ describe('ConferenceComponent', (): void => {
     const mockAudioTrack = {
       enabled: true,
     };
-    
+
     component.localStream = {
       getAudioTracks: () => [mockAudioTrack],
     } as unknown as MediaStream;
@@ -73,7 +73,7 @@ describe('ConferenceComponent', (): void => {
     spyOn(component, 'hangUp').and.callThrough();
     component.hangUp();
     expect(component.callEnded).toBe(true);
-    
+
     setTimeout((): void => {
       expect(component.showSatisfactionForm).toBe(true);
       done();
@@ -112,21 +112,29 @@ describe('ConferenceComponent', (): void => {
       },
     ]);
     component.onSubmitPrescription();
-    expect(component.prescriptionSubmit.emit).toHaveBeenCalledWith(component.prescriptionForm);
+    expect(component.prescriptionSubmit.emit).toHaveBeenCalledWith(
+      component.prescriptionForm,
+    );
   });
 
   it('should mark all as touched if prescription form is invalid', (): void => {
-    component.prescriptionForm.controls['prescriptions'].setValue([{ drug: '', dosage: '', duration: '', comment: '' }]);
+    component.prescriptionForm.controls['prescriptions'].setValue([
+      { drug: '', dosage: '', duration: '', comment: '' },
+    ]);
     component.onSubmitPrescription();
     expect(component.prescriptionFormSubmitted).toBe(true);
-    const controls = component.prescriptionForm.get('prescriptions') as FormArray;
+    const controls = component.prescriptionForm.get(
+      'prescriptions',
+    ) as FormArray;
     controls.controls.forEach((control): void => {
       expect(control.touched).toBe(true);
     });
   });
 
   it('should check for prescription form errors', (): void => {
-    component.prescriptionForm.controls['prescriptions'].setValue([{ drug: '', dosage: '', duration: '', comment: '' }]);
+    component.prescriptionForm.controls['prescriptions'].setValue([
+      { drug: '', dosage: '', duration: '', comment: '' },
+    ]);
     expect(component.hasPrescriptionFormErrors()).toBe(true);
   });
 });

@@ -26,7 +26,9 @@ describe('VideoComponent', (): void => {
       component.srcObject = mockStream;
       fixture.detectChanges();
 
-      const videoElement = fixture.debugElement.query(By.css('video')).nativeElement;
+      const videoElement = fixture.debugElement.query(
+        By.css('video'),
+      ).nativeElement;
       component.ngAfterViewInit();
       expect(videoElement.srcObject).toBe(mockStream);
     });
@@ -40,7 +42,9 @@ describe('VideoComponent', (): void => {
       component.srcObject = mockStream1;
       fixture.detectChanges();
 
-      const videoElement = fixture.debugElement.query(By.css('video')).nativeElement;
+      const videoElement = fixture.debugElement.query(
+        By.css('video'),
+      ).nativeElement;
       expect(videoElement.srcObject).toBe(mockStream1);
 
       component.ngOnChanges({
@@ -57,10 +61,12 @@ describe('VideoComponent', (): void => {
       component.srcObject = mockStream;
 
       fixture.detectChanges();
-      const videoElement = fixture.debugElement.query(By.css('video')).nativeElement;
+      const videoElement = fixture.debugElement.query(
+        By.css('video'),
+      ).nativeElement;
 
       component.ngAfterViewInit();
-      
+
       expect(videoElement.srcObject).toBe(mockStream);
     });
 
@@ -71,7 +77,9 @@ describe('VideoComponent', (): void => {
       fixture.detectChanges();
       component.ngAfterViewInit();
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Video element or source object not found');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Video element or source object not found',
+      );
     });
   });
 });

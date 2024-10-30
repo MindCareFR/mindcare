@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import type { IUserData } from '../app/interfaces/user.interface';
 
-interface AuthResponse {
+export interface AuthResponse {
   token: string;
   user?: {
     id: string;
