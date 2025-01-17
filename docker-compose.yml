@@ -11,7 +11,17 @@ services:
     volumes:
       - ./front:/app
       - /app/node_modules
-    command: npm start -- --host 0.0.0.0
+    command: >
+      sh -c "
+      ng new app --standalone --style=css --routing=true --skip-git --skip-tests --directory=. &&
+      npm install -D @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint prettier eslint-config-prettier eslint-plugin-prettier &&
+      npm install -D tailwindcss postcss autoprefixer &&
+      npm install -D cypress @cypress/schematic &&
+      npm install lucide-angular @angular/cdk ngx-skeleton-loading @ngrx/store @ngrx/effects @ngrx/entity @ngrx/store-devtools &&
+      npx tailwindcss init &&
+      npm install &&
+      ng serve --host 0.0.0.0
+      "
     depends_on:
       - backend
 
@@ -52,5 +62,47 @@ services:
     depends_on:
       - db
 
+  portainer:
+    image: portainer/portainer-ce
+    ports:
+      - "9443:9443"
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: always
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+
+networks:
+  elastic:
+    driver: bridge
+  volumes:
+  elasticsearch_data:
+
 volumes:
   postgres_data:
+  elasticsearch_data:
+  portainer_data:
