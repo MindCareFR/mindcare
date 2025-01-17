@@ -5,14 +5,20 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
+import { LucideAngularModule, Moon, Sun } from 'lucide-angular';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [],
+  imports: [LucideAngularModule],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent implements OnInit {
+  readonly icons = {
+    Moon,
+    Sun,
+  };
+
   appName = 'MindCare';
 
   @ViewChild('navToggle', { static: true })

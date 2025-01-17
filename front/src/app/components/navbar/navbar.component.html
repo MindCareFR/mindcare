@@ -100,67 +100,7 @@
                   <span>Professionnels de santé</span>
                 </a>
               </li>
-              <li class="relative">
-                <button
-                  class="block md:px-4 transition hover:text-primary"
-                  type="button"
-                  id="dropdownDefaultButton"
-                  data-dropdown-toggle="dropdown"
-                >
-                  <span>
-                    Thème
-                    <svg
-                      class="w-4 h-4 ml-1 inline"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 8l4 4 4-4"
-                      ></path>
-                    </svg>
-                  </span>
-                </button>
-                <div
-                  id="dropdown"
-                  class="absolute hidden z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 mt-2"
-                >
-                  <ul
-                    class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                    aria-labelledby="dropdownDefaultButton"
-                  >
-                    <li>
-                      <button
-                        id="light-mode"
-                        class="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Mode clair
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        id="dark-mode"
-                        class="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Mode sombre
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        id="system-mode"
-                        class="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Système
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </li>
+
             </ul>
           </div>
           <div class="flex flex-col gap-4 mt-10 sm:flex-row lg:mt-0">
@@ -172,6 +112,58 @@
                 >Rejoindre la communauté</span
               >
             </a>
+          </div>
+          <div class="flex flex-col gap-4 mt-10 sm:flex-row lg:mt-0">
+            <button
+            class="block md:px-4 transition hover:text-primary"                 type="button"                 id="dropdownDefaultButton"                 data-dropdown-toggle="dropdown"
+    >
+      <div className="absolute inset-0">
+        <div class="absolute inset-0 bg-white" ></div>
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gray-900" ></div>
+      </div>
+      <div className="relative w-full h-full flex">
+        <div className="w-1/2 flex items-center justify-center">
+          <lucide-angular [img]="icons.Sun" class="w-4 h-4 text-amber-500"></lucide-angular>
+        </div>
+        <div className="w-1/2 flex items-center justify-center">
+          <lucide-angular [img]="icons.Moon" class="w-4 h-4 text-white"></lucide-angular>
+        </div>
+      </div>
+    </button>
+              <div
+                id="dropdown"
+                class="absolute hidden z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 mt-6"
+              >
+                <ul
+                  class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownDefaultButton"
+                >
+                  <li>
+                    <button
+                      id="light-mode"
+                      class="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Mode clair
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      id="dark-mode"
+                      class="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Mode sombre
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      id="system-mode"
+                      class="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Système
+                    </button>
+                  </li>
+                </ul>
+              </div>
           </div>
         </div>
       </div>
