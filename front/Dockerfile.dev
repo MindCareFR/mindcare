@@ -1,11 +1,15 @@
-FROM node:18
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+# Installation globale de l'Angular CLI et des outils de développement
+RUN npm install -g @angular/cli@19 eslint prettier
 
-RUN npm install
+# Installation des dépendances de développement
+RUN npm install -D tailwindcss postcss autoprefixer && \
+  npm install -D cypress @cypress/schematic
 
-COPY . .
+# Initialisation de Tailwind (on le fera plutôt dans la commande du docker-compose)
+# RUN npx tailwindcss init
 
 EXPOSE 4200
