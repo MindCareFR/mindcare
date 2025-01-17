@@ -13,12 +13,14 @@ services:
       - /app/node_modules
     command: >
       sh -c "
-      ng new app --standalone --style=css --routing=true --skip-git --skip-tests --directory=. &&
-      npm install -D @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint prettier eslint-config-prettier eslint-plugin-prettier &&
-      npm install -D tailwindcss postcss autoprefixer &&
-      npm install -D cypress @cypress/schematic &&
-      npm install lucide-angular @angular/cdk ngx-skeleton-loading @ngrx/store @ngrx/effects @ngrx/entity @ngrx/store-devtools &&
-      npx tailwindcss init &&
+      if [ ! -f 'package.json' ]; then
+        ng new app --standalone --style=css --routing=true --skip-git --skip-tests --directory=. &&
+        npm install -D @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint prettier eslint-config-prettier eslint-plugin-prettier &&
+        npm install -D tailwindcss postcss autoprefixer &&
+        npm install -D cypress @cypress/schematic &&
+        npm install lucide-angular @angular/cdk ngx-skeleton-loading @ngrx/store @ngrx/effects @ngrx/entity @ngrx/store-devtools &&
+        npx tailwindcss init
+      fi &&
       npm install &&
       ng serve --host 0.0.0.0
       "
