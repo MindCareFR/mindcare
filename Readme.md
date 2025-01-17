@@ -1,8 +1,6 @@
 # MindCare Project
 
-
 Application de gestion et suivi médical développée avec Angular, Spring Boot et PostgreSQL...
-
 
 ## 🚀 Installation /!\
 
@@ -72,6 +70,19 @@ docker-compose up --build
    - Username: postgres
    - Password: postgres
 
+## 📝 Accés à Kibana
+
+- URL: http://localhost:5601/app/home#/
+  Configurer votre dashboard
+
+## 📝 Elasticsearch (logs)
+
+-URL http://localhost:9200
+
+## Portnair
+
+- URL https://localhost:9443
+
 ## 🛠️ Commandes Docker utiles
 
 ```bash
@@ -111,6 +122,7 @@ npm run lint || npm run lint --fix
 ## Branch convention
 
 Pour toute création de branch voicis les conventions à respecter:
+
 ```bash
 Feature/T-<numéros>
 Bugfix/T-<numéros>
@@ -120,6 +132,7 @@ Draft/T-<numéros>
 ## Commit convention
 
 Pour tout les commit voicis les convention a respecter :
+
 ```bash
 feature(<fichiers>): <une explication claire de la feature>, closes #<numéro>.
 fix(<fichiers>): <Une explication claire du fix>, closes #<numéro>.
@@ -127,6 +140,7 @@ draft(<fichiers>): <une explication de l'essaie>, closes #<numéro>.
 ```
 
 ## Fermer les tickets automatiquement
+
 ```bash
 closes #<numéro>
 fixes #<numéro>
@@ -148,6 +162,40 @@ git branch Draft/T-25 && git commit -m "draft(fixture): Ajout de fixtures pour l
 
 ### /!\ Toute branch ou commit or convention se verras refuser /!\
 
-## 📋 Support
+## 📋 Kibana et les logs
+
+```bash
+#Pour créer les logs dans kibana sa se fait comme ci
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@RestController
+public class YourController {
+    private static final Logger logger = LoggerFactory.getLogger(YourController.class);
+
+    @GetMapping("/example")
+    public String example() {
+        logger.info("Ceci est un log de test");
+        logger.error("Voici une erreur exemple");
+        return "OK";
+    }
+}
+
+#PLusieur type de logs sont prévue et conçus en fonction de l'action réaliser
+@GetMapping("/test-logs")
+public String testLogs() {
+    logger.trace("Message de TRACE");
+    logger.debug("Message de DEBUG");
+    logger.info("Message d'INFO");
+    logger.warn("Message de WARN");
+    logger.error("Message d'ERROR");
+    return "Logs générés avec succès";
+}
+
+```
 
 Pour toute question ou problème, veuillez ouvrir une issue sur le dépôt GitHub.
+
+```
+
+```
