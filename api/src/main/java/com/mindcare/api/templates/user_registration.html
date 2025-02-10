@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue sur MindCare</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 200px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .validity {
+            font-size: 14px;
+            color: #666666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img th:src="${logoUrl}" alt="MindCare Logo">
+        </div>
+        <div class="content">
+            <h2>Bienvenue <span th:text="${firstName + ' ' + lastName}"></span> !</h2>
+            
+            <p>Nous sommes ravis de vous accueillir sur MindCare.</p>
+            
+            <p>Pour finaliser votre inscription et accéder à votre compte, veuillez cliquer sur le bouton ci-dessous :</p>
+            
+            <center>
+                <a class="button" th:href="@{${validationUrl}}">
+                    Valider mon compte
+                </a>
+            </center>
+            
+            <p class="validity">Ce lien est valable jusqu'au : <span th:text="${expirationDate}"></span></p>
+        </div>
+    </div>
+</body>
+</html>
