@@ -12,7 +12,7 @@ Application de gestion et suivi médical développée avec Angular, Spring Boot 
 - Docker et Docker Compose
 - Un terminal Git Bash ou similaire
 
-### Étapes d'installation
+### Étapes d'installation 
 
 1. Cloner le dépôt
 
