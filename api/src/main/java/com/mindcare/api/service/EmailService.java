@@ -1,4 +1,4 @@
-package com.mindcare.api.services;
+package com.mindcare.api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
