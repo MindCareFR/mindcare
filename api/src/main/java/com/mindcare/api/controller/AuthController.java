@@ -3,10 +3,13 @@ package com.mindcare.api.controller;
 import com.mindcare.api.dto.auth.*;
 import com.mindcare.api.service.AuthService;
 import com.mindcare.api.service.EmailService;
+import com.mindcare.api.service.GovernmentApiService;
+import com.mindcare.api.service.AccountValidationService;
 import com.mindcare.api.dto.UserRegistrationDTO;
 import com.mindcare.api.exception.DuplicateEmailException;
 import com.mindcare.api.exception.TokenExpiredException;
 import com.mindcare.api.exception.TokenNotFoundException;
+import com.mindcare.api.exception.ValidationException;
 import com.mindcare.api.model.User;
 import com.mindcare.api.model.VerificationToken;
 import com.mindcare.api.repository.UserRepository;
@@ -40,6 +43,8 @@ public class AuthController {
     private final VerificationTokenRepository tokenRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final AccountValidationService validationService;
+    private final GovernmentApiService govApiService;
 
     @PostMapping("/register/patient")
     public ResponseEntity<?> registerPatient(@Valid @RequestBody RegisterPatientDTO registerDto) {
@@ -83,9 +88,40 @@ public class AuthController {
     public ResponseEntity<?> registerPro(@Valid @RequestBody RegisterProDTO registerDto) {
         log.info("Registration attempt for professional with email: {}", registerDto.getEmail());
         
+        // Validation des données
+        if (!validationService.isValidEmail(registerDto.getEmail())) {
+            throw new ValidationException("Invalid email format");
+        }
+        if (!validationService.isValidPhone(registerDto.getPhone())) {
+            throw new ValidationException("Invalid phone number format");
+        }
+        if (!validationService.isValidPostalCode(registerDto.getZipcode())) {
+            throw new ValidationException("Invalid postal code");
+        }
+        if (!validationService.isValidBirthdate(registerDto.getBirthdate())) {
+            throw new ValidationException("Invalid birthdate");
+        }
+    
+        // Vérification des doublons
         if (userRepository.existsByEmail(registerDto.getEmail())) {
             log.warn("Registration failed: Email already exists - {}", registerDto.getEmail());
             throw new DuplicateEmailException("Email already exists");
+        }
+    
+        // Validation des identifiants professionnels
+        if (!validationService.isValidMedicalId(registerDto.getMedicalIdentificationNumber())) {
+            throw new ValidationException("Invalid medical identification number");
+        }
+        if (!validationService.isValidCompanyId(registerDto.getCompanyIdentificationNumber())) {
+            throw new ValidationException("Invalid company identification number");
+        }
+    
+        // Vérification via les APIs gouvernementales
+        if (!govApiService.verifyMedicalId(registerDto.getMedicalIdentificationNumber())) {
+            throw new ValidationException("Medical identification number not found in government database");
+        }
+        if (!govApiService.verifyCompanyId(registerDto.getCompanyIdentificationNumber())) {
+            throw new ValidationException("Company identification number not found in government database");
         }
 
         User user = authService.registerPro(registerDto);
