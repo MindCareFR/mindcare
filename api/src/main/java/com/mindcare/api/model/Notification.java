@@ -1,5 +1,6 @@
 package com.mindcare.api.model;
 
+import lombok.Builder;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "notifications")
 @Data
+@Builder
 public class Notification {
   
   @Id
@@ -19,8 +21,9 @@ public class Notification {
   @Column(nullable = false)
   private String value;
 
-  @Column(nullable = false)
-  private LocalDateTime createdAt;
+  @Column(name = "created_at", nullable = false)
+  @Builder.Default
+  private LocalDateTime createdAt = LocalDateTime.now();
 
   @Column(nullable = true)
   private LocalDateTime deletedAt;

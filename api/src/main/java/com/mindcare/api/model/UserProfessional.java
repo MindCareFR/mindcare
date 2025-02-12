@@ -35,10 +35,10 @@ public class UserProfessional extends User {
   @Column(nullable = false)
   private String companyName;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String medicalIdentificationNumber;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String companyIdentificationNumber;
 
   @ManyToMany(fetch = FetchType.EAGER)
