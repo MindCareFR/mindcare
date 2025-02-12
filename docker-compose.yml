@@ -1,13 +1,15 @@
-# docker-compose.yml
-version: "3.8"
-
+networks:
+  epichneck:
+    driver: bridge
 services:
-  frontend:
+  frontend-mindcare:
     build:
       context: ./front
       dockerfile: Dockerfile.dev
     ports:
       - "4200:4200"
+    networks:
+      - epichneck
     volumes:
       - ./front:/app
       - /app/node_modules
@@ -24,29 +26,29 @@ services:
       npm install &&
       ng serve --host 0.0.0.0
       "
-    depends_on:
-      - backend
 
-  backend:
+  backend-mindcare:
     build:
       context: ./api
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    networks:
+      - epichneck
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-    depends_on:
-      - db
     volumes:
       - ./api:/app
       - ~/.m2:/root/.m2
 
-  db:
+  db-mindcare:
     image: postgres:latest
     ports:
       - "5432:5432"
+    networks:
+      - epichneck
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -54,57 +56,31 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  pgadmin:
+  pgadmin-mindcare:
     image: dpage/pgadmin4
     ports:
       - "5050:80"
+    networks:
+      - epichneck
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
-    depends_on:
-      - db
 
-  portainer:
-    image: portainer/portainer-ce
-    ports:
-      - "9443:9443"
-      - "8000:8000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    restart: always
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+  grafana-mindcare:
+    image: grafana/grafana-enterprise
+    container_name: grafana-mindcare
+    restart: unless-stopped
     environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-      - xpack.security.enabled=false
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_AUTH_ANONYMOUS_ENABLED=false
     ports:
-      - "9200:9200"
+      - "3000:3000"
     volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
+      - grafana-storage:/var/lib/grafana
     networks:
-      - elastic
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.12.0
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    networks:
-      - elastic
-
-networks:
-  elastic:
-    driver: bridge
-  volumes:
-  elasticsearch_data:
+      - epichneck
 
 volumes:
   postgres_data:
-  elasticsearch_data:
-  portainer_data:
+  grafana-storage: {}
