@@ -87,19 +87,16 @@ docker-compose up --build
 
 ```bash
 # Lancer les services
-docker-compose up
-
-# Lancer les services en arrière-plan
-docker-compose up -d
+make start
 
 # Arrêter les services
-docker-compose down
+make down
 
-# Voir les logs
-docker-compose logs
+# Démarer uniquement le front
+make front
 
-# Voir les logs d'un service spécifique (ex: backend)
-docker-compose logs backend
+# Démarer uniquement le backend
+make back
 ```
 
 ## 🔍 Structure du projet
