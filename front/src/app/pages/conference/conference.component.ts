@@ -26,19 +26,18 @@ import { ChatComponent } from '@shared/chat/chat.component';
 import type { IFormConfig, ValidatorFn } from '@interfaces/form.interface';
 
 @Component({
-  selector: 'app-conference',
-  standalone: true,
-  imports: [
-    VideoComponent,
-    FontAwesomeModule,
-    CommonModule,
-    FormComponent,
-    ReactiveFormsModule,
-    MedicalRecordComponent,
-    ProgressStatComponent,
-    ChatComponent,
-  ],
-  templateUrl: './conference.component.html',
+    selector: 'app-conference',
+    imports: [
+        VideoComponent,
+        FontAwesomeModule,
+        CommonModule,
+        FormComponent,
+        ReactiveFormsModule,
+        MedicalRecordComponent,
+        ProgressStatComponent,
+        ChatComponent,
+    ],
+    templateUrl: './conference.component.html'
 })
 export class ConferenceComponent implements OnInit {
   localStream: MediaStream | null = null;

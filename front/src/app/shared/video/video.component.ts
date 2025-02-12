@@ -9,10 +9,9 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-video',
-  standalone: true,
-  imports: [],
-  templateUrl: './video.component.html',
+    selector: 'app-video',
+    imports: [],
+    templateUrl: './video.component.html'
 })
 export class VideoComponent implements AfterViewInit, OnChanges {
   @Input() srcObject: MediaStream | null = null;

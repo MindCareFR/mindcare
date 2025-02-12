@@ -23,10 +23,9 @@ type FormControls = Record<string, AbstractControl>;
 type FormGroups = Record<string, FormGroup>;
 
 @Component({
-  selector: 'app-form',
-  templateUrl: './form.component.html',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+    selector: 'app-form',
+    templateUrl: './form.component.html',
+    imports: [CommonModule, ReactiveFormsModule]
 })
 export class FormComponent implements OnInit, OnChanges {
   @Input() config: IFormConfig = {

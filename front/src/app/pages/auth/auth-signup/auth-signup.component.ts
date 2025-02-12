@@ -19,16 +19,15 @@ import { Router } from '@angular/router';
 import type { ValidatorFn } from '@interfaces/form.interface';
 
 @Component({
-  selector: 'app-auth-signup',
-  standalone: true,
-  templateUrl: './auth-signup.component.html',
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    FooterComponent,
-    FormComponent,
-    ReactiveFormsModule,
-  ],
+    selector: 'app-auth-signup',
+    templateUrl: './auth-signup.component.html',
+    imports: [
+        CommonModule,
+        NavbarComponent,
+        FooterComponent,
+        FormComponent,
+        ReactiveFormsModule,
+    ]
 })
 export class AuthSignupComponent implements OnInit {
   signupConfig: Record<string, IFormConfig> = {

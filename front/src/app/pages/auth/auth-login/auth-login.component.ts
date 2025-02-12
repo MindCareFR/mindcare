@@ -19,16 +19,15 @@ import type {
 } from '@interfaces/form.interface';
 
 @Component({
-  selector: 'app-auth-login',
-  standalone: true,
-  templateUrl: './auth-login.component.html',
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    FooterComponent,
-    FormComponent,
-    ReactiveFormsModule,
-  ],
+    selector: 'app-auth-login',
+    templateUrl: './auth-login.component.html',
+    imports: [
+        CommonModule,
+        NavbarComponent,
+        FooterComponent,
+        FormComponent,
+        ReactiveFormsModule,
+    ]
 })
 export class AuthLoginComponent implements OnInit {
   loginConfig: IFormConfig = {

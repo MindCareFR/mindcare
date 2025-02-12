@@ -7,10 +7,9 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-navbar',
-  standalone: true,
-  imports: [],
-  templateUrl: './navbar.component.html',
+    selector: 'app-navbar',
+    imports: [],
+    templateUrl: './navbar.component.html'
 })
 export class NavbarComponent implements OnInit {
   appName = 'MindCare';
