@@ -1,13 +1,39 @@
-FROM maven:3.8.4-openjdk-17 as builder
+FROM php:8.2-fpm
 
-WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+# Installation des dépendances système
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    nodejs \
+    npm
 
-FROM openjdk:17-jdk-slim
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /app/target/*.jar app.jar
+# Installation des extensions PHP
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-EXPOSE 8080
+# Installation de Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Définir le répertoire de travail
+WORKDIR /var/www
+
+# Copier les fichiers du projet
+COPY . /var/www
+
+# Installation des dépendances
+RUN composer install
+
+# Permissions sur le dossier storage
+RUN chmod -R 777 storage bootstrap/cache
+
+# Exposer le port 9000
+EXPOSE 9000
+
+CMD ["php-fpm"]
