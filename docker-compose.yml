@@ -1,7 +1,46 @@
 networks:
-  epichneck:
+  web:
     driver: bridge
+  side:
+    driver: bridge
+
 services:
+  laravel-app:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./api:/var/www
+      - /var/www/vendor
+    networks:
+      - web
+      - side
+    command: >
+      sh -c "
+      if [ ! -f 'composer.json' ]; then
+        composer create-project laravel/laravel . &&
+        composer install
+      fi &&
+      php artisan key:generate &&
+      php artisan migrate &&
+      php-fpm
+      "
+
+  nginx-mindcare:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./api:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - laravel-app
+    networks:
+      - web
+
   frontend-mindcare:
     build:
       context: ./front
@@ -9,7 +48,8 @@ services:
     ports:
       - "4200:4200"
     networks:
-      - epichneck
+      - web
+      - side
     volumes:
       - ./front:/app
       - /app/node_modules
@@ -27,48 +67,41 @@ services:
       ng serve --host 0.0.0.0
       "
 
-  backend-mindcare:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    networks:
-      - epichneck
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
-    volumes:
-      - ./api:/app
-      - ~/.m2:/root/.m2
-
   db-mindcare:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    networks:
-      - epichneck
+    image: mysql:8.0
+    restart: unless-stopped
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  pgadmin-mindcare:
-    image: dpage/pgadmin4
-    ports:
-      - "5050:80"
+      - mysql_data:/var/lib/mysql
     networks:
-      - epichneck
+      - side
+    ports:
+      - "${DB_PORT}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin-mindcare:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_mindcare
+    restart: unless-stopped
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PMA_HOST=db-mindcare
+      - PMA_PORT=3306
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "8080:80"
+    networks:
+      - side
 
   grafana-mindcare:
     image: grafana/grafana-enterprise
-    container_name: grafana-mindcare
     restart: unless-stopped
     environment:
       - GF_SERVER_ROOT_URL=http://localhost:3000
@@ -79,8 +112,8 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
     networks:
-      - epichneck
+      - side
 
 volumes:
-  postgres_data:
+  mysql_data:
   grafana-storage: {}

@@ -10,7 +10,7 @@ down:
 	docker compose down
 
 front:
-	docker compose up -d frontend-mindcare
+	docker compose up -d  frontend-mindcare
 
 back:
-	docker compose up --wait -d backend-mindcare db-mindcare pgadmin-mindcare grafana-mindcare
+	docker compose up --wait -d laravel-app nginx-mindcare db-mindcare grafana-mindcare phpmyadmin-mindcare
