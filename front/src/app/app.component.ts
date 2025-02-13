@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
+import { AvatarComponent } from './atoms/avatar/avatar.component';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [AvatarComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'app';
-}
+export class AppComponent {}
