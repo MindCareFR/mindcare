@@ -2,47 +2,60 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+	use HasApiTokens, HasUuids, Notifiable, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+	protected $table = 'users';
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+	protected $primaryKey = 'uuid';
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+	protected $fillable = [
+		'firstname',
+		'lastname',
+		'email',
+		'email_verified',
+		'password',
+		'birthdate',
+		'phone',
+		'token',
+		'address',
+		'address_complement',
+		'zipcode',
+		'city',
+		'country',
+		'role_id'
+	];
+
+	protected $hidden = [
+		'password',
+		'token',
+	];
+
+	protected $casts = [
+		'email_verified' => 'boolean',
+		'birthdate' => 'date',
+		'created_at' => 'datetime',
+		'updated_at' => 'datetime',
+		'deleted_at' => 'datetime',
+	];
+
+	public function notifications(): HasMany
+	{
+		return $this->hasMany(Notification::class);
+	}
+
+	public function role(): BelongsTo
+	{
+		return $this->belongsTo(Role::class);
+	}
 }
