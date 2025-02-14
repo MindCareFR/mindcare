@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'government' => [
+        'company_api_url' => env('COMPANY_API_URL'),
+        'medical_api_url' => env('MEDICAL_API_URL'),
+    ],
+
 ];
