@@ -43,7 +43,7 @@ services:
 
   frontend-mindcare:
     build:
-      context: ./front
+      context: .
       dockerfile: Dockerfile.dev
     ports:
       - "4200:4200"
@@ -60,6 +60,7 @@ services:
         npm install -D @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint prettier eslint-config-prettier eslint-plugin-prettier &&
         npm install -D tailwindcss postcss autoprefixer &&
         npm install -D cypress @cypress/schematic &&
+        npm install primeng @primeng/themes &&
         npm install lucide-angular @angular/cdk ngx-skeleton-loading @ngrx/store @ngrx/effects @ngrx/entity @ngrx/store-devtools &&
         npx tailwindcss init
       fi &&
