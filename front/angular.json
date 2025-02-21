@@ -54,7 +54,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": ["node_modules/"]
+            }
           },
           "configurations": {
             "production": {

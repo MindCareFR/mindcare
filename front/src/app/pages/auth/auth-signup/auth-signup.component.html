@@ -16,13 +16,13 @@
     class="max-w-7xl h-full flex flex-col justify-center mx-auto px-6 md:px-12 xl:px-6 md:min-h-screen"
   >
     <div class="relative pt-36 mx-auto">
-      <div class="lg:w-2/3 mx-auto my-auto space-y-20 mb-28">
+      <div class="lg:w-2/3 mx-auto my-auto space-y-10 mb-28">
         <h1
           class="text-gray-900 text-center dark:text-white font-bold text-4xl md:text-5xl xl:text-6xl"
         >
           <div class="flex items-center justify-center -space-x-2 mb-6">
             <img
-              src="/headbrain_b.webp"
+              src="/headbrain_b.png"
               alt="logo"
               class="block h-20 w-20 dark:hidden"
             />
@@ -35,6 +35,16 @@
           Commencez <span class="text-primary">dès aujourd'hui</span> votre
           aventure spirituelle avec <span class="text-primary">MindCare</span>.
         </h1>
+        
+        <div class="flex justify-center space-x-2">
+          <ng-container *ngFor="let field of signupConfig[selectedAccount].fields; let i = index">
+            <div 
+              class="h-2 rounded-full w-28" 
+              [ngClass]="{'bg-primary': i <= currentGroupIndex, 'bg-gray-300 dark:bg-gray-600': i > currentGroupIndex}"
+            ></div>
+          </ng-container>
+        </div>
+        
         <div
           class="w-full max-w-2xl mx-auto p-[2.5px] bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700 rounded-lg"
         >
@@ -57,7 +67,7 @@
                 [ngClass]="{
                   'border border-primary border-2 text-primary':
                     selectedAccount === 'user',
-                  'bg-primary text-white': selectedAccount !== 'user',
+                  'bg-primary text-white': selectedAccount !== 'user'
                 }"
                 (click)="onSelectAccount('user')"
               >
@@ -82,7 +92,7 @@
                 [ngClass]="{
                   'border-primary border-2 text-primary':
                     selectedAccount === 'professional',
-                  'bg-primary text-white': selectedAccount !== 'professional',
+                  'bg-primary text-white': selectedAccount !== 'professional'
                 }"
                 (click)="onSelectAccount('professional')"
               >
@@ -106,6 +116,8 @@
             <hr class="border-t border-gray-300 dark:border-gray-700" />
             <app-form
               [config]="signupConfig[selectedAccount]"
+              [currentGroupIndex]="currentGroupIndex"
+              (currentGroupIndexChange)="currentGroupIndex = $event"
               (formSubmit)="onFormSubmit($event)"
             ></app-form>
             <hr class="border-t border-gray-300 dark:border-gray-700" />
