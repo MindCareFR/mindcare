@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -9,4 +9,9 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'Hello World from Angular!';
+
+  constructor(private renderer: Renderer2) {
+    this.renderer.addClass(document.body, 'bg-white');
+    this.renderer.addClass(document.body, 'dark:bg-gray-900');
+  }
 }
