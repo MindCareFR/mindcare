@@ -37,7 +37,7 @@ export class FormComponent implements OnInit, OnChanges {
   };
   @Output() formSubmit: EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
 
-  form: FormGroup = this.fb.group({});
+  form!: FormGroup;
   currentGroupIndex = 0;
   formSubmitted = false;
   groupSubmitted = false;
@@ -45,6 +45,7 @@ export class FormComponent implements OnInit, OnChanges {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.form = this.fb.group({});
     this.createForm();
   }
 
