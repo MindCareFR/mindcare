@@ -25,8 +25,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (config('schema.auto_migrate')) {
-            Schema::sync(config('schema.schema'));
-        }
     }
 }
