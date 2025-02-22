@@ -36,16 +36,18 @@ export class FormComponent implements OnInit, OnChanges {
     isIndexed: false,
   };
   @Output() formSubmit: EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
+  @Input() currentGroupIndex = 0;
+  @Output() currentGroupIndexChange = new EventEmitter<number>();
 
-  form!: FormGroup;
-  currentGroupIndex = 0;
+  form: FormGroup;
   formSubmitted = false;
   groupSubmitted = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+    this.form = this.fb.group({});
+  }
 
   ngOnInit(): void {
-    this.form = this.fb.group({});
     this.createForm();
   }
 
@@ -130,6 +132,7 @@ export class FormComponent implements OnInit, OnChanges {
       this.form.get(currentGroup)?.markAllAsTouched();
     } else {
       this.currentGroupIndex++;
+      this.currentGroupIndexChange.emit(this.currentGroupIndex);
       this.groupSubmitted = false;
     }
   }
@@ -137,6 +140,7 @@ export class FormComponent implements OnInit, OnChanges {
   onPrevious(): void {
     if (this.currentGroupIndex > 0) {
       this.currentGroupIndex--;
+      this.currentGroupIndexChange.emit(this.currentGroupIndex);
     }
   }
 
