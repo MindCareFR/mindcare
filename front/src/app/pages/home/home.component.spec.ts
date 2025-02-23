@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AppHomeComponent } from './home.component';
 
 describe('AppHomeComponent', () => {
@@ -18,5 +17,12 @@ describe('AppHomeComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should toggle FAQ item', () => {
+    const index = 0;
+    const initialState = component.faqItems[index].isOpen;
+    component.toggleFaq(index);
+    expect(component.faqItems[index].isOpen).toBe(!initialState);
   });
 });
