@@ -8,7 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@services/auth.service';
-import { NavbarComponent } from '@components/navbar/navbar.component';
+import { NavbarComponent } from '@components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
 import type {

@@ -6,7 +6,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { NavbarComponent } from '@components/navbar/navbar.component';
+import { NavbarComponent } from '@components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
 import {
