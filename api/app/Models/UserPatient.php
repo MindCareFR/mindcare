@@ -2,16 +2,32 @@
 
 namespace App\Models;
 
-class UserPatient extends User
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
+class UserPatient extends Model
 {
-  protected $table = 'user_patients';
+    use HasUuids;
 
-  protected $fillable = [
-    'gender',
-    'is_anonymous',
-  ];
+    protected $table = 'user_patients';
+    
+    protected $primaryKey = 'uuid';
 
-  protected $casts = [
-    'is_anonymous' => 'boolean',
-  ];
+    public $timestamps = false;
+
+    protected $fillable = [
+        'uuid',
+        'gender',
+        'is_anonymous',
+    ];
+
+    protected $casts = [
+        'is_anonymous' => 'boolean',
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'uuid', 'uuid');
+    }
 }

@@ -136,8 +136,18 @@ class AuthController extends Controller
 
     Log::info('Login attempt for user: ' . $request->email);
 
+    $user = User::where('email', $request->email)->first();
+    
+    if ($user && !$user->email_verified) {
+        Log::warning('Login attempt with unverified email: ' . $request->email);
+        return response()->json([
+            'message' => 'Please verify your email address before logging in',
+            'error' => 'email_not_verified'
+        ], 403);
+    }
+
     if (!Auth::attempt($validator->validated())) {
-      return response()->json(['message' => 'Invalid credentials'], 401);
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
     $user = User::where('email', $request->email)->first();
