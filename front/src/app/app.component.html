@@ -1,7 +1,37 @@
 <app-avatar
-  src="favicon.ico"
-  size="40"
-  variant="square"
-  alt="Avatar de l'utilisateur"
->
-</app-avatar>
+    src="favicon.ico"
+    size="40"
+    variant="square"
+    alt="Avatar de l'utilisateur"
+></app-avatar>
+
+<app-button-img
+    label="blue"
+    (clicked)="buyItem()"
+    variant="blue"
+    src="user (2).png"
+></app-button-img>
+
+<app-button-img
+    label="purple"
+    (clicked)="minusItem()"
+    variant="purple"
+    src="user (2).png"
+></app-button-img>
+
+<app-button-img
+    label="transparent"
+    (clicked)="minusItem()"
+    variant="transparent"
+    src="user.png"
+    color="blue"
+    ></app-button-img>
+
+<app-button-img
+    label="disable"
+    variant="disable"
+    src="user (2).png"
+></app-button-img>
+
+<p>{{ count }}</p>
+
