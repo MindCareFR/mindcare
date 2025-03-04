@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { AvatarComponent } from './atoms/avatar/avatar.component';
-import { ButtonImgComponent } from './atoms/test-atom/button-img';
+import { ButtonImgComponent } from './atoms/button-img/button-img';
 
 @Component({
   selector: 'app-root',
