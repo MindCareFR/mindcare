@@ -136,8 +136,18 @@ class AuthController extends Controller
 
     Log::info('Login attempt for user: ' . $request->email);
 
+    $user = User::where('email', $request->email)->first();
+    
+    if ($user && !$user->email_verified) {
+        Log::warning('Login attempt with unverified email: ' . $request->email);
+        return response()->json([
+            'message' => 'Please verify your email address before logging in',
+            'error' => 'email_not_verified'
+        ], 403);
+    }
+
     if (!Auth::attempt($validator->validated())) {
-      return response()->json(['message' => 'Invalid credentials'], 401);
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
     $user = User::where('email', $request->email)->first();
@@ -148,25 +158,25 @@ class AuthController extends Controller
   }
 
   public function verify(Request $request)
-  {
+{
     Log::info('Email verification attempt with token: ' . $request->token);
 
     $token = explode('|', $request->token)[1] ?? null;
     if (!$token) {
-      return response()->json(['message' => 'Invalid token format'], 400);
+        return redirect('http://localhost:4200/auth/login?status=error&message=Invalid token format');
     }
 
     $accessToken = \Laravel\Sanctum\PersonalAccessToken::where('token', hash('sha256', $token))
-      ->where('name', 'email-verify')
-      ->where(function ($query) {
-        $query->where('expires_at', '>', now())
-          ->orWhereNull('expires_at');
-      })
-      ->first();
+        ->where('name', 'email-verify')
+        ->where(function ($query) {
+            $query->where('expires_at', '>', now())
+                ->orWhereNull('expires_at');
+        })
+        ->first();
 
     if (!$accessToken) {
-      Log::warning('Invalid or expired token: ' . $request->token);
-      return response()->json(['message' => 'Invalid or expired verification token'], 400);
+        Log::warning('Invalid or expired token: ' . $request->token);
+        return redirect('http://localhost:4200/auth/login?status=error&message=Invalid or expired verification token');
     }
 
     $user = $accessToken->tokenable;
@@ -174,6 +184,6 @@ class AuthController extends Controller
     $accessToken->delete();
 
     Log::info('Email verified successfully for user: ' . $user->email);
-    return response()->json(['message' => 'Email verified successfully']);
-  }
+    return redirect('http://localhost:4200/auth/login?status=success&message=Email verified successfully');
+}
 }

@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nodejs \
-    npm
+    npm \
+    netcat-traditional
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -31,7 +32,8 @@ COPY . /var/www
 RUN composer install
 
 # Permissions sur le dossier storage
-RUN chmod -R 777 storage bootstrap/cache
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
 # Exposer le port 9000
 EXPOSE 9000

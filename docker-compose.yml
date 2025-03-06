@@ -17,6 +17,8 @@ services:
     networks:
       - web
       - side
+    depends_on:
+      - db-mindcare
     command: >
       sh -c "
       if [ ! -f 'composer.json' ]; then
@@ -24,6 +26,10 @@ services:
         composer install
       fi &&
       php artisan key:generate &&
+      while ! nc -z db-mindcare 3306; do
+        echo 'Waiting for MySQL to be ready...'
+        sleep 1
+      done &&
       php artisan migrate &&
       php-fpm
       "
@@ -35,7 +41,7 @@ services:
       - "8000:80"
     volumes:
       - ./api:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - laravel-app
     networks:

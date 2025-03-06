@@ -3,70 +3,102 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Hash;
 use RuntimeException;
 
 class EncryptionService
 {
-  private string $algorithm = 'AES-256-CBC';
+    private string $method = 'aes-256-cbc';
+    private string $key;
 
-  public function encryptData(string $data): string
-  {
-    try {
-      $salt = Hash::make(random_bytes(16));
-      $key = config('app.encryption_key') . $salt;
-
-      $encryptedData = Crypt::encryptString($data);
-
-      // Store salt with encrypted data
-      return $encryptedData . ':' . $salt;
-    } catch (\Exception $e) {
-      Log::error('Error encrypting data', ['error' => $e->getMessage()]);
-      throw new RuntimeException('Error encrypting data', 0, $e);
+    public function __construct()
+    {
+        $this->key = config('app.encryption_key');
+        if (empty($this->key)) {
+            $this->key = env('APP_ENCRYPTION_KEY');
+            
+            if (empty($this->key)) {
+                if (app()->environment(['local', 'testing'])) {
+                    Log::warning('No encryption key found, using development key');
+                    $this->key = str_repeat('dev_key_', 4); 
+                } else {
+                    throw new RuntimeException('Encryption key not found in configuration');
+                }
+            }
+        }
     }
-  }
 
-  public function decryptData(string $encryptedDataWithSalt): string
-  {
-    try {
-      // Split encrypted data and salt
-      $parts = explode(':', $encryptedDataWithSalt);
-      if (count($parts) !== 2) {
-        throw new RuntimeException('Invalid encrypted data format');
-      }
+    public function encryptData(?string $data): ?string
+    {
+        if ($data === null) {
+            return null;
+        }
 
-      $encryptedData = $parts[0];
+        try {
+            $ivLength = openssl_cipher_iv_length($this->method);
+            $iv = openssl_random_pseudo_bytes($ivLength);
+            
+            $encrypted = openssl_encrypt(
+                $data,
+                $this->method,
+                $this->key,
+                OPENSSL_RAW_DATA,
+                $iv
+            );
 
-      return Crypt::decryptString($encryptedData);
-    } catch (\Exception $e) {
-      Log::error('Error decrypting data', ['error' => $e->getMessage()]);
-      throw new RuntimeException('Error decrypting data', 0, $e);
+            if ($encrypted === false) {
+                throw new RuntimeException('Encryption failed');
+            }
+
+            return base64_encode($iv . $encrypted);
+        } catch (\Exception $e) {
+            Log::error('Error encrypting data', ['error' => $e->getMessage()]);
+            throw new RuntimeException('Error encrypting data', 0, $e);
+        }
     }
-  }
 
-  public function hashData(string $data): string
-  {
-    return Hash::make($data);
-  }
+    public function decryptData(?string $encryptedData): ?string
+    {
+        if ($encryptedData === null) {
+            return null;
+        }
 
-  public function verifyHash(string $data, string $hashedData): bool
-  {
-    try {
-      return Hash::check($data, $hashedData);
-    } catch (\Exception $e) {
-      Log::error('Error verifying hash', ['error' => $e->getMessage()]);
-      return false;
+        try {
+            $ivLength = openssl_cipher_iv_length($this->method);
+            $data = base64_decode($encryptedData);
+            
+            $iv = substr($data, 0, $ivLength);
+            $encrypted = substr($data, $ivLength);
+
+            $decrypted = openssl_decrypt(
+                $encrypted,
+                $this->method,
+                $this->key,
+                OPENSSL_RAW_DATA,
+                $iv
+            );
+
+            if ($decrypted === false) {
+                throw new RuntimeException('Decryption failed');
+            }
+
+            return $decrypted;
+        } catch (\Exception $e) {
+            Log::error('Error decrypting data', ['error' => $e->getMessage()]);
+            throw new RuntimeException('Error decrypting data', 0, $e);
+        }
     }
-  }
 
-  public function isEncrypted(string $data): bool
-  {
-    try {
-      $parts = explode(':', $data);
-      return count($parts) === 2 && !empty($parts[0]) && !empty($parts[1]);
-    } catch (\Exception $e) {
-      return false;
+    public function isEncrypted(?string $data): bool
+    {
+        if ($data === null) {
+            return false;
+        }
+
+        try {
+            $decoded = base64_decode($data, true);
+            return $decoded !== false;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
-  }
 }
