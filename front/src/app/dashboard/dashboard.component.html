@@ -1,0 +1,22 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+  <!-- Header -->
+  <app-header
+    [appName]="appName"
+    [userName]="userProfile.name"
+    (toggleSidebarEvent)="toggleSidebar()">
+  </app-header>
+
+  <div class="flex pt-16">
+    <app-sidebar
+      [isOpen]="isSidebarOpen"
+      [userName]="userProfile.name"
+      [userAvatar]="userProfile.avatar"
+      [notifications]="userProfile.notifications">
+    </app-sidebar>
+
+    <div class="flex-1 p-4 md:p-6 lg:ml-64 transition-all duration-300" [ngClass]="{'lg:ml-0': !isSidebarOpen}">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

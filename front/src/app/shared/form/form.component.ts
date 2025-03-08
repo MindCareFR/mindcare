@@ -13,11 +13,12 @@ import {
   AbstractControl,
   ValidationErrors,
   FormControl,
-  ValidatorFn as AValidatorFn,
+  ValidatorFn as AngularValidatorFn,
+  Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { IFormConfig } from '@interfaces/form.interface';
+import { IFormConfig, ValidatorFn } from '@interfaces/form.interface';
 
 type FormControls = Record<string, AbstractControl>;
 type FormGroups = Record<string, FormGroup>;
@@ -63,15 +64,19 @@ export class FormComponent implements OnInit, OnChanges {
 
     this.config.fields.forEach((fieldGroup) => {
       fieldGroup.fields.forEach((field) => {
+        // Convert our custom ValidatorFn array to Angular's ValidatorFn array
+        const validators = field.validators?.map(validator =>
+          validator as unknown as AngularValidatorFn) || [];
+
         if (field.options) {
           control = this.fb.control(
             field.type === 'select' ? field.options[0] : '',
-            (field.validators as unknown as AValidatorFn) || [],
+            validators
           );
         } else {
           control = this.fb.control(
             '',
-            (field.validators as unknown as AValidatorFn) || [],
+            validators
           );
         }
         if (!group[fieldGroup.group]) {
@@ -90,9 +95,13 @@ export class FormComponent implements OnInit, OnChanges {
     const formGroups = this.config.fields.reduce((groups, group) => {
       const formControls = group.fields.reduce<FormControls>(
         (controls, field) => {
+          // Convert our custom ValidatorFn array to Angular's ValidatorFn array
+          const validators = field.validators?.map(validator =>
+            validator as unknown as AngularValidatorFn) || [];
+
           controls[field.name] = this.fb.control(
             '',
-            (field.validators as unknown as AValidatorFn) || [],
+            validators
           );
           return controls;
         },
@@ -161,7 +170,7 @@ export class FormComponent implements OnInit, OnChanges {
     });
   }
 
-  passwordMatchValidator: AValidatorFn = (
+  passwordMatchValidator: AngularValidatorFn = (
     form: AbstractControl,
   ): ValidationErrors | null => {
     const password = form.get('identity.password');
@@ -174,7 +183,13 @@ export class FormComponent implements OnInit, OnChanges {
       confirmPassword.setErrors({ mismatch: true });
       return { mismatch: true };
     } else {
-      confirmPassword?.setErrors(null);
+      // Only clear the mismatch error, not other errors
+      if (confirmPassword?.errors) {
+        const { mismatch, ...otherErrors } = confirmPassword.errors;
+        confirmPassword.setErrors(
+          Object.keys(otherErrors).length ? otherErrors : null
+        );
+      }
       return null;
     }
   };

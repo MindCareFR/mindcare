@@ -10,6 +10,7 @@
       "@shared/*": ["src/app/shared/*"],
       "@interfaces/*": ["src/app/interfaces/*"],
       "@services/*": ["src/services/*"],
+      "@fortawesome/*": ["node_modules/@fortawesome/*"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -22,15 +23,7 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022",
-    "baseUrl": "./",
-    "paths": {
-      "@services/*": ["src/services/*"],
-      "@components/*": ["src/app/components/*"],
-      "@shared/*": ["src/app/shared/*"],
-      "@interfaces/*": ["src/app/interfaces/*"],
-      "@fortawesome/*": ["node_modules/@fortawesome/*"]
-    }
+    "module": "ES2022"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

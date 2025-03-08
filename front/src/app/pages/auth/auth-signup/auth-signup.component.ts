@@ -31,6 +31,8 @@ import type { ValidatorFn } from '@interfaces/form.interface';
   ],
 })
 export class AuthSignupComponent implements OnInit {
+  appName = 'MindCare';
+
   signupConfig: Record<string, IFormConfig> = {
     user: {
       fields: [

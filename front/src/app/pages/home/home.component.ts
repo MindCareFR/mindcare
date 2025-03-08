@@ -36,43 +36,43 @@ export class AppHomeComponent {
 
   faqItems: FaqItem[] = [
     {
-      question: 'Comment fonctionne le suivi personnalisé ?',
-      answer: 'Notre suivi personnalisé utilise des indicateurs adaptés à vos objectifs et besoins spécifiques. Vous recevez des notifications régulières, pouvez suivre vos progrès via des graphiques intuitifs, et votre praticien peut ajuster votre programme en fonction de votre évolution.',
+      question: "Comment puis-je prendre rendez-vous avec un professionnel ?",
+      answer: "Vous pouvez prendre rendez-vous directement depuis votre tableau de bord en cliquant sur 'Trouver un professionnel', puis en sélectionnant le professionnel qui vous convient et un créneau disponible dans son agenda.",
       isOpen: false,
       style: {
-        border: 'border-[#A855F7]',
-        hover: 'hover:bg-[#A855F7]/5',
-        icon: 'text-[#A855F7]'
+        border: "border-gray-200 dark:border-gray-700",
+        hover: "hover:bg-gray-50 dark:hover:bg-gray-800",
+        icon: "text-indigo-600"
       }
     },
     {
-      question: 'Est-ce que mes informations sont sécurisées ?',
-      answer: 'Absolument ! Nous prenons la sécurité de vos données très au sérieux. Toutes les informations sont cryptées selon les normes les plus strictes, et nous sommes conformes aux réglementations RGPD. Seuls vous et les professionnels de santé autorisés peuvent accéder à vos données.',
+      question: "Les consultations en ligne sont-elles sécurisées ?",
+      answer: "Oui, toutes nos consultations en ligne sont cryptées de bout en bout et respectent les normes de sécurité les plus strictes en matière de confidentialité des données de santé.",
       isOpen: false,
       style: {
-        border: 'border-[#4B70F5]',
-        hover: 'hover:bg-[#4B70F5]/5',
-        icon: 'text-[#4B70F5]'
+        border: "border-gray-200 dark:border-gray-700",
+        hover: "hover:bg-gray-50 dark:hover:bg-gray-800",
+        icon: "text-indigo-600"
       }
     },
     {
-      question: 'Puis-je annuler une consultation en ligne ?',
-      answer: "Oui, vous pouvez annuler ou reprogrammer une consultation jusqu'à 24 heures avant le rendez-vous prévu. Il vous suffit d'accéder à votre calendrier dans l'application et de gérer vos rendez-vous. Un remboursement complet est effectué pour les annulations respectant ce délai.",
+      question: "Comment puis-je accéder aux ressources thérapeutiques ?",
+      answer: "Les ressources thérapeutiques sont accessibles depuis votre espace personnel. Vous pouvez les filtrer par catégorie (méditation, gestion du stress, sommeil, etc.) ou suivre les recommandations personnalisées.",
       isOpen: false,
       style: {
-        border: 'border-[#A855F7]',
-        hover: 'hover:bg-[#A855F7]/5',
-        icon: 'text-[#A855F7]'
+        border: "border-gray-200 dark:border-gray-700",
+        hover: "hover:bg-gray-50 dark:hover:bg-gray-800",
+        icon: "text-indigo-600"
       }
     },
     {
-      question: 'Comment les ressources sont-elles personnalisées en fonction de mes besoins sur MindCare ?',
-      answer: "Les ressources sont personnalisées grâce à un questionnaire initial détaillé et à l'analyse continue de vos interactions avec l'application. Notre système adapte les recommandations en fonction de vos objectifs, préférences et progrès, tout en prenant en compte les retours de votre praticien.",
+      question: "Quels sont les tarifs pour les professionnels ?",
+      answer: "Nous proposons plusieurs formules d'abonnement adaptées aux besoins des professionnels. L'offre de base est gratuite avec des fonctionnalités limitées, tandis que nos offres Premium et Pro offrent des outils avancés pour optimiser votre pratique.",
       isOpen: false,
       style: {
-        border: 'border-[#4B70F5]',
-        hover: 'hover:bg-[#4B70F5]/5',
-        icon: 'text-[#4B70F5]'
+        border: "border-gray-200 dark:border-gray-700",
+        hover: "hover:bg-gray-50 dark:hover:bg-gray-800",
+        icon: "text-indigo-600"
       }
     }
   ];

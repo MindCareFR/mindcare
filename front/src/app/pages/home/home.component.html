@@ -1,11 +1,11 @@
 <app-navbar></app-navbar>
 
-<main class="bg-white dark:bg-gray-900 space-y-40 mb-40 sm:space-y-20">
-  <!-- Section Accueil -->
+<main class="bg-white dark:bg-gray-900 space-y-24 mb-24 sm:space-y-16">
+
   <section class="relative" id="home">
-    <div aria-hidden="true" class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
-      <div class="blur-[106px] h-56 bg-gradient-to-br from-[#A855F7] to-[#c084fc] dark:from-[#3b0764]"></div>
-      <div class="blur-[106px] h-32 bg-gradient-to-r from-[#4B70F5] to-[#93c5fd] dark:to-[#1e3a8a]"></div>
+    <div aria-hidden="true" class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-20 dark:opacity-10">
+      <div class="blur-[106px] h-56 bg-gradient-to-br from-indigo-500 to-purple-400 dark:from-indigo-700"></div>
+      <div class="blur-[106px] h-32 bg-gradient-to-r from-indigo-400 to-blue-300 dark:to-indigo-800"></div>
     </div>
 
     <div class="max-w-7xl mx-auto px-6 md:px-12 xl:px-6 min-h-screen flex items-center">
@@ -14,66 +14,57 @@
           <h1 class="text-4xl md:text-6xl font-bold dark:text-white leading-tight mb-8">
             Ensemble, créons la 1ère
             <br class="hidden xl:block" />
-            <span class="text-[#A855F7]">communauté</span> qui se
+            <span class="text-primary">communauté</span> qui se
             <br class="hidden xl:block" />
-            soucie du <span class="text-[#4B70F5]">bien-être mental</span>.
+            soucie du <span class="text-indigo-600">bien-être mental</span>.
           </h1>
 
-          <p class="text-gray-700 text-lg mb-12 max-w-2xl mx-auto dark:text-white">
-            <span class="text-[#4B70F5] font-semibold">{{ appName }}</span> réduit la fracture entre patients et professionnels de santé en bâtissant une communauté dédiée au bien-être mental. Profitez de ressources et d'exercices thérapeutiques, ainsi que d'un suivi personnalisé de vos progrès pour améliorer votre santé mentale au quotidien.
-          </p>
-          <p class="text-gray-700 text-lg mb-12 max-w-2xl mx-auto dark:text-white">
-            <span class="text-black font-semibold dark:text-gray-500">Profitez</span> de ressources, <span class="text-[#A855F7] font-semibold ">d'exercices thérapeutiques</span> et d'un <span class="text-[#4F46E5] font-semibold">suivi personnalisé</span> pour <span class="text-[#4B70F5]  font-semibold"> améliorer votre santé mentale</span> au <span class="text-black font-semibold dark:text-gray-500">quotidien</span>.
+          <p class="text-gray-700 text-lg mb-8 max-w-2xl mx-auto dark:text-gray-200">
+            <span class="text-primary font-semibold">{{ appName }}</span> réduit la fracture entre patients et professionnels de santé en bâtissant une communauté dédiée au bien-être mental. Profitez de ressources et d'exercices thérapeutiques, ainsi que d'un suivi personnalisé de vos progrès.
           </p>
 
           <div class="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-            <button class="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#A855F7] text-white hover:bg-[#9333ea] transition-colors">
-              <fa-icon [icon]="faUser"></fa-icon>
+            <a href="/auth/signup" class="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-white hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors shadow-md hover:shadow-lg dark:shadow-indigo-700/50 transform hover:-translate-y-1">
+              <fa-icon [icon]="faUser" class="mr-2"></fa-icon>
               Je suis un bénéficiaire
-            </button>
-            <button class="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#4B70F5] text-white hover:bg-[#3b5ad1] transition-colors">
-              <fa-icon [icon]="faBriefcase"></fa-icon>
+            </a>
+            <a href="/auth/signup" class="flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white border-2 border-primary text-primary hover:bg-indigo-50 dark:bg-transparent dark:text-white dark:border-indigo-400 dark:hover:bg-indigo-900/30 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
+              <fa-icon [icon]="faBriefcase" class="mr-2"></fa-icon>
               Je suis un professionnel
-            </button>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="py-16 px-4 md:px-8">
+  <section id="community" class="py-16 px-4 md:px-8">
     <div class="max-w-7xl mx-auto">
-      <!-- Titre et Description -->
+
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
-          Rejoignez la <span class="text-[#A855F7]">communauté</span> <span class="text-[#4B70F5]"> {{ appName }}</span>
+          Rejoignez la <span class="text-indigo-600">communauté</span> <span class="text-primary"> {{ appName }}</span>
         </h2>
 
-        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-white">
-          Chez <span class="text-[#4B70F5] font-semibold">{{ appName }}</span>, nous croyons que le
-          <span class="text-[#A855F7] font-semibold">bien-être mental</span> est essentiel et qu'il doit être
-          <span class="text-[#4F46E5] font-semibold">accessible à tous</span>. Notre
-          <span class="font-semibold text-black dark:text-gray-500">communauté</span> rassemble
-          <span class="text-[#A855F7] font-semibold">patients</span> et
-          <span class="text-[#4F46E5] font-semibold">professionnels</span> pour un
-          <span class="text-[#4B70F5] font-semibold">soutien mutuel</span> et un
-          <span class="font-semibold text-black dark:text-gray-500">suivi de qualité</span>.
+        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-gray-200">
+          Chez <span class="text-primary font-semibold">{{ appName }}</span>, nous croyons que le
+          <span class="text-indigo-600 font-semibold">bien-être mental</span> est essentiel et doit être
+          accessible à tous. Notre communauté rassemble patients et professionnels pour un soutien mutuel et un suivi de qualité.
         </p>
       </div>
 
-      <!-- Contenu Principal -->
       <div class="grid md:grid-cols-2 gap-12 items-center">
-        <!-- Image à gauche -->
+
         <div class="w-full max-w-lg mx-auto">
           <img
             src="/picture-landing-page/picture_hand.png"
             alt="Illustration communauté"
-            class="max-w-md h-auto "
+            class="max-w-md h-auto"
           />
         </div>
-        <div class="space-y-8 pl-8 border-l border-gray-800 dark:border-white"> <!-- Ajout de pl-8 et modification du border -->
+        <div class="space-y-8 pl-8 border-l border-gray-300 dark:border-gray-700">
           <div class="flex items-start gap-4">
-            <div class="w-14 h-14 flex-shrink-0 bg-[#A855F7]/10 p-3 rounded-xl">
+            <div class="w-14 h-14 flex-shrink-0 bg-indigo-100 p-3 rounded-xl dark:bg-white">
               <img
                 src="/picture-landing-page/picture_heart.png"
                 alt="Icône bénéficiaires"
@@ -81,16 +72,15 @@
               />
             </div>
             <div>
-              <h3 class="text-xl font-semibold text-[#4B70F5] mb-2">Pour les Bénéficiaires</h3>
-              <p class="text-gray-700 dark:text-white">
+              <h3 class="text-xl font-semibold text-indigo-600 mb-2">Pour les Bénéficiaires</h3>
+              <p class="text-gray-700 dark:text-gray-200">
                 Accédez à un forum de soutien communautaire et partagez vos expériences pour avancer ensemble.
               </p>
             </div>
           </div>
 
-          <!-- Pour les Professionnels -->
           <div class="flex items-start gap-4">
-            <div class="w-14 h-14 flex-shrink-0 bg-[#A855F7]/10 p-3 rounded-xl">
+            <div class="w-14 h-14 flex-shrink-0 bg-indigo-100 p-3 rounded-xl dark:bg-white">
               <img
                 src="/picture-landing-page/picture_.praticien.png"
                 alt="Icône professionnels"
@@ -98,17 +88,16 @@
               />
             </div>
             <div>
-              <h3 class="text-xl font-semibold text-[#A855F7] mb-2">Pour les Professionnels de Santé</h3>
-              <p class="text-gray-700 dark:text-white">
+              <h3 class="text-xl font-semibold text-indigo-600 mb-2">Pour les Professionnels de Santé</h3>
+              <p class="text-gray-700 dark:text-gray-200">
                 Rejoignez un réseau de praticiens dévoués et connectez-vous avec des patients en quête de bien-être.
               </p>
             </div>
           </div>
 
-          <!-- Bouton -->
           <div class="mt-8 flex justify-end">
             <a href="#"
-               class="inline-block px-8 py-3 bg-[#4B70F5] text-white rounded-full font-medium hover:bg-[#3b5ad1] transition-colors"
+               class="inline-block px-8 py-3 bg-primary text-white rounded-full font-medium hover:bg-indigo-500 transition-colors"
             >
               Rejoindre la communauté
             </a>
@@ -118,72 +107,67 @@
     </div>
   </section>
 
-  <section class="py-16 px-4 md:px-8">
+  <section id="method" class="py-16 px-4 md:px-8 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto">
-      <!-- Titre et Description -->
+
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
-          Une méthode <span class="text-[#4B70F5]">innovante</span> et <span class="text-[#A855F7]">adaptée</span>
+          Une méthode <span class="text-indigo-600">innovante</span> et <span class="text-primary">adaptée</span>
         </h2>
 
-        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-white">
-          <span class="text-[#4B70F5] font-semibold">{{ appName }}</span> propose des
-          <span class="text-[#A855F7] font-semibold">fonctionnalités</span> pour
-          <span class="text-[#4F46E5] font-semibold">soutenir</span> le bien-être mental de manière
-          <span class="text-[#black] font-semibold">innovante</span>, en
-          <span class="text-[#A855F7] font-semibold">simplifiant</span> les échanges entre
-          <span class="text-[#4F46E5] font-semibold">professionnels</span> et patients.
+        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-gray-200">
+          <span class="text-primary font-semibold">{{ appName }}</span> propose des
+          fonctionnalités pour soutenir le bien-être mental de manière
+          innovante, en simplifiant les échanges entre
+          professionnels et patients.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 bg-gradient-to-r from-[#4F46E5] to-[#2A3040] p-5 rounded-2xl md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Carte 1 -->
+      <div class="grid grid-cols-1 bg-gradient-to-r from-indigo-600 to-gray-600 dark:from-indigo-500 dark:to-purple-700 p-5 rounded-2xl md:grid-cols-2 lg:grid-cols-4 gap-6 shadow-lg">
+
         <div class="bg-white rounded-xl p-4 shadow-lg h-[350px]">
           <img
             src="/picture-landing-page/picture_consultation.jpg"
             alt="Consultations en ligne"
             class="w-full h-40 object-contain mb-2"
           />
-          <h3 class="text-[#A855F7] text-lg font-semibold mb-2">Consultations en ligne</h3>
+          <h3 class="text-indigo-600 text-lg font-semibold mb-2">Consultations en ligne</h3>
           <p class="text-gray-700 text-sm">
             Accédez à des séances en visio avec des professionnels de santé mentale, en toute sécurité et depuis chez vous.
           </p>
         </div>
 
-        <!-- Carte 2 -->
         <div class="bg-white rounded-xl p-4 shadow-lg h-[350px]">
           <img
             src="/picture-landing-page/picture_suivi_perso.jpg"
             alt="Suivi personnalisé"
             class="w-full h-40 object-contain mb-2"
           />
-          <h3 class="text-[#A855F7] text-lg font-semibold mb-2">Suivi personnalisé</h3>
+          <h3 class="text-indigo-600 text-lg font-semibold mb-2">Suivi personnalisé</h3>
           <p class="text-gray-700 text-sm">
             Suivez vos progrès grâce à des indicateurs personnalisés et recevez des notifications pour rester motivé.
           </p>
         </div>
 
-        <!-- Carte 3 -->
         <div class="bg-white rounded-xl p-4 shadow-lg h-[350px]">
           <img
             src="/picture-landing-page/picture_ressource_exercice.jpg"
             alt="Ressources et exercices"
             class="w-full h-40 object-contain mb-2"
           />
-          <h3 class="text-[#A855F7] text-lg font-semibold mb-2">Ressources et exercices</h3>
+          <h3 class="text-indigo-600 text-lg font-semibold mb-2">Ressources et exercices</h3>
           <p class="text-gray-700 text-sm">
             Accédez à une variété de ressources et d'exercices thérapeutiques adaptés à vos besoins.
           </p>
         </div>
 
-        <!-- Carte 4 -->
         <div class="bg-white rounded-xl p-4 shadow-lg h-[350px]">
           <img
             src="/picture-landing-page/picture_forum_communautaire.png"
             alt="Forum de soutien communautaire"
             class="w-full h-40 object-contain mb-2"
           />
-          <h3 class="text-[#A855F7] text-lg font-semibold mb-2">Forum de soutien communautaire</h3>
+          <h3 class="text-indigo-600 text-lg font-semibold mb-2">Forum de soutien communautaire</h3>
           <p class="text-gray-700 text-sm">
             Participez à notre forum pour partager vos expériences et recevoir du soutien de la communauté.
           </p>
@@ -192,29 +176,26 @@
     </div>
   </section>
 
-  <section class="py-16 px-4 md:px-8">
+  <section id="resources" class="py-16 px-4 md:px-8">
     <div class="max-w-7xl mx-auto">
-      <!-- Titre et Description -->
+
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
-          Des <span class="text-[#A855F7]">ressources</span> pour
-          <span class="text-[#4B70F5]">vous accompagner</span> au
-          <span class="text-[#4B70F5]">quotidien</span>
+          Des <span class="text-indigo-600">ressources</span> pour
+          <span class="text-primary">vous accompagner</span> au
+          quotidien
         </h2>
 
-        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-white">
-          <span class="text-[#4B70F5] font-semibold">{{ appName }}</span> met à disposition une
-          <span class="text-[#A855F7] font-semibold">variété de ressources</span> pour
-          <span class="text-[#4F46E5] font-semibold">soutenir</span> votre bien-être, qu'il s'agisse de
-          <span class="text-black font-semibold dark:text-gray-500">relaxation</span>, de
-          <span class="text-[#4F46E5] font-semibold">gestion de stress</span>, ou de
-          <span class="text-[#4B70F5] font-semibold">développement personnel</span>.
+        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-gray-200">
+          <span class="text-primary font-semibold">{{ appName }}</span> met à disposition une
+          variété de ressources pour soutenir votre bien-être, qu'il s'agisse de
+          relaxation, de gestion de stress, ou de
+          développement personnel.
         </p>
       </div>
 
-      <!-- Contenu Principal -->
       <div class="grid md:grid-cols-2 gap-12 items-center">
-        <!-- Image à gauche -->
+
         <div class="w-full max-w-lg mx-auto">
           <img
             src="/picture-landing-page/picutre_head_puzzle.png"
@@ -223,11 +204,10 @@
           />
         </div>
 
-        <!-- Liste à droite -->
-        <div class="space-y-8 pl-8 border-l border-gray-800 dark:border-white"> <!-- Ajout de pl-8 et modification du border -->
-          <!-- Articles et Guides -->
+        <div class="space-y-8 pl-8 border-l border-gray-300 dark:border-gray-700">
+
           <div class="flex items-start gap-4">
-            <div class="w-36 h-20 flex-shrink-0 border-[1px] border-[#A855F7] rounded-lg">
+            <div class="w-36 h-20 flex-shrink-0 border border-indigo-300 rounded-lg dark:border-indigo-600">
               <img
                 src="/picture-landing-page/picture_article_guide.png"
                 alt="Articles et guides"
@@ -236,15 +216,14 @@
             </div>
             <div>
               <h3 class="text-lg font-semibold mb-1 text-gray-900 dark:text-white">
-                <span class="text-[#A855F7]">Articles et Guides</span> :
-                <span class="font-normal text-base text-gray-700 dark:text-white">Explorez des articles et guides pratiques pour prendre soin de votre santé mentale.</span>
+                <span class="text-indigo-600">Articles et Guides</span> :
+                <span class="font-normal text-base text-gray-700 dark:text-gray-200">Explorez des articles et guides pratiques pour prendre soin de votre santé mentale.</span>
               </h3>
             </div>
           </div>
 
-          <!-- Exercices Thérapeutiques -->
           <div class="flex items-start gap-4">
-            <div class="w-36 h-20 flex-shrink-0 border-[1px] border-[#4B70F5] rounded-lg">
+            <div class="w-36 h-20 flex-shrink-0 border border-indigo-300 rounded-lg dark:border-indigo-600">
               <img
                 src="/picture-landing-page/picture_exercice_therapeutique.png"
                 alt="Exercices thérapeutiques"
@@ -253,15 +232,14 @@
             </div>
             <div>
               <h3 class="text-lg font-semibold mb-1 text-gray-900 dark:text-white">
-                <span class="text-[#4B70F5]">Exercices Thérapeutiques</span> :
-                <span class="font-normal text-base text-gray-700 dark:text-white">Accédez à des exercices adaptés pour travailler sur vos émotions et vos objectifs de bien-être.</span>
+                <span class="text-indigo-600">Exercices Thérapeutiques</span> :
+                <span class="font-normal text-base text-gray-700 dark:text-gray-200">Accédez à des exercices adaptés pour travailler sur vos émotions et vos objectifs de bien-être.</span>
               </h3>
             </div>
           </div>
 
-          <!-- Forum de Soutien -->
           <div class="flex items-start gap-4">
-            <div class="w-36 h-20 flex-shrink-0 border-[1px] border-black rounded-lg dark:border-gray-500">
+            <div class="w-36 h-20 flex-shrink-0 border border-indigo-300 rounded-lg dark:border-indigo-600">
               <img
                 src="/picture-landing-page/picture_forum_soutient.png"
                 alt="Forum de soutien"
@@ -270,16 +248,15 @@
             </div>
             <div>
               <h3 class="text-lg font-semibold mb-1 text-gray-900 dark:text-white">
-                <span class="text-black dark:text-gray-500">Forum de Soutien Communautaire</span> :
-                <span class="font-normal text-base text-gray-700 dark:text-white">Participez au forum pour partager vos expériences et recevoir du soutien.</span>
+                <span class="text-indigo-600">Forum de Soutien Communautaire</span> :
+                <span class="font-normal text-base text-gray-700 dark:text-gray-200">Participez au forum pour partager vos expériences et recevoir du soutien.</span>
               </h3>
             </div>
           </div>
 
-          <!-- Bouton -->
           <div class="mt-12 flex justify-end">
             <a href="#"
-               class="inline-block px-8 py-3 bg-[#4B70F5] text-white rounded-full font-medium hover:bg-[#3b5ad1] transition-colors"
+               class="inline-block px-8 py-3 bg-primary text-white rounded-full font-medium hover:bg-indigo-500 transition-colors"
             >
               Accéder à mes ressources
             </a>
@@ -289,72 +266,69 @@
     </div>
   </section>
 
-  <section class="py-16 px-4 md:px-8">
+  <section id="professional" class="py-16 px-4 md:px-8 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto">
-      <!-- Titre et Description -->
+
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
-          <span class="text-[#4B70F5]">{{ appName }}</span> pour les <span class="text-[#A855F7]">professionnels</span> de santé
+          <span class="text-primary">{{ appName }}</span> pour les <span class="text-indigo-600">professionnels</span> de santé
         </h2>
 
-        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-white">
-          <span class="text-[#4B70F5] font-semibold">Simplifiez</span> la
-          <span class="text-[#A855F7] font-semibold">gestion</span> de votre
-          <span class="text-[#4F46E5] font-semibold">pratique</span> et assurez un suivi optimal de vos
-          <span class="text-[#A855F7] font-semibold">patients</span> grâce aux
-          <span class="text-black font-semibold dark:text-gray-500">outils innovants</span> de
-          <span class="text-[#4B70F5] font-semibold">MindCare</span>.
+        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-gray-200">
+          <span class="text-indigo-600 font-semibold">Simplifiez</span> la
+          gestion de votre
+          pratique et assurez un suivi optimal de vos
+          patients grâce aux
+          outils innovants de
+          <span class="text-primary font-semibold">{{ appName }}</span>.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 bg-gradient-to-r from-[#A855F7] to-[#2A3040] p-5 rounded-2xl md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Carte 1 -->
+      <div class="grid grid-cols-1 bg-gradient-to-r from-gray-600 to-indigo-500 dark:from-violet-500 dark:to-indigo-700 p-5 rounded-2xl md:grid-cols-2 lg:grid-cols-4 gap-6 shadow-lg">
+
         <div class="bg-white rounded-xl p-4 shadow-lg h-[350px]">
           <img
             src="/picture-landing-page/picture_gestion_docu.jpg"
             alt="Gestion intuitive des documents"
             class="w-full h-40 object-contain mb-2"
           />
-          <h3 class="text-[#4B70F5] text-lg font-semibold mb-2">Gestion intuitive des documents</h3>
+          <h3 class="text-indigo-600 text-lg font-semibold mb-2">Gestion intuitive des documents</h3>
           <p class="text-gray-700 text-sm">
             Centralisez et gérez facilement vos papiers administratifs, factures et documents patients, pour une organisation simplifiée au quotidien.
           </p>
         </div>
 
-        <!-- Carte 2 -->
         <div class="bg-white rounded-xl p-4 shadow-lg h-[350px]">
           <img
             src="/picture-landing-page/picture_suivie_patient.jpg"
             alt="Suivi personnalisé des patients"
             class="w-full h-40 object-contain mb-2"
           />
-          <h3 class="text-[#4B70F5] text-lg font-semibold mb-2">Suivi personnalisé des patients</h3>
+          <h3 class="text-indigo-600 text-lg font-semibold mb-2">Suivi personnalisé des patients</h3>
           <p class="text-gray-700 text-sm">
             Adaptez les recommandations et consultez le suivi des progrès de chaque patient, grâce à des outils de suivi conçus pour un accompagnement optimal.
           </p>
         </div>
 
-        <!-- Carte 3 -->
         <div class="bg-white rounded-xl p-4 shadow-lg h-[350px]">
           <img
             src="/picture-landing-page/picture_paiement_securiser.jpg"
             alt="Paiement sécurisé"
             class="w-full h-40 object-contain mb-2"
           />
-          <h3 class="text-[#4B70F5] text-lg font-semibold mb-2">Paiement sécurisé</h3>
+          <h3 class="text-indigo-600 text-lg font-semibold mb-2">Paiement sécurisé</h3>
           <p class="text-gray-700 text-sm">
             Bénéficiez d'une solution de paiement sécurisée intégrée, facilitant les transactions et renforçant la confiance avec vos patients.
           </p>
         </div>
 
-        <!-- Carte 4 -->
         <div class="bg-white rounded-xl p-4 shadow-lg h-[350px]">
           <img
             src="/picture-landing-page/picture_programme_personnaliser.jpg"
             alt="Création de programmes sur mesure"
             class="w-full h-40 object-contain mb-2"
           />
-          <h3 class="text-[#4B70F5] text-lg font-semibold mb-2">Création de programmes sur mesure</h3>
+          <h3 class="text-indigo-600 text-lg font-semibold mb-2">Création de programmes sur mesure</h3>
           <p class="text-gray-700 text-sm">
             Concevez et proposez des plans de soins personnalisés, offrant à vos patients un parcours adapté à leurs besoins spécifiques.
           </p>
@@ -365,28 +339,27 @@
 
   <section class="py-16 px-4 md:px-8">
     <div class="max-w-7xl mx-auto">
-      <!-- Titre et Description -->
+
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
-          Ce que <span class="text-[#A855F7]">disent</span> nos <span class="text-[#4B70F5]">membres</span>
+          Ce que <span class="text-indigo-600">disent</span> nos <span class="text-primary">membres</span>
         </h2>
 
-        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-white">
-          <span class="text-[#4F46E5] font-semibold">Découvrez</span> comment
-          <span class="text-[#4B70F5] font-semibold">{{ appName }}</span> a aidé des
-          <span class="text-[#A855F7] font-semibold">utilisateurs</span> et des professionnels de santé à
-          <span class="text-[#4F46E5] font-semibold">améliorer</span> leur
-          <span class="text-black font-semibold dark:text-gray-500">quotidien</span>.
+        <p class="text-lg max-w-3xl mx-auto leading-relaxed text-gray-700 dark:text-gray-200">
+          Découvrez comment
+          <span class="text-primary font-semibold">{{ appName }}</span> a aidé des
+          utilisateurs et des professionnels de santé à
+          améliorer leur
+          quotidien.
         </p>
       </div>
 
-      <!-- Grille de témoignages -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Témoignage 1 -->
-        <div class="bg-[#4B70F5] opacity-90 rounded-xl p-6 text-white relative">
+
+        <div class="bg-indigo-100 dark:bg-indigo-900 rounded-xl p-6 text-gray-800 dark:text-white relative">
           <div class="flex items-center gap-3 mb-6">
             <div class="bg-white p-2 rounded-full">
-              <svg class="w-6 h-6 text-[#4B70F5]" fill="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
               </svg>
             </div>
@@ -398,11 +371,10 @@
           <p class="text-sm font-semibold">– Sophie L., Utilisatrice depuis 3 mois</p>
         </div>
 
-        <!-- Témoignage 2 -->
-        <div class="bg-gray-900 opacity-90 rounded-xl p-6 text-white relative dark:bg-gray-800">
+        <div class="bg-gray-100 dark:bg-gray-700 rounded-xl p-6 text-gray-800 dark:text-white relative">
           <div class="flex items-center gap-3 mb-6">
             <div class="bg-white p-2 rounded-full">
-              <svg class="w-6 h-6 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-indigo-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
               </svg>
             </div>
@@ -414,11 +386,10 @@
           <p class="text-sm font-semibold">– Dr. Thomas G., Psychologue</p>
         </div>
 
-        <!-- Témoignage 3 -->
-        <div class="bg-[#A855F7] opacity-90 rounded-xl p-6 text-white relative">
+        <div class="bg-indigo-50 dark:bg-indigo-800 rounded-xl p-6 text-gray-800 dark:text-white relative">
           <div class="flex items-center gap-3 mb-6">
             <div class="bg-white p-2 rounded-full">
-              <svg class="w-6 h-6 text-[#A855F7]" fill="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
               </svg>
             </div>
@@ -430,11 +401,10 @@
           <p class="text-sm font-semibold">– Julien M., Utilisateur régulier</p>
         </div>
 
-        <!-- Témoignage 4 -->
-        <div class="bg-[#4F46E5] opacity-90 rounded-xl p-6 text-white relative">
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 text-gray-800 dark:text-white relative">
           <div class="flex items-center gap-3 mb-6">
             <div class="bg-white p-2 rounded-full">
-              <svg class="w-6 h-6 text-[#4B70F5]" fill="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
               </svg>
             </div>
@@ -449,31 +419,28 @@
     </div>
   </section>
 
-  <section class="py-16 px-4 md:px-8">
+  <section id="contact" class="py-16 px-4 md:px-8 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto">
-      <!-- Titre et Description -->
+
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
-          <span class="text-[#4B70F5]">FAQ</span> et
-          <span class="text-[#A855F7]">support</span>
+          <span class="text-primary">FAQ</span> et
+          <span class="text-indigo-600">support</span>
         </h2>
 
-        <p class="text-lg mb-8 text-gray-700 dark:text-white">
-          Vous avez des <span class="text-[#4B70F5] font-semibold">questions</span> ?
-          Nous avons les <span class="text-[#A855F7] font-semibold">réponses</span> !
+        <p class="text-lg mb-8 text-gray-700 dark:text-gray-200">
+          Vous avez des <span class="text-indigo-600 font-semibold">questions</span> ?
+          Nous avons les <span class="text-indigo-600 font-semibold">réponses</span> !
         </p>
       </div>
 
-      <!-- Liste FAQ -->
       <div class="space-y-4 max-w-4xl mx-auto">
         @for (item of faqItems; track item; let i = $index) {
-          <div class="overflow-hidden transition-all duration-300 ease-in-out"
-               [class]="[item.style.border, 'rounded-2xl border bg-white/50']">
+          <div class="overflow-hidden transition-all duration-300 ease-in-out rounded-2xl border border-primary dark:border-gray-700 bg-white/50 dark:bg-gray-900/50">
             <!-- Question -->
             <button
               (click)="toggleFaq(i)"
-              class="w-full p-6 flex justify-between items-center cursor-pointer transition-all duration-200"
-              [class]="item.style.hover"
+              class="w-full p-6 flex justify-between items-center cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800"
               type="button"
               [attr.aria-expanded]="item.isOpen"
             >
@@ -482,16 +449,14 @@
               </h3>
               <fa-icon
                 [icon]="item.isOpen ? faChevronUp : faChevronDown"
-                [class]="item.style.icon"
-                class="w-6 h-6 transition-transform duration-200"
+                class="w-6 h-6 text-indigo-600 transition-transform duration-200"
                 [class.rotate-180]="item.isOpen"
               ></fa-icon>
             </button>
 
-            <!-- Réponse -->
             @if (item.isOpen) {
-              <div class="px-6 pb-6 text-gray-700 dark:text-white">
-                <div class="pt-2" [class]="['border-t', item.style.border]">
+              <div class="px-6 pb-6 text-gray-700 dark:text-gray-200">
+                <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
                   <p class="mt-4">{{item.answer}}</p>
                 </div>
               </div>
@@ -500,11 +465,10 @@
         }
       </div>
 
-      <!-- Contact -->
       <div class="text-center mt-12">
         <p class="text-lg text-gray-700 dark:text-white">
           D'autres questions ?
-          <a href="#" class="text-[#4B70F5] font-semibold hover:underline">Contactez-nous</a>.
+          <a href="/contact" class="text-indigo-600 font-semibold hover:underline">Contactez-nous</a>.
         </p>
       </div>
     </div>
