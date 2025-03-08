@@ -16,22 +16,26 @@ class AuthService
   ) {}
 
   public function registerPatient(array $data): User
-  {
-    return DB::transaction(function () use ($data) {
-      $user = new UserPatient();
-      $this->mapCommonFields($user, $data);
+    {
+        return DB::transaction(function () use ($data) {
+            // Créer l'utilisateur principal
+            $user = new User();
+            $this->mapCommonFields($user, $data);
+            
+            $role = Role::where('name', 'ROLE_PATIENT')->first();
+            $user->role_id = $role->id;
+            $user->save();
 
-      $role = Role::where('name', 'ROLE_PATIENT')->first();
+            // Créer les données spécifiques au patient avec le même UUID
+            UserPatient::create([
+                'uuid' => $user->uuid,  // Utilise le même UUID
+                'gender' => $this->encryptionService->encryptData($data['gender']),
+                'is_anonymous' => $data['is_anonymous'] ?? false,
+            ]);
 
-      // Encrypt sensitive patient data
-      $user->gender = $this->encryptionService->encryptData($data['gender']);
-      $user->is_anonymous = $data['is_anonymous'] ?? false;
-      $user->role_id = $role->id;
-
-      $user->save();
-      return $user;
-    });
-  }
+            return $user->load('role');
+        });
+    }
 
   public function registerPro(array $data): User
   {
