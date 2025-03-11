@@ -10,25 +10,17 @@
       >
         {{ group.label }}
       </h2>
-      <p
-        *ngIf="group.description"
-        class="mb-4 text-primary dark:text-primary-light"
-      >
+      <p *ngIf="group.description" class="mb-4 text-primary dark:text-primary-light">
         {{ group.description }}
       </p>
-      <div
-        [formGroupName]="group.group"
-        [ngClass]="group.styles || 'grid grid-cols-1 gap-4'"
-      >
+      <div [formGroupName]="group.group" [ngClass]="group.styles || 'grid grid-cols-1 gap-4'">
         <ng-container *ngFor="let field of group.fields">
           <div
             class="form-group"
             [ngClass]="{
               'col-span-2': field.type === 'checkbox',
-              'lg:col-span-1':
-                field.type !== 'checkbox' && group.fields.length > 2,
-              'col-span-2 md:col-span-2':
-                group.fields.length === 2 && field.type !== 'checkbox',
+              'lg:col-span-1': field.type !== 'checkbox' && group.fields.length > 2,
+              'col-span-2 md:col-span-2': group.fields.length === 2 && field.type !== 'checkbox',
             }"
           >
             <!-- Label pour les champs non-checkbox -->
@@ -40,9 +32,7 @@
               {{ field.label }}
               <span
                 *ngIf="
-                  form.get(group.group)?.get(field.name)?.errors?.[
-                    'required'
-                  ] &&
+                  form.get(group.group)?.get(field.name)?.errors?.['required'] &&
                   form.get(group.group)?.get(field.name)?.invalid &&
                   form.get(group.group)?.get(field.name)?.touched
                 "
@@ -54,9 +44,7 @@
             <!-- Input standard -->
             <input
               *ngIf="
-                field.type !== 'select' &&
-                field.type !== 'textarea' &&
-                field.type !== 'checkbox'
+                field.type !== 'select' && field.type !== 'textarea' && field.type !== 'checkbox'
               "
               [id]="field.name"
               [type]="field.type"
@@ -80,9 +68,7 @@
                 {{ field.label }}
                 <span
                   *ngIf="
-                    form.get(group.group)?.get(field.name)?.errors?.[
-                      'requiredTrue'
-                    ] &&
+                    form.get(group.group)?.get(field.name)?.errors?.['requiredTrue'] &&
                     form.get(group.group)?.get(field.name)?.invalid &&
                     form.get(group.group)?.get(field.name)?.touched
                   "
@@ -123,62 +109,40 @@
               "
               class="text-red-600 mt-1 text-md"
             >
-              <div
-                *ngIf="
-                  form.get(group.group)?.get(field.name)?.errors?.['email']
-                "
-              >
+              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['email']">
                 Veuillez entrer une adresse e-mail valide.
               </div>
-              <div
-                *ngIf="
-                  form.get(group.group)?.get(field.name)?.errors?.['minlength']
-                "
-              >
+              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['minlength']">
                 Ce champ doit contenir au moins
-                {{
-                  form.get(group.group)?.get(field.name)?.errors?.["minlength"]
-                    ?.requiredLength
-                }}
+                {{ form.get(group.group)?.get(field.name)?.errors?.['minlength']?.requiredLength }}
                 caractères.
               </div>
-              <div
-                *ngIf="
-                  form.get(group.group)?.get(field.name)?.errors?.['maxlength']
-                "
-              >
+              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['maxlength']">
                 Ce champ doit contenir au plus
-                {{
-                  form.get(group.group)?.get(field.name)?.errors?.["maxlength"]
-                    ?.requiredLength
-                }}
+                {{ form.get(group.group)?.get(field.name)?.errors?.['maxlength']?.requiredLength }}
                 caractères.
               </div>
-              <div
-                *ngIf="
-                  form.get(group.group)?.get(field.name)?.errors?.['pattern']
-                "
-              >
+              <div *ngIf="form.get(group.group)?.get(field.name)?.errors?.['pattern']">
                 <div
                   *ngIf="
-                    form.get(group.group)?.get(field.name)?.errors?.['pattern']
-                      .requiredPattern === '/[a-z]/'
+                    form.get(group.group)?.get(field.name)?.errors?.['pattern'].requiredPattern ===
+                    '/[a-z]/'
                   "
                 >
                   Le mot de passe doit contenir au moins une lettre minuscule.
                 </div>
                 <div
                   *ngIf="
-                    form.get(group.group)?.get(field.name)?.errors?.['pattern']
-                      .requiredPattern === '/[A-Z]/'
+                    form.get(group.group)?.get(field.name)?.errors?.['pattern'].requiredPattern ===
+                    '/[A-Z]/'
                   "
                 >
                   Le mot de passe doit contenir au moins une lettre majuscule.
                 </div>
                 <div
                   *ngIf="
-                    form.get(group.group)?.get(field.name)?.errors?.['pattern']
-                      .requiredPattern === '/[0-9]/'
+                    form.get(group.group)?.get(field.name)?.errors?.['pattern'].requiredPattern ===
+                    '/[0-9]/'
                   "
                 >
                   Le mot de passe doit contenir au moins un chiffre.
@@ -187,9 +151,7 @@
               <div
                 *ngIf="
                   field.name === 'confirm_password' &&
-                  form.get(group.group)?.get('confirm_password')?.errors?.[
-                    'mismatch'
-                  ]
+                  form.get(group.group)?.get('confirm_password')?.errors?.['mismatch']
                 "
               >
                 Les mots de passe ne correspondent pas.
@@ -222,9 +184,7 @@
       (click)="onPrevious()"
       class="relative flex h-11 w-full lg:w-auto items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:border before:border-indigo-600 before:bg-white before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-white dark:before:bg-transparent sm:w-max"
     >
-  <span
-    class="relative font-semibold text-indigo-600 dark:text-white"
-    >Précédent</span>
+      <span class="relative font-semibold text-indigo-600 dark:text-white">Précédent</span>
     </button>
 
     <button
@@ -241,9 +201,7 @@
       *ngIf="isLastGroup() || !config.isIndexed"
       class="relative flex h-11 w-full lg:w-auto items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
     >
-      <span class="relative text-base font-semibold text-white">{{
-        config.submitLabel
-      }}</span>
+      <span class="relative text-base font-semibold text-white">{{ config.submitLabel }}</span>
     </button>
   </div>
 </form>

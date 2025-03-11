@@ -7,7 +7,7 @@ import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
   selector: 'app-navbar',
   standalone: true,
   imports: [CommonModule, FontAwesomeModule],
-  templateUrl: './header.component.html'
+  templateUrl: './header.component.html',
 })
 export class NavbarComponent implements OnInit {
   faSun = faSun;
@@ -22,7 +22,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private renderer: Renderer2,
-    private el: ElementRef,
+    private el: ElementRef
   ) {}
 
   ngOnInit(): void {

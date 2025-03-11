@@ -1,19 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthLoginComponent } from './auth-login.component';
-import {
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
 class MockAuthService {
-  login = jasmine
-    .createSpy('login')
-    .and.returnValue(of({ token: 'mockToken' }));
+  login = jasmine.createSpy('login').and.returnValue(of({ token: 'mockToken' }));
 }
 
 class MockRouter {
@@ -52,12 +45,8 @@ describe('AuthLoginComponent', (): void => {
 
     component.ngOnInit();
 
-    expect(component.loginConfig.fields[0].fields[0].defaultValue).toBe(
-      'test@example.com',
-    );
-    expect(component.loginConfig.fields[0].fields[1].defaultValue).toBe(
-      'password123',
-    );
+    expect(component.loginConfig.fields[0].fields[0].defaultValue).toBe('test@example.com');
+    expect(component.loginConfig.fields[0].fields[1].defaultValue).toBe('password123');
   });
 
   it('should submit the form when valid', (): void => {
@@ -71,10 +60,7 @@ describe('AuthLoginComponent', (): void => {
 
     component.onFormSubmit(formGroup);
 
-    expect(mockAuthService.login).toHaveBeenCalledWith(
-      'test@example.com',
-      'password123',
-    );
+    expect(mockAuthService.login).toHaveBeenCalledWith('test@example.com', 'password123');
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard']);
     expect(localStorage.getItem('email')).toBe('test@example.com');
     expect(localStorage.getItem('password')).toBe('password123');
@@ -112,10 +98,7 @@ describe('AuthLoginComponent', (): void => {
 
     component.onFormSubmit(formGroup);
 
-    expect(mockAuthService.login).toHaveBeenCalledWith(
-      'test@example.com',
-      'wrongpassword',
-    );
+    expect(mockAuthService.login).toHaveBeenCalledWith('test@example.com', 'wrongpassword');
     expect(formGroup.setErrors).toHaveBeenCalledWith({
       invalidCredentials: true,
     });

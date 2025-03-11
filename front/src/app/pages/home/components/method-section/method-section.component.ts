@@ -6,10 +6,7 @@ import { faUser, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-method-section',
   standalone: true,
-  imports: [
-    CommonModule,
-    FontAwesomeModule
-  ],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './method-section.component.html',
 })
 export class MethodSectionComponent {

@@ -6,21 +6,14 @@ import { NavbarComponent } from '@components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
 import { IFormConfig } from '@interfaces/form.interface';
-import {ContactService} from '@services/contact.service';
-import {ToastService} from '@services/toast.service';
-
+import { ContactService } from '@services/contact.service';
+import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    FooterComponent,
-    FormComponent,
-    ReactiveFormsModule
-  ],
-  templateUrl: './contact.component.html'
+  imports: [CommonModule, NavbarComponent, FooterComponent, FormComponent, ReactiveFormsModule],
+  templateUrl: './contact.component.html',
 })
 export class ContactComponent {
   appName = 'MindCare';
@@ -38,7 +31,7 @@ export class ContactComponent {
             label: 'Prénom',
             placeholder: 'Entrez votre prénom',
             validators: [Validators.required, Validators.minLength(2)],
-            width: 'md:col-span-1'
+            width: 'md:col-span-1',
           },
           {
             name: 'lastName',
@@ -46,7 +39,7 @@ export class ContactComponent {
             label: 'Nom',
             placeholder: 'Entrez votre nom',
             validators: [Validators.required, Validators.minLength(2)],
-            width: 'md:col-span-1'
+            width: 'md:col-span-1',
           },
           {
             name: 'email',
@@ -54,7 +47,7 @@ export class ContactComponent {
             label: 'Adresse email',
             placeholder: 'exemple@mindcare.com',
             validators: [Validators.required, Validators.email],
-            width: 'md:col-span-2'
+            width: 'md:col-span-2',
           },
           {
             name: 'subject',
@@ -65,10 +58,10 @@ export class ContactComponent {
               'Support technique',
               'Question facturation',
               'Demande de partenariat',
-              'Autre'
+              'Autre',
             ],
             validators: [Validators.required],
-            width: 'md:col-span-2'
+            width: 'md:col-span-2',
           },
           {
             name: 'message',
@@ -77,14 +70,14 @@ export class ContactComponent {
             placeholder: 'Décrivez votre demande en détail...',
             validators: [Validators.required, Validators.minLength(20)],
             rows: 8,
-            width: 'md:col-span-2'
+            width: 'md:col-span-2',
           },
         ],
-        styles: 'grid grid-cols-1 gap-4 md:grid-cols-1'
-      }
+        styles: 'grid grid-cols-1 gap-4 md:grid-cols-1',
+      },
     ],
     submitLabel: 'Envoyer votre message',
-    isIndexed: false
+    isIndexed: false,
   };
 
   constructor(
@@ -102,9 +95,9 @@ export class ContactComponent {
           form.reset();
         },
         error: (error: any) => {
-          this.toastService.error('Une erreur est survenue lors de l\'envoi');
-          console.error('Erreur d\'envoi de message', error);
-        }
+          this.toastService.error("Une erreur est survenue lors de l'envoi");
+          console.error("Erreur d'envoi de message", error);
+        },
       });
     } else {
       this.toastService.error('Veuillez remplir correctement tous les champs');

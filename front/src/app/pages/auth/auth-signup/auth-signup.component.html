@@ -21,26 +21,22 @@
           class="text-gray-900 text-center dark:text-white font-bold text-4xl md:text-5xl xl:text-6xl"
         >
           <div class="flex items-center justify-center -space-x-2 mb-6">
-            <img
-              src="/logo_black.webp"
-              alt="logo"
-              class="block h-20 w-20 dark:hidden"
-            />
-            <img
-              src="/logo_white.png"
-              alt="logo"
-              class="hidden h-20 w-20 dark:block"
-            />
+            <img src="/logo_black.webp" alt="logo" class="block h-20 w-20 dark:hidden" />
+            <img src="/logo_white.png" alt="logo" class="hidden h-20 w-20 dark:block" />
           </div>
-          Commencez <span class="text-indigo-600 font-bold">dès aujourd'hui</span> votre
-          aventure spirituelle avec <span class="text-primary font-bold">{{ appName }}</span>.
+          Commencez <span class="text-indigo-600 font-bold">dès aujourd'hui</span> votre aventure
+          spirituelle avec <span class="text-primary font-bold">{{ appName }}</span
+          >.
         </h1>
 
         <div class="flex justify-center space-x-2">
           <ng-container *ngFor="let field of signupConfig[selectedAccount].fields; let i = index">
             <div
               class="h-2 rounded-full w-28"
-              [ngClass]="{'bg-indigo-600': i <= currentGroupIndex, 'bg-gray-300 dark:bg-gray-600': i > currentGroupIndex}"
+              [ngClass]="{
+                'bg-indigo-600': i <= currentGroupIndex,
+                'bg-gray-300 dark:bg-gray-600': i > currentGroupIndex,
+              }"
             ></div>
           </ng-container>
         </div>
@@ -48,26 +44,23 @@
         <div
           class="w-full max-w-2xl mx-auto p-[2.5px] bg-gradient-to-br from-indigo-600 to-purple-400 dark:from-indigo-700 rounded-lg shadow-lg"
         >
-          <div
-            class="flex flex-col w-full p-8 gap-y-6 bg-white dark:bg-gray-900 rounded-md"
-          >
-            <p class="text-gray-700 font-bold  dark:text-gray-200">
-              Inscrivez-vous pour accéder à votre espace personnel et profiter
-              de tous les avantages de
-              <span class="text-primary dark:text-primary font-semibold">{{ appName }}</span>.
+          <div class="flex flex-col w-full p-8 gap-y-6 bg-white dark:bg-gray-900 rounded-md">
+            <p class="text-gray-700 font-bold dark:text-gray-200">
+              Inscrivez-vous pour accéder à votre espace personnel et profiter de tous les avantages
+              de
+              <span class="text-primary dark:text-primary font-semibold">{{ appName }}</span
+              >.
             </p>
             <p class="text-gray-700 dark:text-gray-200">
               Sélectionnez un type de compte pour commencer.
             </p>
-            <div
-              class="flex gap-y-2 flex-col sm:gap-y-0 sm:gap-x-2 sm:flex-row"
-            >
+            <div class="flex gap-y-2 flex-col sm:gap-y-0 sm:gap-x-2 sm:flex-row">
               <button
                 class="flex items-center justify-center h-12 px-4 font-semibold rounded-lg hover:bg-opacity-90 transition-colors"
                 [ngClass]="{
                   'border border-indigo-600 border-2 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400':
                     selectedAccount === 'user',
-                  'bg-indigo-600 text-white dark:bg-indigo-500': selectedAccount !== 'user'
+                  'bg-indigo-600 text-white dark:bg-indigo-500': selectedAccount !== 'user',
                 }"
                 (click)="onSelectAccount('user')"
               >
@@ -92,7 +85,7 @@
                 [ngClass]="{
                   'border-indigo-600 border-2 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400':
                     selectedAccount === 'professional',
-                  'bg-indigo-600 text-white dark:bg-indigo-500': selectedAccount !== 'professional'
+                  'bg-indigo-600 text-white dark:bg-indigo-500': selectedAccount !== 'professional',
                 }"
                 (click)="onSelectAccount('professional')"
               >
@@ -122,17 +115,19 @@
             ></app-form>
             <hr class="border-t border-gray-300 dark:border-gray-700" />
             <div class="flex justify-between flex-col gap-y-2">
-              <a href="/auth/forgot-password"
-                 class="text-md text-indigo-600 hover:underline dark:text-indigo-400 font-semibold"
+              <a
+                href="/auth/forgot-password"
+                class="text-md text-indigo-600 hover:underline dark:text-indigo-400 font-semibold"
               >
                 Mot de passe oublié ?
               </a>
               <div>
                 <span class="text-md text-gray-700 dark:text-gray-200"
-                >Vous avez déjà un compte ?</span
+                  >Vous avez déjà un compte ?</span
                 >
-                <a href="/auth/login"
-                   class="text-md text-primary hover:underline dark:text-primary font-bold ml-1"
+                <a
+                  href="/auth/login"
+                  class="text-md text-primary hover:underline dark:text-primary font-bold ml-1"
                 >
                   Je me connecte
                 </a>

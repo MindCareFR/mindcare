@@ -1,19 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NavbarComponent } from '@components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
-import {
-  IFormConfig,
-  IFormField,
-  IFormGroup,
-} from '@interfaces/form.interface';
+import { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
 import { AuthService } from '@services/auth.service';
 import { Router } from '@angular/router';
 import type { ValidatorFn } from '@interfaces/form.interface';
@@ -22,13 +13,7 @@ import type { ValidatorFn } from '@interfaces/form.interface';
   selector: 'app-auth-signup',
   standalone: true,
   templateUrl: './auth-signup.component.html',
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    FooterComponent,
-    FormComponent,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, NavbarComponent, FooterComponent, FormComponent, ReactiveFormsModule],
 })
 export class AuthSignupComponent implements OnInit {
   appName = 'MindCare';
@@ -152,8 +137,7 @@ export class AuthSignupComponent implements OnInit {
         {
           group: 'identity',
           label: 'Identité',
-          description:
-            'Nous ne divulguerons jamais vos informations personnelles à des tiers.',
+          description: 'Nous ne divulguerons jamais vos informations personnelles à des tiers.',
           fields: [
             {
               name: 'firstname',
@@ -307,7 +291,7 @@ export class AuthSignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -328,17 +312,13 @@ export class AuthSignupComponent implements OnInit {
     groups.forEach((group: IFormGroup): void => {
       group.fields.forEach((field: IFormField): void => {
         if (field.name === 'email' && email) field.defaultValue = email;
-        if (field.name === 'password' && password)
-          field.defaultValue = password;
+        if (field.name === 'password' && password) field.defaultValue = password;
       });
     });
   }
 
   onNext(): void {
-    if (
-      this.currentGroupIndex <
-      this.signupConfig[this.selectedAccount].fields.length - 1
-    ) {
+    if (this.currentGroupIndex < this.signupConfig[this.selectedAccount].fields.length - 1) {
       this.currentGroupIndex++;
     }
   }
@@ -350,10 +330,7 @@ export class AuthSignupComponent implements OnInit {
   }
 
   isLastGroup(): boolean {
-    return (
-      this.currentGroupIndex ===
-      this.signupConfig[this.selectedAccount].fields.length - 1
-    );
+    return this.currentGroupIndex === this.signupConfig[this.selectedAccount].fields.length - 1;
   }
 
   isFirstGroup(): boolean {
@@ -372,7 +349,7 @@ export class AuthSignupComponent implements OnInit {
         localStorage.removeItem('password');
       }
       if (email && password) {
-        this.authService.login(email, password).subscribe((response) => {
+        this.authService.login(email, password).subscribe(response => {
           if (response) {
             this.router.navigate(['/dashboard']);
           } else {

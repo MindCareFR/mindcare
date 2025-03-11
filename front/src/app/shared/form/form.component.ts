@@ -62,22 +62,16 @@ export class FormComponent implements OnInit, OnChanges {
     const group: FormGroups = {};
     let control: FormControl<string | null> = this.fb.control(null);
 
-    this.config.fields.forEach((fieldGroup) => {
-      fieldGroup.fields.forEach((field) => {
+    this.config.fields.forEach(fieldGroup => {
+      fieldGroup.fields.forEach(field => {
         // Convert our custom ValidatorFn array to Angular's ValidatorFn array
-        const validators = field.validators?.map(validator =>
-          validator as unknown as AngularValidatorFn) || [];
+        const validators =
+          field.validators?.map(validator => validator as unknown as AngularValidatorFn) || [];
 
         if (field.options) {
-          control = this.fb.control(
-            field.type === 'select' ? field.options[0] : '',
-            validators
-          );
+          control = this.fb.control(field.type === 'select' ? field.options[0] : '', validators);
         } else {
-          control = this.fb.control(
-            '',
-            validators
-          );
+          control = this.fb.control('', validators);
         }
         if (!group[fieldGroup.group]) {
           group[fieldGroup.group] = this.fb.group({});
@@ -93,20 +87,14 @@ export class FormComponent implements OnInit, OnChanges {
 
   initForm(): void {
     const formGroups = this.config.fields.reduce((groups, group) => {
-      const formControls = group.fields.reduce<FormControls>(
-        (controls, field) => {
-          // Convert our custom ValidatorFn array to Angular's ValidatorFn array
-          const validators = field.validators?.map(validator =>
-            validator as unknown as AngularValidatorFn) || [];
+      const formControls = group.fields.reduce<FormControls>((controls, field) => {
+        // Convert our custom ValidatorFn array to Angular's ValidatorFn array
+        const validators =
+          field.validators?.map(validator => validator as unknown as AngularValidatorFn) || [];
 
-          controls[field.name] = this.fb.control(
-            '',
-            validators
-          );
-          return controls;
-        },
-        {},
-      );
+        controls[field.name] = this.fb.control('', validators);
+        return controls;
+      }, {});
       groups[group.group] = this.fb.group(formControls);
       return groups;
     }, {} as FormGroups);
@@ -162,33 +150,23 @@ export class FormComponent implements OnInit, OnChanges {
   }
 
   hasFormErrors(): boolean {
-    return Object.keys(this.form.controls).some((group) => {
+    return Object.keys(this.form.controls).some(group => {
       const groupControl = this.form.get(group) as FormGroup;
-      return Object.keys(groupControl.controls).some(
-        (field) => groupControl.get(field)?.invalid,
-      );
+      return Object.keys(groupControl.controls).some(field => groupControl.get(field)?.invalid);
     });
   }
 
-  passwordMatchValidator: AngularValidatorFn = (
-    form: AbstractControl,
-  ): ValidationErrors | null => {
+  passwordMatchValidator: AngularValidatorFn = (form: AbstractControl): ValidationErrors | null => {
     const password = form.get('identity.password');
     const confirmPassword = form.get('identity.confirm_password');
-    if (
-      password &&
-      confirmPassword &&
-      password.value !== confirmPassword.value
-    ) {
+    if (password && confirmPassword && password.value !== confirmPassword.value) {
       confirmPassword.setErrors({ mismatch: true });
       return { mismatch: true };
     } else {
       // Only clear the mismatch error, not other errors
       if (confirmPassword?.errors) {
         const { mismatch, ...otherErrors } = confirmPassword.errors;
-        confirmPassword.setErrors(
-          Object.keys(otherErrors).length ? otherErrors : null
-        );
+        confirmPassword.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
       }
       return null;
     }

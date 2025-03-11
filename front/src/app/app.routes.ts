@@ -5,7 +5,7 @@ import { ConferenceComponent } from './pages/conference/conference.component';
 import { AppHomeComponent } from './pages/home/home.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { NotFoundComponent } from './pages/page404/page404.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 // import { DashboardOverviewComponent } from './pages/dashboard/components/dashboard-overview/dashboard-overview.component';
 // import { SessionsComponent } from './pages/dashboard/components/sessions/sessions.component';

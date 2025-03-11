@@ -37,7 +37,7 @@ interface FaqItem {
     RessourceSectionComponent,
     ProfessionelSectionComponent,
     AvisSectionComponent,
-    FaqSectionComponent
+    FaqSectionComponent,
   ],
   templateUrl: './home.component.html',
 })
@@ -47,5 +47,4 @@ export class AppHomeComponent {
   faChevronDown = faChevronDown;
   faChevronUp = faChevronUp;
   appName = 'MindCare';
-
 }

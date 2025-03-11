@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToastService {
-
-
-  constructor() { }
+  constructor() {}
 
   /**
    * Display a success message to the user
@@ -49,16 +47,16 @@ export class ToastService {
   }
 
   private showToast(message: string, type: 'success' | 'error' | 'warning' | 'info'): void {
-
-
-
     const colors = {
       success: '#6fb670',
       error: '#dd4338',
       warning: '#FF9800',
-      info: '#2196F3'
+      info: '#2196F3',
     };
 
-    console.log(`%c ${type.toUpperCase()}: ${message}`, `background: ${colors[type]}; color: white; padding: 4px; border-radius: 4px;`);
+    console.log(
+      `%c ${type.toUpperCase()}: ${message}`,
+      `background: ${colors[type]}; color: white; padding: 4px; border-radius: 4px;`
+    );
   }
 }

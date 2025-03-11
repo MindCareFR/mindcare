@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {NotFoundComponent} from './page404.component';
-import {RouterTestingModule} from '@angular/router/testing';
+import { NotFoundComponent } from './page404.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('NotFoundComponent', () => {
   let component: NotFoundComponent;
@@ -8,15 +8,11 @@ describe('NotFoundComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        NotFoundComponent
-      ]
+      imports: [RouterTestingModule, NotFoundComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NotFoundComponent);
     component = fixture.componentInstance;
-
 
     spyOn(console, 'error').and.callFake(() => {});
 
@@ -40,13 +36,12 @@ describe('NotFoundComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const links = compiled.querySelectorAll('a');
 
-    const homeLink = Array.from(links).find(link =>
-      link.getAttribute('routerLink') === '/');
+    const homeLink = Array.from(links).find(link => link.getAttribute('routerLink') === '/');
     expect(homeLink).toBeTruthy();
 
-    const contactLink = Array.from(links).find(link =>
-      link.getAttribute('routerLink') === '/contact');
+    const contactLink = Array.from(links).find(
+      link => link.getAttribute('routerLink') === '/contact'
+    );
     expect(contactLink).toBeTruthy();
   });
-
 });

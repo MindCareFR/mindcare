@@ -9,11 +9,8 @@ describe('AppHomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        AppHomeComponent,
-        FontAwesomeModule
-      ],
-      schemas: [NO_ERRORS_SCHEMA] // To ignore custom elements like app-navbar in tests
+      imports: [AppHomeComponent, FontAwesomeModule],
+      schemas: [NO_ERRORS_SCHEMA], // To ignore custom elements like app-navbar in tests
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppHomeComponent);

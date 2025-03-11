@@ -8,7 +8,7 @@ import { filter } from 'rxjs/operators';
   selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './sidebar.component.html'
+  templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent implements OnInit {
   @Input() isOpen = true;
@@ -22,43 +22,43 @@ export class SidebarComponent implements OnInit {
       icon: 'home',
       route: '/dashboard',
       active: false,
-      badge: false
+      badge: false,
     },
     {
       label: 'Mes séances',
       icon: 'video',
       route: '/dashboard/sessions',
       active: false,
-      badge: false
+      badge: false,
     },
     {
       label: 'Mes rendez-vous',
       icon: 'calendar',
       route: '/dashboard/appointments',
       active: false,
-      badge: false
+      badge: false,
     },
     {
       label: 'Ressources',
       icon: 'book-open',
       route: '/dashboard/resources',
       active: false,
-      badge: false
+      badge: false,
     },
     {
       label: 'Messages',
       icon: 'message-circle',
       route: '/dashboard/messages',
       active: false,
-      badge: true
+      badge: true,
     },
     {
       label: 'Mon profil',
       icon: 'user',
       route: '/dashboard/profile',
       active: false,
-      badge: false
-    }
+      badge: false,
+    },
   ];
 
   // Second group
@@ -67,14 +67,14 @@ export class SidebarComponent implements OnInit {
       label: 'Réglages',
       icon: 'settings',
       route: '/dashboard/settings',
-      active: false
+      active: false,
     },
     {
       label: 'Support',
       icon: 'help-circle',
       route: '/dashboard/support',
-      active: false
-    }
+      active: false,
+    },
   ];
 
   constructor(private router: Router) {}
@@ -84,11 +84,11 @@ export class SidebarComponent implements OnInit {
     this.updateActiveItems(this.router.url);
 
     // S'abonner aux changements de route
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      this.updateActiveItems(event.url);
-    });
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.updateActiveItems(event.url);
+      });
   }
 
   updateActiveItems(url: string) {

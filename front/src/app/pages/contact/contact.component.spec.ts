@@ -3,10 +3,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 
 import { ContactComponent } from './contact.component';
-import {FormComponent} from '@shared/form/form.component';
-import {ContactService} from '@services/contact.service';
-import {ToastService} from '@services/toast.service';
-
+import { FormComponent } from '@shared/form/form.component';
+import { ContactService } from '@services/contact.service';
+import { ToastService } from '@services/toast.service';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
@@ -15,20 +14,15 @@ describe('ContactComponent', () => {
   let mockToastService: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
-
     mockContactService = jasmine.createSpyObj('ContactService', ['sendMessage']);
     mockToastService = jasmine.createSpyObj('ToastService', ['success', 'error']);
 
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        ContactComponent,
-        FormComponent
-      ],
+      imports: [ReactiveFormsModule, ContactComponent, FormComponent],
       providers: [
         { provide: ContactService, useValue: mockContactService },
-        { provide: ToastService, useValue: mockToastService }
-      ]
+        { provide: ToastService, useValue: mockToastService },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ContactComponent);
@@ -56,10 +50,10 @@ describe('ContactComponent', () => {
             lastName: 'Doe',
             email: 'john.doe@example.com',
             subject: 'Support technique',
-            message: 'Ceci est un message de test avec plus de 20 caractères'
-          }
+            message: 'Ceci est un message de test avec plus de 20 caractères',
+          },
         },
-        reset: jasmine.createSpy('reset')
+        reset: jasmine.createSpy('reset'),
       } as any;
 
       mockContactService.sendMessage.and.returnValue(of({}));
@@ -87,26 +81,30 @@ describe('ContactComponent', () => {
             lastName: 'Doe',
             email: 'john.doe@example.com',
             subject: 'Support technique',
-            message: 'Ceci est un message de test avec plus de 20 caractères'
-          }
-        }
+            message: 'Ceci est un message de test avec plus de 20 caractères',
+          },
+        },
       } as any;
 
       // Simuler une erreur de service
-      mockContactService.sendMessage.and.returnValue(throwError(() => new Error('Erreur de service')));
+      mockContactService.sendMessage.and.returnValue(
+        throwError(() => new Error('Erreur de service'))
+      );
 
       // Appeler la méthode de soumission
       component.onFormSubmit(mockForm);
 
       // Vérifier que le toast d'erreur a été appelé
-      expect(mockToastService.error).toHaveBeenCalledWith('Une erreur est survenue lors de l\'envoi');
+      expect(mockToastService.error).toHaveBeenCalledWith(
+        "Une erreur est survenue lors de l'envoi"
+      );
     });
 
     it('should not submit when form is invalid', () => {
       // Préparer un formulaire invalide
       const mockForm = {
         valid: false,
-        value: {}
+        value: {},
       } as any;
 
       // Appeler la méthode de soumission
@@ -116,7 +114,9 @@ describe('ContactComponent', () => {
       expect(mockContactService.sendMessage).not.toHaveBeenCalled();
 
       // Vérifier que le toast d'erreur a été appelé
-      expect(mockToastService.error).toHaveBeenCalledWith('Veuillez remplir correctement tous les champs');
+      expect(mockToastService.error).toHaveBeenCalledWith(
+        'Veuillez remplir correctement tous les champs'
+      );
     });
   });
 });

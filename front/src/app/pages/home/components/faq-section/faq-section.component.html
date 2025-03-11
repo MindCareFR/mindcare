@@ -1,6 +1,5 @@
 <section id="contact" class="py-16 px-4 md:px-8 dark:bg-gray-900">
   <div class="max-w-7xl mx-auto">
-
     <div class="text-center mb-16">
       <h2 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
         <span class="text-primary">FAQ</span> et
@@ -8,14 +7,16 @@
       </h2>
 
       <p class="text-lg mb-8 text-gray-700 dark:text-gray-200">
-        Vous avez des <span class="text-indigo-600 font-semibold">questions</span> ?
-        Nous avons les <span class="text-indigo-600 font-semibold">réponses</span> !
+        Vous avez des <span class="text-indigo-600 font-semibold">questions</span> ? Nous avons les
+        <span class="text-indigo-600 font-semibold">réponses</span> !
       </p>
     </div>
 
     <div class="space-y-4 max-w-4xl mx-auto">
       @for (item of faqItems; track item; let i = $index) {
-        <div class="overflow-hidden transition-all duration-300 ease-in-out rounded-2xl border border-primary dark:border-gray-700 bg-white/50 dark:bg-gray-900/50">
+        <div
+          class="overflow-hidden transition-all duration-300 ease-in-out rounded-2xl border border-primary dark:border-gray-700 bg-white/50 dark:bg-gray-900/50"
+        >
           <!-- Question -->
           <button
             (click)="toggleFaq(i)"
@@ -24,7 +25,7 @@
             [attr.aria-expanded]="item.isOpen"
           >
             <h3 class="text-lg font-medium text-gray-900 dark:text-white text-left">
-              {{item.question}}
+              {{ item.question }}
             </h3>
             <fa-icon
               [icon]="item.isOpen ? faChevronUp : faChevronDown"
@@ -36,7 +37,7 @@
           @if (item.isOpen) {
             <div class="px-6 pb-6 text-gray-700 dark:text-gray-200">
               <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
-                <p class="mt-4">{{item.answer}}</p>
+                <p class="mt-4">{{ item.answer }}</p>
               </div>
             </div>
           }

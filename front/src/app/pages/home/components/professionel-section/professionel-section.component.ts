@@ -6,10 +6,7 @@ import { faUser, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-professionel-section',
   standalone: true,
-  imports: [
-    CommonModule,
-    FontAwesomeModule
-  ],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './professionel-section.component.html',
 })
 export class ProfessionelSectionComponent {
