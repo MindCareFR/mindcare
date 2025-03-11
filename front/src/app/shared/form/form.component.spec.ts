@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { FormComponent } from './form.component';
@@ -90,9 +85,7 @@ describe('FormComponent', (): void => {
       fixture.detectChanges();
 
       const emailField = component.form.get('identity.email');
-      const emailInput = fixture.debugElement.query(
-        By.css('#email'),
-      ).nativeElement;
+      const emailInput = fixture.debugElement.query(By.css('#email')).nativeElement;
 
       emailInput.value = 'test@example.com';
       emailInput.dispatchEvent(new Event('input'));
@@ -113,7 +106,7 @@ describe('FormComponent', (): void => {
       fixture.detectChanges();
 
       const errorMessage: DebugElement = fixture.debugElement.query(
-        By.css('label[for="email"] .text-red-600'),
+        By.css('label[for="email"] .text-red-600')
       );
       expect(errorMessage.nativeElement.textContent.trim()).toBe('*');
     }));
@@ -129,11 +122,9 @@ describe('FormComponent', (): void => {
       tick();
       fixture.detectChanges();
 
-      const emailError: DebugElement = fixture.debugElement.query(
-        By.css('.text-red-600'),
-      );
+      const emailError: DebugElement = fixture.debugElement.query(By.css('.text-red-600'));
       expect(emailError.nativeElement.textContent.trim()).toContain(
-        'Veuillez entrer une adresse e-mail valide',
+        'Veuillez entrer une adresse e-mail valide'
       );
     }));
   });
@@ -155,7 +146,7 @@ describe('FormComponent', (): void => {
       });
 
       const identityGroup = component.form.get('identity') as FormGroup;
-      Object.keys(identityGroup.controls || {}).forEach((key) => {
+      Object.keys(identityGroup.controls || {}).forEach(key => {
         const control = identityGroup?.get(key);
         control?.markAsTouched();
         control?.markAsDirty();
@@ -165,19 +156,17 @@ describe('FormComponent', (): void => {
       tick();
       fixture.detectChanges();
 
-      const confirmPasswordControl = component.form.get(
-        'identity.confirm_password',
-      );
+      const confirmPasswordControl = component.form.get('identity.confirm_password');
       expect(confirmPasswordControl?.errors?.['mismatch']).toBeTruthy(
-        'Expected mismatch error to be present',
+        'Expected mismatch error to be present'
       );
 
       const errorMessage: DebugElement = fixture.debugElement.query(
-        By.css(`div.text-red-600 div:last-child`),
+        By.css(`div.text-red-600 div:last-child`)
       );
 
       expect(errorMessage.nativeElement.textContent.trim()).toBe(
-        'Les mots de passe ne correspondent pas.',
+        'Les mots de passe ne correspondent pas.'
       );
     }));
 
@@ -187,9 +176,7 @@ describe('FormComponent', (): void => {
       fixture.detectChanges();
 
       const passwordField = component.form.get('identity.password');
-      const confirmPasswordField = component.form.get(
-        'identity.confirm_password',
-      );
+      const confirmPasswordField = component.form.get('identity.confirm_password');
 
       passwordField?.setValue('password123');
       confirmPasswordField?.setValue('password123');
@@ -199,7 +186,7 @@ describe('FormComponent', (): void => {
       fixture.detectChanges();
 
       const errorMessage: DebugElement = fixture.debugElement.query(
-        By.css('div.form-group div.text-red-600 div:last-child'),
+        By.css('div.form-group div.text-red-600 div:last-child')
       );
       expect(errorMessage).toBeFalsy();
     }));
@@ -211,9 +198,7 @@ describe('FormComponent', (): void => {
       component.currentGroupIndex = 1;
       fixture.detectChanges();
 
-      const select = fixture.debugElement.query(
-        By.css('#language'),
-      ).nativeElement;
+      const select = fixture.debugElement.query(By.css('#language')).nativeElement;
       expect(select.options.length).toBe(3);
     }));
 
@@ -223,9 +208,7 @@ describe('FormComponent', (): void => {
       fixture.detectChanges();
 
       const languageField = component.form.get('preferences.language');
-      const select = fixture.debugElement.query(
-        By.css('#language'),
-      ).nativeElement;
+      const select = fixture.debugElement.query(By.css('#language')).nativeElement;
 
       select.value = select.options[1].value;
       select.dispatchEvent(new Event('change'));
@@ -250,7 +233,7 @@ describe('FormComponent', (): void => {
 
       fixture.detectChanges();
       const submitButton: DebugElement = fixture.debugElement.query(
-        By.css('button[type="submit"]'),
+        By.css('button[type="submit"]')
       );
       submitButton.nativeElement.click();
       tick();
