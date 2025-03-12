@@ -6,6 +6,7 @@ import { AppHomeComponent } from './pages/home/home.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { NotFoundComponent } from './pages/page404/page404.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ProfessionnelsDeSanteComponent } from './pages/professionnels-de-sante/professionnels-de-sante.component';
 
 // import { DashboardOverviewComponent } from './pages/dashboard/components/dashboard-overview/dashboard-overview.component';
 // import { SessionsComponent } from './pages/dashboard/components/sessions/sessions.component';
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'auth/signup', component: AuthSignupComponent },
   { path: 'conference', component: ConferenceComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'professionnels-de-sante', component: ProfessionnelsDeSanteComponent },
   {
     path: 'dashboard',
     component: DashboardComponent,
