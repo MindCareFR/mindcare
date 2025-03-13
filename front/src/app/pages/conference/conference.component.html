@@ -1,10 +1,6 @@
 <div class="relative w-full h-screen">
   <div *ngIf="!callEnded">
-    <app-video
-      [srcObject]="remoteStream"
-      [controls]="false"
-      class="absolute inset-0"
-    ></app-video>
+    <app-video [srcObject]="remoteStream" [controls]="false" class="absolute inset-0"></app-video>
     <div
       [ngClass]="{
         'right-4': true,
@@ -24,11 +20,7 @@
     <div
       class="absolute top-4 left-2 w-auto h-48 border-2 border-gray-200 border-opacity-50 rounded-lg overflow-hidden md:w-64 md:top-auto md:bottom-4 md:left-4"
     >
-      <app-video
-        [srcObject]="localStream"
-        [controls]="false"
-        class="w-full h-full"
-      ></app-video>
+      <app-video [srcObject]="localStream" [controls]="false" class="w-full h-full"></app-video>
     </div>
     <div
       class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-4 bg-gray-200 bg-opacity-50 p-2 rounded-full"
@@ -56,9 +48,7 @@
       class="absolute top-0 right-0 z-10 w-screen md:z-0 md:w-[92%] h-full overflow-y-auto bg-white bg-opacity-90 text-black p-4 transition-transform duration-300 ease-in-out dark:bg-gray-800 dark:bg-opacity-90 dark:text-gray-300"
     >
       <div class="space-y-4">
-        <h2 class="text-2xl font-bold my-5 md:my-0">
-          Tableau de bord professionnel
-        </h2>
+        <h2 class="text-2xl font-bold my-5 md:my-0">Tableau de bord professionnel</h2>
 
         <!-- Dossier médical -->
         <div class="bg-gray-100 p-4 rounded-lg dark:bg-gray-900">
@@ -75,10 +65,7 @@
             tabindex="0"
             (keydown.enter)="togglePrescriptionSection()"
           >
-            <h3
-              class="text-xl font-semibold"
-              [ngClass]="{ 'mb-4': showPrescriptionForm }"
-            >
+            <h3 class="text-xl font-semibold" [ngClass]="{ 'mb-4': showPrescriptionForm }">
               Créer une prescription
             </h3>
             <svg
@@ -102,10 +89,8 @@
           </div>
           <div
             [ngClass]="{
-              'max-h-screen overflow-visible translate-y-0 opacity-100':
-                showPrescriptionForm,
-              'max-h-0 overflow-hidden translate-y-8 opacity-0':
-                !showPrescriptionForm,
+              'max-h-screen overflow-visible translate-y-0 opacity-100': showPrescriptionForm,
+              'max-h-0 overflow-hidden translate-y-8 opacity-0': !showPrescriptionForm,
             }"
             class="transition-max-height duration-300 ease-in-out transform-gpu"
           >
@@ -116,20 +101,11 @@
             >
               <div
                 formArrayName="prescriptions"
-                *ngFor="
-                  let prescription of prescriptions.controls;
-                  let i = index
-                "
+                *ngFor="let prescription of prescriptions.controls; let i = index"
               >
-                <div
-                  [formGroupName]="i"
-                  class="grid grid-cols-1 lg:grid-cols-3 gap-4"
-                >
+                <div [formGroupName]="i" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                   <div class="col-span-3 lg:col-span-1">
-                    <label
-                      class="block text-gray-700 dark:text-gray-300"
-                      for="drug"
-                    >
+                    <label class="block text-gray-700 dark:text-gray-300" for="drug">
                       Médicament
                       <span
                         *ngIf="
@@ -149,10 +125,7 @@
                     />
                   </div>
                   <div class="col-span-3 lg:col-span-1">
-                    <label
-                      class="block text-gray-700 dark:text-gray-300"
-                      for="dosage"
-                    >
+                    <label class="block text-gray-700 dark:text-gray-300" for="dosage">
                       Dosage
                       <span
                         *ngIf="
@@ -172,10 +145,7 @@
                     />
                   </div>
                   <div class="col-span-3 lg:col-span-1">
-                    <label
-                      class="block text-gray-700 dark:text-gray-300"
-                      for="duration"
-                    >
+                    <label class="block text-gray-700 dark:text-gray-300" for="duration">
                       Durée
                       <span
                         *ngIf="
@@ -195,9 +165,7 @@
                     />
                   </div>
                   <div class="col-span-3">
-                    <label
-                      class="block text-gray-700 dark:text-gray-300"
-                      for="comment"
+                    <label class="block text-gray-700 dark:text-gray-300" for="comment"
                       >Commentaire</label
                     >
                     <textarea
@@ -208,42 +176,33 @@
                       class="w-full px-3 py-2 mt-1 border border-gray-300 resize md:resize-none rounded-md shadow-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-purple-400 focus:border-purple-400"
                     ></textarea>
                   </div>
-                  <div
-                    class="flex justify-end col-span-3 lg:col-span-3 flex justify-end"
-                  >
+                  <div class="flex justify-end col-span-3 lg:col-span-3 flex justify-end">
                     <button
                       type="button"
                       (click)="removePrescription(i)"
                       (keydown.enter)="removePrescription(i)"
                       class="relative flex h-11 w-full lg:w-auto items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-red-500 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
                     >
-                      <span class="relative text-base font-semibold text-white"
-                        >Supprimer</span
-                      >
+                      <span class="relative text-base font-semibold text-white">Supprimer</span>
                     </button>
                   </div>
                 </div>
               </div>
               <div class="col-span-1 lg:col-span-3 flex justify-end">
                 <div
-                  *ngIf="
-                    prescriptionFormSubmitted && hasPrescriptionFormErrors()
-                  "
+                  *ngIf="prescriptionFormSubmitted && hasPrescriptionFormErrors()"
                   class="text-red-600 mt-5 text-md"
                 >
                   Veuillez remplir tous les champs correctement.
                 </div>
               </div>
-              <div
-                class="col-span-1 gap-x-4 lg:col-span-3 flex justify-between"
-              >
+              <div class="col-span-1 gap-x-4 lg:col-span-3 flex justify-between">
                 <button
                   type="button"
                   (click)="addPrescription()"
                   class="relative flex h-11 w-full lg:w-auto items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-gray-300 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
                 >
-                  <span
-                    class="relative text-base font-semibold text-gray-700 dark:text-gray-300"
+                  <span class="relative text-base font-semibold text-gray-700 dark:text-gray-300"
                     >Ajouter une ligne</span
                   >
                 </button>
@@ -251,9 +210,7 @@
                   type="submit"
                   class="relative flex h-11 w-full lg:w-auto items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
                 >
-                  <span class="relative text-base font-semibold text-white"
-                    >Créer un PDF</span
-                  >
+                  <span class="relative text-base font-semibold text-white">Créer un PDF</span>
                 </button>
               </div>
             </form>
@@ -272,9 +229,7 @@
               name="chatMessage"
               placeholder="Écrire un message..."
             />
-            <button class="bg-primary text-white px-4 py-2 rounded-r">
-              Envoyer
-            </button>
+            <button class="bg-primary text-white px-4 py-2 rounded-r">Envoyer</button>
           </div>
         </div>
 
@@ -287,10 +242,7 @@
       </div>
     </div>
   </div>
-  <div
-    *ngIf="callEnded"
-    class="absolute inset-0 flex items-center justify-center"
-  >
+  <div *ngIf="callEnded" class="absolute inset-0 flex items-center justify-center">
     <div
       aria-hidden="true"
       class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20"
@@ -306,10 +258,7 @@
       La visioconférence est terminée.
     </p>
   </div>
-  <div
-    *ngIf="showSatisfactionForm"
-    class="absolute inset-0 px-3 flex items-center justify-center"
-  >
+  <div *ngIf="showSatisfactionForm" class="absolute inset-0 px-3 flex items-center justify-center">
     <div
       aria-hidden="true"
       class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20"
@@ -326,8 +275,8 @@
     >
       <div class="p-4 space-y-6 bg-white dark:bg-gray-800 rounded-md md:p-8">
         <p class="text-gray-700 mb-10 dark:text-gray-300">
-          Votre avis est important pour nous. Veuillez remplir le formulaire de
-          satisfaction ci-dessous.
+          Votre avis est important pour nous. Veuillez remplir le formulaire de satisfaction
+          ci-dessous.
         </p>
         <app-form
           [config]="satisfactionFormConfig['satisfaction']"

@@ -13,11 +13,12 @@ import {
   AbstractControl,
   ValidationErrors,
   FormControl,
-  ValidatorFn as AValidatorFn,
+  ValidatorFn as AngularValidatorFn,
+  Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { IFormConfig } from '@interfaces/form.interface';
+import { IFormConfig, ValidatorFn } from '@interfaces/form.interface';
 
 type FormControls = Record<string, AbstractControl>;
 type FormGroups = Record<string, FormGroup>;
@@ -210,11 +211,9 @@ export class FormComponent implements OnInit, OnChanges {
   }
 
   hasFormErrors(): boolean {
-    return Object.keys(this.form.controls).some((group) => {
+    return Object.keys(this.form.controls).some(group => {
       const groupControl = this.form.get(group) as FormGroup;
-      return Object.keys(groupControl.controls).some(
-        (field) => groupControl.get(field)?.invalid,
-      );
+      return Object.keys(groupControl.controls).some(field => groupControl.get(field)?.invalid);
     });
   }
 

@@ -66,20 +66,14 @@ describe('AuthSignupComponent', (): void => {
   });
 
   it('should set email and password from localStorage', (): void => {
-    spyOn(localStorage, 'getItem').and.returnValues(
-      'test@example.com',
-      'password123',
-    );
+    spyOn(localStorage, 'getItem').and.returnValues('test@example.com', 'password123');
     component.setInitialFormValues();
-    const emailField: IFormField =
-      component.signupConfig['user'].fields[0].fields[0];
+    const emailField: IFormField = component.signupConfig['user'].fields[0].fields[0];
     expect(emailField.defaultValue).toBe('test@example.com');
   });
 
   it('should submit the form when valid', (): void => {
-    mockAuthService.login.and.returnValue(
-      of({ token: 'token' } as AuthResponse),
-    );
+    mockAuthService.login.and.returnValue(of({ token: 'token' } as AuthResponse));
 
     const formGroup = fb.group({
       identity: fb.group({
@@ -91,10 +85,7 @@ describe('AuthSignupComponent', (): void => {
 
     component.onFormSubmit(formGroup);
 
-    expect(mockAuthService.login).toHaveBeenCalledWith(
-      'test@example.com',
-      'password123',
-    );
+    expect(mockAuthService.login).toHaveBeenCalledWith('test@example.com', 'password123');
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard']);
   });
 

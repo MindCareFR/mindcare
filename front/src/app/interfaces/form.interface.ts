@@ -1,3 +1,5 @@
+import { AbstractControl, ValidationErrors } from '@angular/forms';
+
 export interface IFormField {
   name: string;
   type: string;
@@ -6,9 +8,14 @@ export interface IFormField {
   options?: string[];
   validators?: ValidatorFn[];
   defaultValue?: string | number | boolean;
+  width?: string;
+  rows?: number;
 }
 
-export type ValidatorFn = (value: string | number | boolean) => boolean;
+// Updated ValidatorFn to be compatible with Angular's ValidatorFn
+export interface ValidatorFn {
+  (control: AbstractControl): ValidationErrors | null;
+}
 
 export interface IFormGroup {
   group: string;

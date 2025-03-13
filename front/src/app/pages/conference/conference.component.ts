@@ -1,16 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormArray,
-} from '@angular/forms';
-import {
-  FontAwesomeModule,
-  IconDefinition,
-} from '@fortawesome/angular-fontawesome';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
 import {
   faMicrophone,
   faMicrophoneSlash,
@@ -59,8 +50,7 @@ export class ConferenceComponent implements OnInit {
         {
           group: 'satisfaction',
           label: 'Satisfaction',
-          description:
-            'Merci de nous donner votre avis sur la qualité de la communication.',
+          description: 'Merci de nous donner votre avis sur la qualité de la communication.',
           fields: [
             {
               name: 'rating',
@@ -68,20 +58,13 @@ export class ConferenceComponent implements OnInit {
               label: 'Note',
               placeholder: 'Sélectionnez une note',
               validators: [Validators.required as unknown as ValidatorFn],
-              options: [
-                '1 - Très mauvais',
-                '2 - Mauvais',
-                '3 - Moyen',
-                '4 - Bon',
-                '5 - Très bon',
-              ],
+              options: ['1 - Très mauvais', '2 - Mauvais', '3 - Moyen', '4 - Bon', '5 - Très bon'],
             },
             {
               name: 'comment',
               type: 'textarea',
               label: 'Commentaire',
-              placeholder:
-                'Laissez un commentaire sur la qualité de la communication',
+              placeholder: 'Laissez un commentaire sur la qualité de la communication',
               validators: [],
             },
           ],
@@ -96,8 +79,7 @@ export class ConferenceComponent implements OnInit {
 
   prescriptionForm: FormGroup;
   prescriptionFormSubmitted = false;
-  @Output() prescriptionSubmit: EventEmitter<FormGroup> =
-    new EventEmitter<FormGroup>();
+  @Output() prescriptionSubmit: EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
   showPrescriptionForm = false;
 
   constructor(private fb: FormBuilder) {
@@ -138,15 +120,13 @@ export class ConferenceComponent implements OnInit {
   toggleMute(): void {
     this.muted = !this.muted;
     if (this.localStream) {
-      this.localStream
-        .getAudioTracks()
-        .forEach((track) => (track.enabled = !this.muted));
+      this.localStream.getAudioTracks().forEach(track => (track.enabled = !this.muted));
     }
   }
 
   hangUp(): void {
     if (this.localStream) {
-      this.localStream.getTracks().forEach((track) => track.stop());
+      this.localStream.getTracks().forEach(track => track.stop());
     }
     this.callEnded = true;
     setTimeout(() => {
@@ -193,7 +173,7 @@ export class ConferenceComponent implements OnInit {
       this.prescriptionSubmit.emit(this.prescriptionForm);
     } else {
       const controls = this.prescriptionForm.get('prescriptions') as FormArray;
-      controls.controls.forEach((control) => {
+      controls.controls.forEach(control => {
         if (control.invalid) {
           control.markAllAsTouched();
         }
@@ -202,11 +182,9 @@ export class ConferenceComponent implements OnInit {
   }
 
   hasPrescriptionFormErrors(): boolean {
-    return Object.keys(this.prescriptionForm.controls).some((group) => {
+    return Object.keys(this.prescriptionForm.controls).some(group => {
       const groupControl = this.prescriptionForm.get(group) as FormGroup;
-      return Object.keys(groupControl.controls).some(
-        (field) => groupControl.get(field)?.invalid,
-      );
+      return Object.keys(groupControl.controls).some(field => groupControl.get(field)?.invalid);
     });
   }
 }

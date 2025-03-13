@@ -8,27 +8,16 @@ import {
 import { Router, ActivatedRoute } from '@angular/router'; 
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@services/auth.service';
-import { NavbarComponent } from '@components/navbar/navbar.component';
+import { NavbarComponent } from '@components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
-import type {
-  IFormConfig,
-  IFormField,
-  IFormGroup,
-  ValidatorFn,
-} from '@interfaces/form.interface';
+import type { IFormConfig, IFormField, IFormGroup, ValidatorFn } from '@interfaces/form.interface';
 
 @Component({
   selector: 'app-auth-login',
   standalone: true,
   templateUrl: './auth-login.component.html',
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    FooterComponent,
-    FormComponent,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, NavbarComponent, FooterComponent, FormComponent, ReactiveFormsModule],
 })
 export class AuthLoginComponent implements OnInit {
   loginConfig: IFormConfig = {
@@ -36,18 +25,14 @@ export class AuthLoginComponent implements OnInit {
       {
         group: 'credentials',
         label: 'Informations de connexion',
-        description:
-          'Veuillez saisir vos informations de connexion pour accéder à votre compte.',
+        description: 'Veuillez saisir vos informations de connexion pour accéder à votre compte.',
         fields: [
           {
             name: 'email',
             type: 'email',
             label: 'Adresse e-mail',
             placeholder: 'Entrez votre adresse e-mail',
-            validators: [
-              Validators.required,
-              Validators.email,
-            ] as unknown as ValidatorFn[],
+            validators: [Validators.required, Validators.email] as unknown as ValidatorFn[],
           },
           {
             name: 'password',
@@ -84,8 +69,7 @@ export class AuthLoginComponent implements OnInit {
       groups.forEach((group: IFormGroup): void => {
         group.fields.forEach((field: IFormField): void => {
           if (field.name === 'email' && email) field.defaultValue = email;
-          if (field.name === 'password' && password)
-            field.defaultValue = password;
+          if (field.name === 'password' && password) field.defaultValue = password;
         });
       });
     }
@@ -111,7 +95,7 @@ export class AuthLoginComponent implements OnInit {
         localStorage.removeItem('password');
       }
       if (email && password) {
-        this.authService.login(email, password).subscribe((response) => {
+        this.authService.login(email, password).subscribe(response => {
           if (response) {
             this.router.navigate(['/dashboard']);
           } else {
