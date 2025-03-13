@@ -21,26 +21,30 @@
           class="text-gray-900 text-center dark:text-white font-bold text-4xl md:text-5xl xl:text-6xl"
         >
           <div class="flex items-center justify-center -space-x-2 mb-6">
-            <img src="/logo_black.webp" alt="logo" class="block h-20 w-20 dark:hidden" />
-            <img src="/logo_white.png" alt="logo" class="hidden h-20 w-20 dark:block" />
+            <img
+              src="/headbrain_b.png"
+              alt="logo"
+              class="block h-20 w-20 dark:hidden"
+            />
+            <img
+              src="/headbrain_w.webp"
+              alt="logo"
+              class="hidden h-20 w-20 dark:block"
+            />
           </div>
           Commencez <span class="text-indigo-600 font-bold">dès aujourd'hui</span> votre aventure
           spirituelle avec <span class="text-primary font-bold">{{ appName }}</span
           >.
         </h1>
-
+        
         <div class="flex justify-center space-x-2">
           <ng-container *ngFor="let field of signupConfig[selectedAccount].fields; let i = index">
-            <div
-              class="h-2 rounded-full w-28"
-              [ngClass]="{
-                'bg-indigo-600': i <= currentGroupIndex,
-                'bg-gray-300 dark:bg-gray-600': i > currentGroupIndex,
-              }"
+            <div 
+              class="h-2 rounded-full w-28" 
+              [ngClass]="{'bg-primary': i <= currentGroupIndex, 'bg-gray-300 dark:bg-gray-600': i > currentGroupIndex}"
             ></div>
           </ng-container>
         </div>
-
         <div
           class="w-full max-w-2xl mx-auto p-[2.5px] bg-gradient-to-br from-indigo-600 to-purple-400 dark:from-indigo-700 rounded-lg shadow-lg"
         >
@@ -60,7 +64,7 @@
                 [ngClass]="{
                   'border border-indigo-600 border-2 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400':
                     selectedAccount === 'user',
-                  'bg-indigo-600 text-white dark:bg-indigo-500': selectedAccount !== 'user',
+                  'bg-primary text-white': selectedAccount !== 'user'
                 }"
                 (click)="onSelectAccount('user')"
               >
@@ -85,7 +89,7 @@
                 [ngClass]="{
                   'border-indigo-600 border-2 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400':
                     selectedAccount === 'professional',
-                  'bg-indigo-600 text-white dark:bg-indigo-500': selectedAccount !== 'professional',
+                  'bg-primary text-white': selectedAccount !== 'professional'
                 }"
                 (click)="onSelectAccount('professional')"
               >

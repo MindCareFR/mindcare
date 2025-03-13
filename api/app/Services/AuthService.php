@@ -18,7 +18,6 @@ class AuthService
   public function registerPatient(array $data): User
     {
         return DB::transaction(function () use ($data) {
-            // Créer l'utilisateur principal
             $user = new User();
             $this->mapCommonFields($user, $data);
             
@@ -26,9 +25,8 @@ class AuthService
             $user->role_id = $role->id;
             $user->save();
 
-            // Créer les données spécifiques au patient avec le même UUID
             UserPatient::create([
-                'uuid' => $user->uuid,  // Utilise le même UUID
+                'uuid' => $user->uuid,  
                 'gender' => $this->encryptionService->encryptData($data['gender']),
                 'is_anonymous' => $data['is_anonymous'] ?? false,
             ]);
@@ -37,31 +35,32 @@ class AuthService
         });
     }
 
-  public function registerPro(array $data): User
-  {
+ public function registerPro(array $data): User
+{
     return DB::transaction(function () use ($data) {
-      $user = new UserProfessional();
-      $this->mapCommonFields($user, $data);
+        $user = new User();
+        $this->mapCommonFields($user, $data);
+        
+        $role = Role::where('name', 'ROLE_PRO')->first();
+        $user->role_id = $role->id;
+        $user->save();
 
-      $role = Role::where('name', 'ROLE_PRO')->first();
-
-      // Encrypt sensitive professional data
-      $user->languages = $data['languages'];
-      $user->experience = $data['experience'];
-      $user->certification = $this->encryptionService->encryptData($data['certification']);
-      $user->company_name = $this->encryptionService->encryptData($data['company_name']);
-      $user->medical_identification_number = $this->encryptionService->encryptData($data['medical_identification_number']);
-      $user->company_identification_number = $this->encryptionService->encryptData($data['company_identification_number']);
-      $user->role_id = $role->id;
-
-      $user->save();
-      return $user;
+        UserProfessional::create([
+            'uuid' => $user->uuid,
+            'languages' => $data['languages'],
+            'experience' => $data['experience'],
+            'certification' => $this->encryptionService->encryptData($data['certification']),
+            'company_name' => $this->encryptionService->encryptData($data['company_name']),
+            'medical_identification_number' => $this->encryptionService->encryptData($data['medical_identification_number']),
+            'company_identification_number' => $this->encryptionService->encryptData($data['company_identification_number']),
+        ]);
+        
+        return $user->load('role');
     });
-  }
+}
 
   private function mapCommonFields(User $user, array $data): void
   {
-    // Non-sensitive data
     $user->firstname = $data['firstname'];
     $user->lastname = $data['lastname'];
     $user->email = $data['email'];
@@ -69,7 +68,6 @@ class AuthService
     $user->country = $data['country'];
     $user->email_verified = false;
 
-    // Sensitive data
     $user->password = Hash::make($data['password']);
     $user->phone = $this->encryptionService->encryptData($data['phone']);
     $user->birthdate = $data['birthdate'];

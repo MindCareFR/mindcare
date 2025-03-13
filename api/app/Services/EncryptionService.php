@@ -14,7 +14,16 @@ class EncryptionService
     {
         $this->key = config('app.encryption_key');
         if (empty($this->key)) {
-            throw new RuntimeException('Encryption key not found in configuration');
+            $this->key = env('APP_ENCRYPTION_KEY');
+            
+            if (empty($this->key)) {
+                if (app()->environment(['local', 'testing'])) {
+                    Log::warning('No encryption key found, using development key');
+                    $this->key = str_repeat('dev_key_', 4); 
+                } else {
+                    throw new RuntimeException('Encryption key not found in configuration');
+                }
+            }
         }
     }
 
@@ -40,7 +49,6 @@ class EncryptionService
                 throw new RuntimeException('Encryption failed');
             }
 
-            // Combine IV and encrypted data with a delimiter
             return base64_encode($iv . $encrypted);
         } catch (\Exception $e) {
             Log::error('Error encrypting data', ['error' => $e->getMessage()]);
@@ -58,7 +66,6 @@ class EncryptionService
             $ivLength = openssl_cipher_iv_length($this->method);
             $data = base64_decode($encryptedData);
             
-            // Extract IV and encrypted data
             $iv = substr($data, 0, $ivLength);
             $encrypted = substr($data, $ivLength);
 
