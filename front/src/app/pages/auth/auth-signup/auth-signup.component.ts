@@ -8,7 +8,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { NavbarComponent } from '@components/navbar/navbar.component';
+import { HeaderComponent } from 'src/app/dashboard/components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
 import { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
@@ -20,7 +20,7 @@ import type { ValidatorFn } from '@interfaces/form.interface';
   selector: 'app-auth-signup',
   standalone: true,
   templateUrl: './auth-signup.component.html',
-  imports: [CommonModule, NavbarComponent, FooterComponent, FormComponent, ReactiveFormsModule],
+  imports: [CommonModule, HeaderComponent, FooterComponent, FormComponent, ReactiveFormsModule],
 })
 export class AuthSignupComponent implements OnInit {
   appName = 'MindCare';

@@ -80,7 +80,7 @@ export class FormComponent implements OnInit, OnChanges {
         
         const control = this.fb.control(
           defaultValue,
-          (field.validators as unknown as AValidatorFn) || []
+          (field.validators as unknown as ValidatorFn) || []
         );
         
         group[fieldGroup.group].addControl(field.name, control);
@@ -269,7 +269,7 @@ export class FormComponent implements OnInit, OnChanges {
     return errors;
   }
 
-  passwordMatchValidator: AValidatorFn = (
+  passwordMatchValidator: ValidatorFn = (
     form: AbstractControl,
   ): ValidationErrors | null => {
     const password = this.getNestedControl(form as FormGroup, 'password');
