@@ -11,13 +11,24 @@ import { AuthService } from '@services/auth.service';
 import { NavbarComponent } from '@components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
-import type { IFormConfig, IFormField, IFormGroup, ValidatorFn } from '@interfaces/form.interface';
+import type {
+  IFormConfig,
+  IFormField,
+  IFormGroup,
+  ValidatorFn,
+} from '@interfaces/form.interface';
 
 @Component({
   selector: 'app-auth-login',
   standalone: true,
   templateUrl: './auth-login.component.html',
-  imports: [CommonModule, NavbarComponent, FooterComponent, FormComponent, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    NavbarComponent,
+    FooterComponent,
+    FormComponent,
+    ReactiveFormsModule,
+  ],
 })
 export class AuthLoginComponent implements OnInit {
   loginConfig: IFormConfig = {
@@ -25,14 +36,18 @@ export class AuthLoginComponent implements OnInit {
       {
         group: 'credentials',
         label: 'Informations de connexion',
-        description: 'Veuillez saisir vos informations de connexion pour accéder à votre compte.',
+        description:
+          'Veuillez saisir vos informations de connexion pour accéder à votre compte.',
         fields: [
           {
             name: 'email',
             type: 'email',
             label: 'Adresse e-mail',
             placeholder: 'Entrez votre adresse e-mail',
-            validators: [Validators.required, Validators.email] as unknown as ValidatorFn[],
+            validators: [
+              Validators.required,
+              Validators.email,
+            ] as unknown as ValidatorFn[],
           },
           {
             name: 'password',
@@ -52,6 +67,7 @@ export class AuthLoginComponent implements OnInit {
 
   successMessage: string | null = null;
   errorMessage: string | null = null;
+  errorMessageText: string = '';
 
   constructor(
     private authService: AuthService,
@@ -69,7 +85,8 @@ export class AuthLoginComponent implements OnInit {
       groups.forEach((group: IFormGroup): void => {
         group.fields.forEach((field: IFormField): void => {
           if (field.name === 'email' && email) field.defaultValue = email;
-          if (field.name === 'password' && password) field.defaultValue = password;
+          if (field.name === 'password' && password)
+            field.defaultValue = password;
         });
       });
     }
@@ -78,15 +95,18 @@ export class AuthLoginComponent implements OnInit {
       if (params['status'] === 'success') {
         this.successMessage = params['message'] || 'Votre email a été vérifié avec succès !';
       } else if (params['status'] === 'error') {
-        this.errorMessage = params['message'] || 'Erreur lors de la vérification de l\'email.';
+        this.errorMessageText = params['message'] || 'Erreur lors de la vérification de l\'email.';
       }
     });
   }
 
   onFormSubmit(form: FormGroup): void {
-    console.log('Form submitted');
     if (form.valid) {
-      const { email, password, remember } = form.value;
+      const credentials = form.value.credentials || {};
+      const email = credentials.email;
+      const password = credentials.password;
+      const remember = credentials.remember;
+      
       if (remember) {
         localStorage.setItem('email', email);
         localStorage.setItem('password', password);
@@ -94,17 +114,40 @@ export class AuthLoginComponent implements OnInit {
         localStorage.removeItem('email');
         localStorage.removeItem('password');
       }
+      
+      this.successMessage = null;
+      this.errorMessage = null;
+      this.errorMessageText = '';
+      
       if (email && password) {
-        this.authService.login(email, password).subscribe(response => {
-          if (response) {
-            this.router.navigate(['/dashboard']);
-          } else {
-            form.setErrors({ invalidCredentials: true });
+        this.authService.login(email, password).subscribe(
+          (response) => {
+            if (response && response.token) {
+              this.successMessage = 'Connexion réussie !';
+              setTimeout(() => {
+                this.router.navigate(['/dashboard']);
+              }, 1000);
+            } else {
+              // Définir le message d'erreur pour le composant de formulaire
+              this.errorMessageText = 'Identifiants invalides. Veuillez réessayer.';
+              form.setErrors({ invalidCredentials: true });
+            }
+          },
+          (error) => {
+            console.error('Erreur de connexion:', error);
+            
+            if (error && error.message) {
+              this.errorMessageText = error.message;
+            } else {
+              this.errorMessageText = 'Une erreur est survenue lors de la connexion. Veuillez réessayer plus tard.';
+            }
+            
+            form.setErrors({ serverError: true });
           }
-        });
+        );
       }
     } else {
-      console.log('Form is invalid');
+      this.errorMessageText = 'Veuillez remplir correctement tous les champs requis.';
       form.markAllAsTouched();
     }
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 export interface AuthResponse {
@@ -18,24 +18,50 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<AuthResponse | null> {
+  login(email: string, password: string): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/login`, { email, password })
       .pipe(
         map((response) => {
-          if (response.token) {
+          if (response && response.token) {
             localStorage.setItem('token', response.token);
+            if (response.user_id) {
+              localStorage.setItem('user_id', response.user_id);
+            }
           }
           return response;
         }),
-        catchError((error) => {
-          console.error('Login error', error);
-          return of(null);
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage = 'Une erreur est survenue';
+          
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Erreur: ${error.error.message}`;
+          } else {
+            if (error.status === 401) {
+              errorMessage = 'Email ou mot de passe incorrect';
+            } else if (error.status === 403) {
+              errorMessage = 'Votre compte n\'a pas encore été activé';
+            } else if (error.status === 404) {
+              errorMessage = 'Aucun compte n\'est associé à cet email';
+            } else if (error.status === 429) {
+              errorMessage = 'Trop de tentatives de connexion';
+            } else if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            }
+          }
+          
+          return throwError(() => {
+            return {
+              message: errorMessage,
+              status: error.status,
+              error: error.error
+            };
+          });
         })
       );
   }
 
-  registerPatient(formData: any): Observable<AuthResponse | null> {
+  registerPatient(formData: any): Observable<AuthResponse> {
     const requiredFields = [
       'email', 'password', 'firstname', 'lastname', 'birthdate', 
       'phone', 'address', 'zipcode', 'city', 'country', 'gender'
@@ -44,11 +70,20 @@ export class AuthService {
     const missingFields = requiredFields.filter(field => !formData[field]);
     if (missingFields.length > 0) {
       console.error('Champs manquants:', missingFields);
+      return throwError(() => ({
+        message: `Champs manquants: ${missingFields.join(', ')}`,
+        status: 400,
+        error: { missingFields }
+      }));
     }
 
     if (formData.password !== formData.password_confirmation) {
       console.error('Les mots de passe ne correspondent pas');
-      return throwError(() => new Error('Les mots de passe ne correspondent pas'));
+      return throwError(() => ({
+        message: 'Les mots de passe ne correspondent pas',
+        status: 400,
+        error: { passwordMismatch: true }
+      }));
     }
 
     const payload = {
@@ -67,8 +102,6 @@ export class AuthService {
       is_anonymous: formData.is_anonymous || false
     };
 
-    // console.log('Payload d\'inscription patient:', payload);
-
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/register/patient`, payload)
       .pipe(
@@ -76,21 +109,34 @@ export class AuthService {
           console.log('Réponse d\'inscription', response);
           return response;
         }),
-        catchError((error) => {
+        catchError((error: HttpErrorResponse) => {
           console.error('Erreur d\'inscription', error);
           console.error('Status:', error.status);
           console.error('Message:', error.message);
+          
+          let errorMessage = 'Une erreur est survenue lors de l\'inscription';
+          
+          if (error.status === 422 && error.error && error.error.errors) {
+            const validationErrors = Object.values(error.error.errors).flat();
+            errorMessage = Array.isArray(validationErrors) ? validationErrors.join(', ') : String(validationErrors);
+          } else if (error.error && error.error.message) {
+            errorMessage = error.error.message;
+          }
           
           if (error.error) {
             console.error('Erreur détaillée:', error.error);
           }
           
-          return throwError(() => error);
+          return throwError(() => ({
+            message: errorMessage,
+            status: error.status,
+            error: error.error
+          }));
         })
       );
   }
 
-  registerProfessional(formData: any): Observable<AuthResponse | null> {
+  registerProfessional(formData: any): Observable<AuthResponse> {
     const requiredFields = [
       'email', 'password', 'firstname', 'lastname', 'birthdate', 
       'phone', 'address', 'zipcode', 'city', 'country', 'languages',
@@ -101,11 +147,20 @@ export class AuthService {
     const missingFields = requiredFields.filter(field => !formData[field]);
     if (missingFields.length > 0) {
       console.error('Champs manquants pour professionnel:', missingFields);
+      return throwError(() => ({
+        message: `Champs manquants: ${missingFields.join(', ')}`,
+        status: 400,
+        error: { missingFields }
+      }));
     }
     
     if (formData.password !== formData.password_confirmation) {
       console.error('Les mots de passe ne correspondent pas');
-      return throwError(() => new Error('Les mots de passe ne correspondent pas'));
+      return throwError(() => ({
+        message: 'Les mots de passe ne correspondent pas',
+        status: 400,
+        error: { passwordMismatch: true }
+      }));
     }
   
     let languages = [];
@@ -146,21 +201,34 @@ export class AuthService {
           console.log('Réponse d\'inscription professionnelle:', response);
           return response;
         }),
-        catchError((error) => {
+        catchError((error: HttpErrorResponse) => {
           console.error('Erreur d\'inscription professionnelle', error);
           console.error('Status:', error.status);
           console.error('Message:', error.message);
+          
+          let errorMessage = 'Une erreur est survenue lors de l\'inscription';
+          
+          if (error.status === 422 && error.error && error.error.errors) {
+            const validationErrors = Object.values(error.error.errors).flat();
+            errorMessage = Array.isArray(validationErrors) ? validationErrors.join(', ') : String(validationErrors);
+          } else if (error.error && error.error.message) {
+            errorMessage = error.error.message;
+          }
           
           if (error.error) {
             console.error('Erreur détaillée:', error.error);
           }
           
-          return throwError(() => error);
+          return throwError(() => ({
+            message: errorMessage,
+            status: error.status,
+            error: error.error
+          }));
         })
       );
   }
 
-  verifyEmail(token: string): Observable<AuthResponse | null> {
+  verifyEmail(token: string): Observable<AuthResponse> {
     return this.http
       .get<AuthResponse>(`${this.apiUrl}/verify`, { 
         params: { token } 
@@ -170,19 +238,39 @@ export class AuthService {
           console.log('Email verification response', response);
           return response;
         }),
-        catchError((error) => {
+        catchError((error: HttpErrorResponse) => {
           console.error('Email verification error', error);
-          return of(null);
+          
+          let errorMessage = 'Erreur lors de la vérification de l\'email';
+          
+          if (error.error && error.error.message) {
+            errorMessage = error.error.message;
+          }
+          
+          return throwError(() => ({
+            message: errorMessage,
+            status: error.status,
+            error: error.error
+          }));
         })
       );
   }
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('user_id');
   }
 
   isAuthenticated(): boolean {
     return !!localStorage.getItem('token');
+  }
+
+  getUserId(): string | null {
+    return localStorage.getItem('user_id');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
   private formatBirthdate(birthdate: string): string {
