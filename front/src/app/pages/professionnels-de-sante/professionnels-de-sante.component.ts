@@ -31,5 +31,5 @@ export class ProfessionnelsDeSanteComponent {
   Approche: string = "Gestalt-thérapie, approche systémique de la famille";
   Travaux: string = "Peur et crises d'angoisse, Dépendance émotionnelle, Stress";
   histoire: string = "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter"
-
+  pageSize = 10;
 }
