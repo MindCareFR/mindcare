@@ -23,18 +23,16 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponse | null> {
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/login`, { email, password })
-      .pipe(
-        map((response) => {
-          localStorage.setItem('token', response.token);
-          return response;
-        }),
-        catchError((error) => {
-          console.error('Login error', error);
-          return of(null);
-        }),
-      );
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
+      map(response => {
+        localStorage.setItem('token', response.token);
+        return response;
+      }),
+      catchError(error => {
+        console.error('Login error', error);
+        return of(null);
+      })
+    );
   }
 
   signup(data: IUserData): Observable<AuthResponse | null> {
@@ -49,22 +47,20 @@ export class AuthService {
         birthdate: new Date(data.birthdate).toISOString(),
       })
       .pipe(
-        map((response) => {
+        map(response => {
           localStorage.setItem('token', response.token);
           return response;
         }),
-        catchError((error) => {
+        catchError(error => {
           console.error('Signup error', error);
           return of(null);
-        }),
+        })
       );
   }
 
   checkInputsSignup(data: IUserData): boolean {
     const birthdateRegex = new RegExp(/^\d{2}\/\d{2}\/\d{4}$/);
-    const emailRegex = new RegExp(
-      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-    );
+    const emailRegex = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/);
     const phoneRegex = new RegExp(/^\d{10}$/);
     return (
       data.gender > 0 &&
