@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Response;
 
 /*
@@ -24,6 +25,18 @@ Route::middleware('api')->group(function () {
 
   // Protected routes
   Route::middleware('auth:sanctum')->group(function () {
-    // Add your protected routes here
+    Route::prefix('profile')->group(function () {
+      Route::get('/', [ProfileController::class, 'showMyProfile']);
+      Route::put('/basic', [ProfileController::class, 'updateBasicInfo']);
+      Route::get('/preferences/init', [ProfileController::class, 'initDefaultPreferences']);
+      Route::put('/preferences', [ProfileController::class, 'updatePreferences']);
+      Route::put('/professional', [ProfileController::class, 'updateProfessionalProfile']);
+      Route::put('/patient', [ProfileController::class, 'updatePatientProfile']);
+      Route::get('/reviews', [ProfileController::class, 'getMyReviews']);
+    });
+
+    Route::post('/professional/{uuid}/review', [ProfileController::class, 'submitReview']);
   });
+
+  Route::get('/profile/{uuid}', [ProfileController::class, 'showPublicProfile']);
 });
