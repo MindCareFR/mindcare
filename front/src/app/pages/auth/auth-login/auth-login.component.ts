@@ -5,7 +5,7 @@ import {
   FormBuilder,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router'; 
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@services/auth.service';
 import { NavbarComponent } from '@components/navbar/navbar.component';
@@ -65,10 +65,14 @@ export class AuthLoginComponent implements OnInit {
     isIndexed: false,
   };
 
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
+
   constructor(
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
+    private route: ActivatedRoute 
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +89,14 @@ export class AuthLoginComponent implements OnInit {
         });
       });
     }
+
+    this.route.queryParams.subscribe(params => {
+      if (params['status'] === 'success') {
+        this.successMessage = params['message'] || 'Votre email a été vérifié avec succès !';
+      } else if (params['status'] === 'error') {
+        this.errorMessage = params['message'] || 'Erreur lors de la vérification de l\'email.';
+      }
+    });
   }
 
   onFormSubmit(form: FormGroup): void {
