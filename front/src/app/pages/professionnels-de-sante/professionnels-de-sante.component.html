@@ -33,13 +33,13 @@
       <div class="mt-4">
         <div *ngIf="doctor.activeTab === 'principal'">
           <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-          <p>{{ Approche }}</p>
+          <p>{{ doctor.approche }}</p>
           <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-          <p>{{ Travaux }}</p>
+          <p>{{ doctor.travaux }}</p>
         </div>
         <div *ngIf="doctor.activeTab === 'general'">
           <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-          <p>{{ histoire }}</p>
+          <p>{{ doctor.histoire }}</p>
         </div>
       </div>
     </div>

@@ -24,13 +24,6 @@ import { FooterComponent } from '@components/footer/footer.component';
 })
 export class ProfessionnelsDeSanteComponent {
   activeTab: string = "principal";
-  name: string ="Nom prenom";
-  note: number = 9;
-  ans: number = 5;
-  diplome: string = "BAC+3";
-  Approche: string = "Gestalt-thérapie, approche systémique de la famille";
-  Travaux: string = "Peur et crises d'angoisse, Dépendance émotionnelle, Stress";
-  histoire: string = "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter"
   currentPage = 1;
   pageSize = 12;
   doctors = [
@@ -39,8 +32,8 @@ export class ProfessionnelsDeSanteComponent {
       note: 9,
       ans: 15,
       diplome: 'PhD',
-      Approche: 'Cognitive Therapy',
-      Travaux: 'Anxiety, Depression',
+      approche: 'Cognitive Therapy',
+      travaux: 'Anxiety, Depression',
       histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
       image: 'https://picsum.photos/200/300',
       activeTab: 'principal'
@@ -49,8 +42,8 @@ export class ProfessionnelsDeSanteComponent {
       note: 8,
       ans: 10,
       diplome: 'MD',
-      Approche: 'Behavioral Therapy',
-      Travaux: 'PTSD, Stress',
+      approche: 'Behavioral Therapy',
+      travaux: 'PTSD, Stress',
       histoire: 'Former military psychiatrist',
       image: 'https://picsum.photos/200/300',
       activeTab: 'principal' },
@@ -58,8 +51,8 @@ export class ProfessionnelsDeSanteComponent {
       note: 8,
       ans: 10,
       diplome: 'MD',
-      Approche: 'Behavioral Therapy',
-      Travaux: 'PTSD, Stress',
+      approche: 'Behavioral Therapy',
+      travaux: 'PTSD, Stress',
       histoire: 'Former military psychiatrist',
       image: 'https://picsum.photos/200/300',
       activeTab: 'principal'
@@ -68,8 +61,8 @@ export class ProfessionnelsDeSanteComponent {
       note: 8,
       ans: 10,
       diplome: 'MD',
-      Approche: 'Behavioral Therapy',
-      Travaux: 'PTSD, Stress',
+      approche: 'Behavioral Therapy',
+      travaux: 'PTSD, Stress',
       histoire: 'Former military psychiatrist',
       image: 'https://picsum.photos/200/300',
       activeTab: 'principal'
@@ -78,8 +71,8 @@ export class ProfessionnelsDeSanteComponent {
       note: 8,
       ans: 10,
       diplome: 'MD',
-      Approche: 'Behavioral Therapy',
-      Travaux: 'PTSD, Stress',
+      approche: 'Behavioral Therapy',
+      travaux: 'PTSD, Stress',
       histoire: 'Former military psychiatrist',
       image: 'https://picsum.photos/200/300',
       activeTab: 'principal'
