@@ -6,329 +6,57 @@
     <h1 class="text-4xl font-bold mb-4">Psychologues MindCare</h1>
   </div>
 </div>
+
+<!-- Фильры -->
+
+
 <!-- Карточка врача -->
-<div class="container mx-auto">
-  <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    <div class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
-      <div class="flex justify-center">
-        <p-avatar image="https://picsum.photos/200/300" class="mr-2" size="xlarge" shape="circle" />
+<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  <div *ngFor="let doctor of paginatedDoctors" class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
+    <div class="flex justify-center">
+      <p-avatar [image]="doctor.image" class="mr-2" size="xlarge" shape="circle" />
+    </div>
+    <div class="mt-2 flex justify-center">
+      <p>{{ doctor.name }}</p>
+    </div>
+    <div class="mb-1 flex flex-wrap justify-center gap-2">
+      <div class="py-1 px-2 bg-blue-200 rounded">{{ doctor.note }} sur 10</div>
+      <div class="py-1 px-2 bg-green-200 rounded">{{ doctor.ans }} ans d'expérience</div>
+      <div class="py-1 px-2 bg-gray-200 rounded">{{ doctor.diplome }}</div>
+    </div>
+    <div class="h-44 overflow-auto">
+      <div class="flex justify-center gap-6">
+        <button (click)="doctor.activeTab = 'principal'" class="rounded text-xl">Principal</button>
+        <button (click)="doctor.activeTab = 'general'" class="rounded text-xl">Général</button>
       </div>
-      <div class="mt-2 flex justify-center">
-        <p>{{ name }}</p>
-      </div>
-      <div class="mb-1 flex flex-wrap justify-center gap-2">
-        <div class="py-1 px-2 bg-blue-200 rounded">{{ note }} sur 10</div>
-        <div class="py-1 px-2 bg-green-200 rounded">{{ ans }} ans d'expérience</div>
-        <div class="py-1 px-2 bg-gray-200 rounded">{{ diplome }}</div>
-      </div>
-      <div class="h-44 overflow-auto">
-        <div class="flex justify-center gap-6">
-          <button (click)="activeTab = 'principal'" class="rounded text-xl">Principal</button>
-          <button (click)="activeTab = 'general'" class="rounded text-xl">Général</button>
+      <hr>
+      <div class="mt-4">
+        <div *ngIf="doctor.activeTab === 'principal'">
+          <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
+          <p>{{ Approche }}</p>
+          <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
+          <p>{{ Travaux }}</p>
         </div>
-        <hr>
-        <div class="mt-4">
-          <div *ngIf="activeTab === 'principal'">
-            <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-            <p>{{ Approche }}</p>
-            <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-            <p>{{ Travaux }}</p>
-          </div>
-          <div *ngIf="activeTab === 'general'">
-            <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-            <p>{{ histoire }}</p>
-          </div>
+        <div *ngIf="doctor.activeTab === 'general'">
+          <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
+          <p>{{ histoire }}</p>
         </div>
-      </div>
-      <div class="flex justify-center">
-        <p-button label="Voir plus" severity="info" />
       </div>
     </div>
-    <div class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
-      <div class="flex justify-center">
-        <p-avatar image="https://picsum.photos/200/300" class="mr-2" size="xlarge" shape="circle" />
-      </div>
-      <div class="mt-2 flex justify-center">
-        <p>{{ name }}</p>
-      </div>
-      <div class="mb-1 flex flex-wrap justify-center gap-2">
-        <div class="py-1 px-2 bg-blue-200 rounded">{{ note }} sur 10</div>
-        <div class="py-1 px-2 bg-green-200 rounded">{{ ans }} ans d'expérience</div>
-        <div class="py-1 px-2 bg-gray-200 rounded">{{ diplome }}</div>
-      </div>
-      <div class="h-44 overflow-auto">
-        <div class="flex justify-center gap-6">
-          <button (click)="activeTab = 'principal'" class="rounded text-xl">Principal</button>
-          <button (click)="activeTab = 'general'" class="rounded text-xl">Général</button>
-        </div>
-        <hr>
-        <div class="mt-4">
-          <div *ngIf="activeTab === 'principal'">
-            <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-            <p>{{ Approche }}</p>
-            <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-            <p>{{ Travaux }}</p>
-          </div>
-          <div *ngIf="activeTab === 'general'">
-            <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-            <p>{{ histoire }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center">
-        <p-button label="Voir plus" severity="info" />
-      </div>
-    </div>
-    <div class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
-      <div class="flex justify-center">
-        <p-avatar image="https://picsum.photos/200/300" class="mr-2" size="xlarge" shape="circle" />
-      </div>
-      <div class="mt-2 flex justify-center">
-        <p>{{ name }}</p>
-      </div>
-      <div class="mb-1 flex flex-wrap justify-center gap-2">
-        <div class="py-1 px-2 bg-blue-200 rounded">{{ note }} sur 10</div>
-        <div class="py-1 px-2 bg-green-200 rounded">{{ ans }} ans d'expérience</div>
-        <div class="py-1 px-2 bg-gray-200 rounded">{{ diplome }}</div>
-      </div>
-      <div class="h-44 overflow-auto">
-        <div class="flex justify-center gap-6">
-          <button (click)="activeTab = 'principal'" class="rounded text-xl">Principal</button>
-          <button (click)="activeTab = 'general'" class="rounded text-xl">Général</button>
-        </div>
-        <hr>
-        <div class="mt-4">
-          <div *ngIf="activeTab === 'principal'">
-            <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-            <p>{{ Approche }}</p>
-            <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-            <p>{{ Travaux }}</p>
-          </div>
-          <div *ngIf="activeTab === 'general'">
-            <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-            <p>{{ histoire }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center">
-        <p-button label="Voir plus" severity="info" />
-      </div>
-    </div>
-  </div>
-  <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    <div class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
-      <div class="flex justify-center">
-        <p-avatar image="https://picsum.photos/200/300" class="mr-2" size="xlarge" shape="circle" />
-      </div>
-      <div class="mt-2 flex justify-center">
-        <p>{{ name }}</p>
-      </div>
-      <div class="mb-1 flex flex-wrap justify-center gap-2">
-        <div class="py-1 px-2 bg-blue-200 rounded">{{ note }} sur 10</div>
-        <div class="py-1 px-2 bg-green-200 rounded">{{ ans }} ans d'expérience</div>
-        <div class="py-1 px-2 bg-gray-200 rounded">{{ diplome }}</div>
-      </div>
-      <div class="h-44 overflow-auto">
-        <div class="flex justify-center gap-6">
-          <button (click)="activeTab = 'principal'" class="rounded text-xl">Principal</button>
-          <button (click)="activeTab = 'general'" class="rounded text-xl">Général</button>
-        </div>
-        <hr>
-        <div class="mt-4">
-          <div *ngIf="activeTab === 'principal'">
-            <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-            <p>{{ Approche }}</p>
-            <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-            <p>{{ Travaux }}</p>
-          </div>
-          <div *ngIf="activeTab === 'general'">
-            <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-            <p>{{ histoire }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center">
-        <p-button label="Voir plus" severity="info" />
-      </div>
-    </div>
-    <div class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
-      <div class="flex justify-center">
-        <p-avatar image="https://picsum.photos/200/300" class="mr-2" size="xlarge" shape="circle" />
-      </div>
-      <div class="mt-2 flex justify-center">
-        <p>{{ name }}</p>
-      </div>
-      <div class="mb-1 flex flex-wrap justify-center gap-2">
-        <div class="py-1 px-2 bg-blue-200 rounded">{{ note }} sur 10</div>
-        <div class="py-1 px-2 bg-green-200 rounded">{{ ans }} ans d'expérience</div>
-        <div class="py-1 px-2 bg-gray-200 rounded">{{ diplome }}</div>
-      </div>
-      <div class="h-44 overflow-auto">
-        <div class="flex justify-center gap-6">
-          <button (click)="activeTab = 'principal'" class="rounded text-xl">Principal</button>
-          <button (click)="activeTab = 'general'" class="rounded text-xl">Général</button>
-        </div>
-        <hr>
-        <div class="mt-4">
-          <div *ngIf="activeTab === 'principal'">
-            <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-            <p>{{ Approche }}</p>
-            <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-            <p>{{ Travaux }}</p>
-          </div>
-          <div *ngIf="activeTab === 'general'">
-            <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-            <p>{{ histoire }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center">
-        <p-button label="Voir plus" severity="info" />
-      </div>
-    </div>
-    <div class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
-      <div class="flex justify-center">
-        <p-avatar image="https://picsum.photos/200/300" class="mr-2" size="xlarge" shape="circle" />
-      </div>
-      <div class="mt-2 flex justify-center">
-        <p>{{ name }}</p>
-      </div>
-      <div class="mb-1 flex flex-wrap justify-center gap-2">
-        <div class="py-1 px-2 bg-blue-200 rounded">{{ note }} sur 10</div>
-        <div class="py-1 px-2 bg-green-200 rounded">{{ ans }} ans d'expérience</div>
-        <div class="py-1 px-2 bg-gray-200 rounded">{{ diplome }}</div>
-      </div>
-      <div class="h-44 overflow-auto">
-        <div class="flex justify-center gap-6">
-          <button (click)="activeTab = 'principal'" class="rounded text-xl">Principal</button>
-          <button (click)="activeTab = 'general'" class="rounded text-xl">Général</button>
-        </div>
-        <hr>
-        <div class="mt-4">
-          <div *ngIf="activeTab === 'principal'">
-            <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-            <p>{{ Approche }}</p>
-            <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-            <p>{{ Travaux }}</p>
-          </div>
-          <div *ngIf="activeTab === 'general'">
-            <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-            <p>{{ histoire }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center">
-        <p-button label="Voir plus" severity="info" />
-      </div>
-    </div>
-  </div>
-  <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    <div class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
-      <div class="flex justify-center">
-        <p-avatar image="https://picsum.photos/200/300" class="mr-2" size="xlarge" shape="circle" />
-      </div>
-      <div class="mt-2 flex justify-center">
-        <p>{{ name }}</p>
-      </div>
-      <div class="mb-1 flex flex-wrap justify-center gap-2">
-        <div class="py-1 px-2 bg-blue-200 rounded">{{ note }} sur 10</div>
-        <div class="py-1 px-2 bg-green-200 rounded">{{ ans }} ans d'expérience</div>
-        <div class="py-1 px-2 bg-gray-200 rounded">{{ diplome }}</div>
-      </div>
-      <div class="h-44 overflow-auto">
-        <div class="flex justify-center gap-6">
-          <button (click)="activeTab = 'principal'" class="rounded text-xl">Principal</button>
-          <button (click)="activeTab = 'general'" class="rounded text-xl">Général</button>
-        </div>
-        <hr>
-        <div class="mt-4">
-          <div *ngIf="activeTab === 'principal'">
-            <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-            <p>{{ Approche }}</p>
-            <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-            <p>{{ Travaux }}</p>
-          </div>
-          <div *ngIf="activeTab === 'general'">
-            <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-            <p>{{ histoire }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center">
-        <p-button label="Voir plus" severity="info" />
-      </div>
-    </div>
-    <div class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
-      <div class="flex justify-center">
-        <p-avatar image="https://picsum.photos/200/300" class="mr-2" size="xlarge" shape="circle" />
-      </div>
-      <div class="mt-2 flex justify-center">
-        <p>{{ name }}</p>
-      </div>
-      <div class="mb-1 flex flex-wrap justify-center gap-2">
-        <div class="py-1 px-2 bg-blue-200 rounded">{{ note }} sur 10</div>
-        <div class="py-1 px-2 bg-green-200 rounded">{{ ans }} ans d'expérience</div>
-        <div class="py-1 px-2 bg-gray-200 rounded">{{ diplome }}</div>
-      </div>
-      <div class="h-44 overflow-auto">
-        <div class="flex justify-center gap-6">
-          <button (click)="activeTab = 'principal'" class="rounded text-xl">Principal</button>
-          <button (click)="activeTab = 'general'" class="rounded text-xl">Général</button>
-        </div>
-        <hr>
-        <div class="mt-4">
-          <div *ngIf="activeTab === 'principal'">
-            <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-            <p>{{ Approche }}</p>
-            <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-            <p>{{ Travaux }}</p>
-          </div>
-          <div *ngIf="activeTab === 'general'">
-            <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-            <p>{{ histoire }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center">
-        <p-button label="Voir plus" severity="info" />
-      </div>
-    </div>
-    <div class="mt-6 p-4 max-w-sm mx-auto border rounded-lg hover:shadow-lg">
-      <div class="flex justify-center">
-        <p-avatar image="https://picsum.photos/200/300" class="mr-2" size="xlarge" shape="circle" />
-      </div>
-      <div class="mt-2 flex justify-center">
-        <p>{{ name }}</p>
-      </div>
-      <div class="mb-1 flex flex-wrap justify-center gap-2">
-        <div class="py-1 px-2 bg-blue-200 rounded">{{ note }} sur 10</div>
-        <div class="py-1 px-2 bg-green-200 rounded">{{ ans }} ans d'expérience</div>
-        <div class="py-1 px-2 bg-gray-200 rounded">{{ diplome }}</div>
-      </div>
-      <div class="h-44 overflow-auto">
-        <div class="flex justify-center gap-6">
-          <button (click)="activeTab = 'principal'" class="rounded text-xl">Principal</button>
-          <button (click)="activeTab = 'general'" class="rounded text-xl">Général</button>
-        </div>
-        <hr>
-        <div class="mt-4">
-          <div *ngIf="activeTab === 'principal'">
-            <h4 class="text-lg font-semibold">Approche psychothérapeutique</h4>
-            <p>{{ Approche }}</p>
-            <h4 class="text-lg font-semibold">Travaux avec des thèmes</h4>
-            <p>{{ Travaux }}</p>
-          </div>
-          <div *ngIf="activeTab === 'general'">
-            <h4 class="text-lg font-semibold">À propos du spécialiste</h4>
-            <p>{{ histoire }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center">
-        <p-button label="Voir plus" severity="info" />
-      </div>
+    <div class="flex justify-center">
+      <p-button label="Voir plus" severity="info" />
     </div>
   </div>
 </div>
+<div class="flex justify-center my-6">
+  <p-button label="Précédent" severity="info" (click)="previousPage()" [disabled]="currentPage === 1"
+    class=" px-4 rounded"/>
+    <p class="my-auto">{{ currentPage }}</p>
+  <p-button label="Suivant" severity="info" (click)="nextPage()" [disabled]="currentPage * pageSize >= doctors.length"
+    class=" px-4 rounded"/>
+</div>
 
 <app-footer></app-footer>
+
+
+
