@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, MaxLengthValidator } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
 import { NavbarComponent } from '@components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
+import { FilterService } from 'primeng/api';
 
 
 @Component({
@@ -22,7 +23,7 @@ import { FooterComponent } from '@components/footer/footer.component';
   ],
   templateUrl: './professionnels-de-sante.component.html',
 })
-export class ProfessionnelsDeSanteComponent {
+export class ProfessionnelsDeSanteComponent{
   activeTab: string = "principal";
   currentPage = 1;
   pageSize = 12;
@@ -38,46 +39,17 @@ export class ProfessionnelsDeSanteComponent {
       image: 'https://picsum.photos/200/300',
       activeTab: 'principal'
     },
-    { name: 'Dr. Bob',
-      note: 8,
-      ans: 10,
-      diplome: 'MD',
-      approche: 'Behavioral Therapy',
-      travaux: 'PTSD, Stress',
-      histoire: 'Former military psychiatrist',
-      image: 'https://picsum.photos/200/300',
-      activeTab: 'principal' },
-    { name: 'Dr. Bob',
-      note: 8,
-      ans: 10,
-      diplome: 'MD',
-      approche: 'Behavioral Therapy',
-      travaux: 'PTSD, Stress',
-      histoire: 'Former military psychiatrist',
-      image: 'https://picsum.photos/200/300',
-      activeTab: 'principal'
-    },
-    { name: 'Dr. Bob',
-      note: 8,
-      ans: 10,
-      diplome: 'MD',
-      approche: 'Behavioral Therapy',
-      travaux: 'PTSD, Stress',
-      histoire: 'Former military psychiatrist',
-      image: 'https://picsum.photos/200/300',
-      activeTab: 'principal'
-    },
-    { name: 'Dr. Bob',
-      note: 8,
-      ans: 10,
-      diplome: 'MD',
-      approche: 'Behavioral Therapy',
-      travaux: 'PTSD, Stress',
-      histoire: 'Former military psychiatrist',
-      image: 'https://picsum.photos/200/300',
-      activeTab: 'principal'
-    },
   ];
+
+  filters = [
+    { key: 'symptoms', label: 'Symptômes', options: [] },
+    { key: 'approach', label: 'Approche', options: [] },
+    { key: 'sex', label: 'Sex', options: [] },
+    { key: 'recommended', label: 'Recommandé', options: [] },
+  ];
+
+  dropdowns: { [key: string]: boolean } = {};
+
 
   get paginatedDoctors() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -95,4 +67,22 @@ export class ProfessionnelsDeSanteComponent {
       this.currentPage++;
     }
   }
+
+  truncateText(text: string, maxLength: number): string {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    let trimmed = text.slice(0, maxLength).trimEnd();
+    return trimmed + '...';
+  }
+
+  toggleDropdown(key: string) {
+    this.dropdowns[key] = !this.dropdowns[key];
+  }
+
+  selectOption(key: string, option: string) {
+    console.log(`Selected ${option} for ${key}`);
+    this.dropdowns[key] = false;
+  }
+
 }
