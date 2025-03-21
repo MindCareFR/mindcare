@@ -6,7 +6,7 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
 import { NavbarComponent } from '@components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
-import { FilterService } from 'primeng/api';
+import { FiltresComponent } from '@components/filtres/filtres.component';
 
 
 @Component({
@@ -20,6 +20,7 @@ import { FilterService } from 'primeng/api';
     ButtonModule,
     NavbarComponent,
     FooterComponent,
+    FiltresComponent,
   ],
   templateUrl: './professionnels-de-sante.component.html',
 })
@@ -40,16 +41,6 @@ export class ProfessionnelsDeSanteComponent{
       activeTab: 'principal'
     },
   ];
-
-  filters = [
-    { key: 'symptoms', label: 'Symptômes', options: [] },
-    { key: 'approach', label: 'Approche', options: [] },
-    { key: 'sex', label: 'Sex', options: [] },
-    { key: 'recommended', label: 'Recommandé', options: [] },
-  ];
-
-  dropdowns: { [key: string]: boolean } = {};
-
 
   get paginatedDoctors() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -74,15 +65,6 @@ export class ProfessionnelsDeSanteComponent{
     }
     let trimmed = text.slice(0, maxLength).trimEnd();
     return trimmed + '...';
-  }
-
-  toggleDropdown(key: string) {
-    this.dropdowns[key] = !this.dropdowns[key];
-  }
-
-  selectOption(key: string, option: string) {
-    console.log(`Selected ${option} for ${key}`);
-    this.dropdowns[key] = false;
   }
 
 }

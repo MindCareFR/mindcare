@@ -1,0 +1,20 @@
+<div class="flex flex-wrap items-center justify-center gap-4 bg-white shadow-md rounded-2xl p-4">
+    <div *ngFor="let filter of filters">
+      <div class="relative inline-block text-left">
+        <button (click)="toggleDropdown(filter.key)"
+                class="bg-gray-100 text-black font-medium rounded-xl px-6 py-3 flex items-center space-x-2 w-full">
+          <span>{{ filter.label }}</span>
+          <svg class="w-4 h-4 transform" [class.rotate-180]="dropdowns[filter.key]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div *ngIf="dropdowns[filter.key]" class="absolute mt-2 bg-white border rounded-xl shadow-lg z-10 w-48">
+          <button *ngFor="let option of filter.options"
+                  (click)="selectOption(filter.key, option)"
+                  class="block px-4 py-2 w-full text-left hover:bg-gray-100">
+            {{ option }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
