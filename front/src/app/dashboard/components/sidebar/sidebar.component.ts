@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,6 +16,11 @@ export class SidebarComponent implements OnInit {
   @Input() userName = '';
   @Input() userAvatar = '';
   @Input() notifications = 0;
+  @Input() role = '';
+
+  // Ajout des propriétés pour le nom et prénom
+  firstName: string = '';
+  lastName: string = '';
 
   navItems = [
     {
@@ -77,7 +83,10 @@ export class SidebarComponent implements OnInit {
     },
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService  // Injecter le service d'authentification
+  ) {}
 
   ngOnInit() {
     // Mettre à jour l'élément actif en fonction de l'URL actuelle
@@ -89,6 +98,50 @@ export class SidebarComponent implements OnInit {
       .subscribe((event: any) => {
         this.updateActiveItems(event.url);
       });
+
+    // Récupérer les informations de l'utilisateur connecté
+    this.loadUserInfo();
+  }
+
+  // Nouvelle méthode pour charger les informations de l'utilisateur
+  loadUserInfo() {
+    // Observer les changements d'utilisateur
+    this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        this.firstName = user.firstname || '';
+        this.lastName = user.lastname || '';
+        this.role = user.role?.name || '';
+
+        // Si input userName est vide, on le remplace par prénom + nom
+        if (!this.userName) {
+          this.userName = `${this.firstName} ${this.lastName}`;
+        }
+
+        // On peut aussi récupérer l'avatar si disponible
+        this.userAvatar = user.avatar || 'avatar.png';
+      } else {
+        // Si pas d'utilisateur, on peut appeler getProfile pour récupérer les infos
+        this.authService.getUserProfile().subscribe(
+          profile => {
+            if (profile) {
+              this.firstName = profile.firstname || '';
+              this.lastName = profile.lastname || '';
+              this.userName = `${this.firstName} ${this.lastName}`;
+              this.userAvatar = profile.avatar || 'avatar.png';
+            }
+          },
+          error => {
+            console.error('Erreur lors de la récupération du profil', error);
+          }
+        );
+      }
+    });
+  }
+
+  // Méthode pour se déconnecter
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/auth/login']);
   }
 
   updateActiveItems(url: string) {

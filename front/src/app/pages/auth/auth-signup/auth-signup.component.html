@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-navbar></app-navbar>
 
 <div class="relative">
   <div
@@ -22,12 +22,12 @@
         >
           <div class="flex items-center justify-center -space-x-2 mb-6">
             <img
-              src="/headbrain_b.png"
+              src="/logo_black.webp"
               alt="logo"
               class="block h-20 w-20 dark:hidden"
             />
             <img
-              src="/headbrain_w.webp"
+              src="/logo_white.png"
               alt="logo"
               class="hidden h-20 w-20 dark:block"
             />
@@ -36,16 +36,16 @@
           spirituelle avec <span class="text-primary font-bold">{{ appName }}</span
           >.
         </h1>
-        
+
         <div class="flex justify-center space-x-2">
           <ng-container *ngFor="let field of signupConfig[selectedAccount].fields; let i = index">
-            <div 
-              class="h-2 rounded-full w-28" 
+            <div
+              class="h-2 rounded-full w-28"
               [ngClass]="{'bg-primary': i <= currentGroupIndex, 'bg-gray-300 dark:bg-gray-600': i > currentGroupIndex}"
             ></div>
           </ng-container>
         </div>
-        
+
 
         <div
           class="w-full max-w-2xl mx-auto p-[2.5px] bg-gradient-to-br from-indigo-600 to-purple-400 dark:from-indigo-700 rounded-lg shadow-lg"
@@ -117,7 +117,7 @@
             <div *ngIf="formError" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
               <div class="flex">
                 <div class="flex-shrink-0">
-                  
+
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                     path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                   </svg>
