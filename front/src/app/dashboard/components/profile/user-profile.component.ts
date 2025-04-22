@@ -42,12 +42,7 @@ export interface ProfileData {
   selector: 'app-user-profile',
   standalone: true,
   templateUrl: './user-profile.component.html',
-  imports: [
-    CommonModule,
-    FormsModule,
-    ProfileFormComponent,
-    PasswordFormComponent
-  ]
+  imports: [CommonModule, FormsModule, ProfileFormComponent, PasswordFormComponent],
 })
 export class UserProfileComponent implements OnInit {
   // Données du profil
@@ -55,7 +50,7 @@ export class UserProfileComponent implements OnInit {
     firstname: 'Utilisateur',
     lastname: '',
     email: '',
-    role: { name: 'ROLE_PATIENT' } // Valeur par défaut
+    role: { name: 'ROLE_PATIENT' }, // Valeur par défaut
   };
 
   // États UI
@@ -71,7 +66,7 @@ export class UserProfileComponent implements OnInit {
   constructor(
     private readonly profileService: ProfileService,
     private readonly router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadProfileData();
@@ -105,7 +100,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     this.profileService.getProfile().subscribe({
-      next: (data) => {
+      next: data => {
         console.log('Données du profil chargées:', data);
 
         if (!data) {
@@ -124,9 +119,10 @@ export class UserProfileComponent implements OnInit {
 
         this.loading = false;
       },
-      error: (err) => {
+      error: err => {
         console.error('Erreur de chargement du profil:', err);
-        this.errorMessage = 'Impossible de charger les données du profil. Essayez de vous reconnecter.';
+        this.errorMessage =
+          'Impossible de charger les données du profil. Essayez de vous reconnecter.';
         this.loadFailed = true;
         this.loading = false;
 
@@ -135,7 +131,7 @@ export class UserProfileComponent implements OnInit {
           localStorage.removeItem('token');
           setTimeout(() => this.router.navigate(['/login']), 2000);
         }
-      }
+      },
     });
   }
 
@@ -148,7 +144,7 @@ export class UserProfileComponent implements OnInit {
       return date.toLocaleDateString('fr-FR', {
         day: '2-digit',
         month: '2-digit',
-        year: 'numeric'
+        year: 'numeric',
       });
     } catch (e) {
       return dateString;
@@ -159,7 +155,7 @@ export class UserProfileComponent implements OnInit {
   getRoleLabel(): string {
     if (!this.profileData?.role?.name) return 'Utilisateur';
 
-    switch(this.profileData.role.name) {
+    switch (this.profileData.role.name) {
       case 'ROLE_PRO':
         return 'Professionnel de santé';
       case 'ROLE_PATIENT':
@@ -178,7 +174,7 @@ export class UserProfileComponent implements OnInit {
     this.errorMessage = null;
 
     this.profileService.toggleAnonymousMode().subscribe({
-      next: (response) => {
+      next: response => {
         // Mise à jour du statut d'anonymat basé sur la réponse du serveur
         if (this.profileData.professional) {
           this.profileData.professional.is_anonymous = response.is_anonymous;
@@ -187,11 +183,11 @@ export class UserProfileComponent implements OnInit {
         this.successMessage = response.message || 'Mode anonyme mis à jour avec succès';
         this.loading = false;
       },
-      error: (err) => {
+      error: err => {
         console.error('Erreur lors de la mise à jour du mode anonyme:', err);
         this.errorMessage = 'Impossible de mettre à jour le mode anonyme.';
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -211,7 +207,7 @@ export class UserProfileComponent implements OnInit {
     this.successMessage = null;
     this.errorMessage = null;
 
-    switch(formType) {
+    switch (formType) {
       case 'profile':
         this.showProfileForm = true;
         break;

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FooterComponent } from '@components/footer/footer.component';
 import { NavbarComponent } from '@components/navbar/navbar.component';
-import {Professional, ProfessionalsService} from '@services/professionnel-liste.service';
+import { Professional, ProfessionalsService } from '@services/professionnel-liste.service';
 
 @Component({
   selector: 'app-psychologues',
@@ -63,7 +63,7 @@ export class ProfessionalsComponent implements OnInit {
         console.error('Erreur lors du chargement des professionnels:', err);
         this.error = 'Impossible de charger la liste des professionnels.';
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -106,10 +106,10 @@ export class ProfessionalsComponent implements OnInit {
     // Filtre par symptômes
     if (this.selectedSymptoms.length > 0) {
       result = result.filter(pro =>
-        this.selectedSymptoms.some(symptom =>
-            pro.themes && pro.themes.some(theme =>
-              theme.toLowerCase().includes(symptom.toLowerCase())
-            )
+        this.selectedSymptoms.some(
+          symptom =>
+            pro.themes &&
+            pro.themes.some(theme => theme.toLowerCase().includes(symptom.toLowerCase()))
         )
       );
     }
@@ -117,10 +117,10 @@ export class ProfessionalsComponent implements OnInit {
     // Filtre par approche
     if (this.selectedApproaches.length > 0) {
       result = result.filter(pro =>
-        this.selectedApproaches.some(approach =>
-            pro.approaches && pro.approaches.some(a =>
-              a.toLowerCase().includes(approach.toLowerCase())
-            )
+        this.selectedApproaches.some(
+          approach =>
+            pro.approaches &&
+            pro.approaches.some(a => a.toLowerCase().includes(approach.toLowerCase()))
         )
       );
     }
@@ -134,7 +134,12 @@ export class ProfessionalsComponent implements OnInit {
     switch (this.sortBy) {
       case 'recommended':
         // Mélange de note et expérience
-        result.sort((a, b) => ((b.rating || 0) + (b.experience || 0)/10) - ((a.rating || 0) + (a.experience || 0)/10));
+        result.sort(
+          (a, b) =>
+            (b.rating || 0) +
+            (b.experience || 0) / 10 -
+            ((a.rating || 0) + (a.experience || 0) / 10)
+        );
         break;
       case 'rating':
         result.sort((a, b) => (b.rating || 0) - (a.rating || 0));

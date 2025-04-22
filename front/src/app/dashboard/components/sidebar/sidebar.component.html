@@ -5,9 +5,10 @@
 >
   <!-- Conteneur principal -->
   <div class="flex flex-col h-full pt-16 p-4 rounded-r-2xl overflow-y-auto">
-
     <!-- Bloc utilisateur (avatar + nom + role) -->
-    <div class="flex items-center space-x-3 mb-16 pb-4 border-b border-gray-200 dark:border-gray-700">
+    <div
+      class="flex items-center space-x-3 mb-16 pb-4 border-b border-gray-200 dark:border-gray-700"
+    >
       <div class="relative">
         <!-- Avatar avec initiales comme dans le composant profil -->
         <div
@@ -35,7 +36,9 @@
           {{
             role === 'ROLE_PATIENT'
               ? 'Patient'
-              : (role === 'ROLE_PRO' ? 'Professionnel' : 'Utilisateur')
+              : role === 'ROLE_PRO'
+                ? 'Professionnel'
+                : 'Utilisateur'
           }}
         </p>
       </div>
@@ -253,7 +256,7 @@
       <a
         class="flex items-center px-3 py-2 mt-2 text-sm font-medium rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700"
         (click)="logout()"
-        style="cursor: pointer;"
+        style="cursor: pointer"
       >
         <span class="w-5 h-5 mr-3 flex items-center justify-center">
           <svg
@@ -277,5 +280,4 @@
     <!-- /Menu secondaire -->
   </div>
   <!-- /div.flex.flex-col -->
-
 </aside>

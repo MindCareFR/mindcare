@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NavbarComponent } from '@components/navbar/navbar.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
@@ -71,7 +66,7 @@ export class AuthSignupComponent implements OnInit {
               placeholder: 'Entrez votre mot de passe',
               validators: [
                 Validators.required as unknown as ValidatorFn,
-                Validators.minLength(8) as unknown as ValidatorFn
+                Validators.minLength(8) as unknown as ValidatorFn,
               ],
             },
             {
@@ -79,9 +74,7 @@ export class AuthSignupComponent implements OnInit {
               type: 'password',
               label: 'Confirmation du mot de passe',
               placeholder: 'Confirmez votre mot de passe',
-              validators: [
-                Validators.required as unknown as ValidatorFn
-              ],
+              validators: [Validators.required as unknown as ValidatorFn],
             },
           ],
           styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
@@ -201,7 +194,7 @@ export class AuthSignupComponent implements OnInit {
               placeholder: 'Entrez votre mot de passe',
               validators: [
                 Validators.required as unknown as ValidatorFn,
-                Validators.minLength(8) as unknown as ValidatorFn
+                Validators.minLength(8) as unknown as ValidatorFn,
               ],
             },
             {
@@ -209,9 +202,7 @@ export class AuthSignupComponent implements OnInit {
               type: 'password',
               label: 'Confirmation du mot de passe',
               placeholder: 'Confirmez votre mot de passe',
-              validators: [
-                Validators.required as unknown as ValidatorFn
-              ],
+              validators: [Validators.required as unknown as ValidatorFn],
             },
             {
               name: 'phone',
@@ -307,7 +298,7 @@ export class AuthSignupComponent implements OnInit {
             {
               name: 'company_name',
               type: 'text',
-              label: 'Nom de l\'entreprise',
+              label: "Nom de l'entreprise",
               placeholder: 'Entrez le nom de votre entreprise',
               validators: [Validators.required as unknown as ValidatorFn],
             },
@@ -422,10 +413,13 @@ export class AuthSignupComponent implements OnInit {
     console.log('Valeur de contract:', contractValue);
 
     if (!cguValue || !contractValue) {
-      this.formError = "Veuillez accepter les conditions générales et les règles de la plateforme pour continuer.";
+      this.formError =
+        'Veuillez accepter les conditions générales et les règles de la plateforme pour continuer.';
       this.isLoading = false;
 
-      const legalGroupIndex = this.signupConfig[this.selectedAccount].fields.findIndex(field => field.group === 'legal');
+      const legalGroupIndex = this.signupConfig[this.selectedAccount].fields.findIndex(
+        field => field.group === 'legal'
+      );
       if (legalGroupIndex !== -1) {
         this.currentGroupIndex = legalGroupIndex;
       }
@@ -437,7 +431,7 @@ export class AuthSignupComponent implements OnInit {
     const passwordConfirmation = this.getNestedFormValue(form, 'password_confirmation');
 
     if (password !== passwordConfirmation) {
-      this.formError = "Les mots de passe ne correspondent pas.";
+      this.formError = 'Les mots de passe ne correspondent pas.';
       form.setErrors({ passwordMismatch: true });
       form.markAllAsTouched();
       this.isLoading = false;
@@ -464,24 +458,25 @@ export class AuthSignupComponent implements OnInit {
 
     if (this.selectedAccount === 'user') {
       this.authService.registerPatient(formData).subscribe({
-        next: (response) => {
-          console.log('Réponse d\'inscription :', response);
+        next: response => {
+          console.log("Réponse d'inscription :", response);
           if (response) {
             console.log('Inscription réussie');
-            this.formSuccess = "Inscription réussie ! Vous allez être redirigé vers la page de connexion.";
+            this.formSuccess =
+              'Inscription réussie ! Vous allez être redirigé vers la page de connexion.';
 
             setTimeout(() => {
               this.router.navigate(['/auth/login']);
             }, 3000);
           } else {
-            console.error('Échec de l\'inscription (réponse null)');
+            console.error("Échec de l'inscription (réponse null)");
             this.formError = "Échec de l'inscription. Veuillez réessayer.";
             form.setErrors({ registrationFailed: true });
           }
           this.isLoading = false;
         },
-        error: (error) => {
-          console.error('Erreur d\'inscription :', error);
+        error: error => {
+          console.error("Erreur d'inscription :", error);
           this.isLoading = false;
 
           if (error.status === 422 && error.error?.errors) {
@@ -500,28 +495,29 @@ export class AuthSignupComponent implements OnInit {
           }
 
           form.setErrors({ registrationFailed: true });
-        }
+        },
       });
     } else {
       this.authService.registerProfessional(formData).subscribe({
-        next: (response) => {
-          console.log('Réponse d\'inscription professionnelle :', response);
+        next: response => {
+          console.log("Réponse d'inscription professionnelle :", response);
           if (response) {
             console.log('Inscription professionnelle réussie');
-            this.formSuccess = "Inscription professionnelle réussie ! Vous allez être redirigé vers la page de connexion.";
+            this.formSuccess =
+              'Inscription professionnelle réussie ! Vous allez être redirigé vers la page de connexion.';
 
             setTimeout(() => {
               this.router.navigate(['/auth/login']);
             }, 3000);
           } else {
-            console.error('Échec de l\'inscription professionnelle (réponse null)');
+            console.error("Échec de l'inscription professionnelle (réponse null)");
             this.formError = "Échec de l'inscription. Veuillez réessayer.";
             form.setErrors({ registrationFailed: true });
           }
           this.isLoading = false;
         },
-        error: (error) => {
-          console.error('Erreur d\'inscription professionnelle :', error);
+        error: error => {
+          console.error("Erreur d'inscription professionnelle :", error);
           this.isLoading = false;
 
           if (error.status === 422 && error.error?.errors) {
@@ -540,7 +536,7 @@ export class AuthSignupComponent implements OnInit {
           }
 
           form.setErrors({ registrationFailed: true });
-        }
+        },
       });
     }
   }

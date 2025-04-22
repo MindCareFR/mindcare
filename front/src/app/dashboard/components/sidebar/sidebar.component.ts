@@ -85,7 +85,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService  // Injecter le service d'authentification
+    private authService: AuthService // Injecter le service d'authentification
   ) {}
 
   ngOnInit() {

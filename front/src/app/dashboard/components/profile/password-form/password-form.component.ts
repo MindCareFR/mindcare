@@ -7,7 +7,7 @@ import { ProfileService } from '@services/profile.service';
   selector: 'app-password-form',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './password-form.component.html'
+  templateUrl: './password-form.component.html',
 })
 export class PasswordFormComponent {
   @Output() passwordChanged = new EventEmitter<void>();
@@ -17,7 +17,7 @@ export class PasswordFormComponent {
   passwordData = {
     current_password: '',
     new_password: '',
-    confirm_password: ''
+    confirm_password: '',
   };
 
   loading = false;
@@ -26,7 +26,7 @@ export class PasswordFormComponent {
     current_password: '',
     new_password: '',
     confirm_password: '',
-    match: ''
+    match: '',
   };
 
   constructor(private profileService: ProfileService) {}
@@ -40,26 +40,28 @@ export class PasswordFormComponent {
 
     this.loading = true;
 
-    this.profileService.changePassword({
-      current_password: this.passwordData.current_password,
-      new_password: this.passwordData.new_password
-    }).subscribe({
-      next: (response) => {
-        console.log('Mot de passe changé avec succès', response);
-        this.loading = false;
-        this.passwordChanged.emit();
-      },
-      error: (err) => {
-        console.error('Erreur de changement de mot de passe:', err);
-        this.loading = false;
+    this.profileService
+      .changePassword({
+        current_password: this.passwordData.current_password,
+        new_password: this.passwordData.new_password,
+      })
+      .subscribe({
+        next: response => {
+          console.log('Mot de passe changé avec succès', response);
+          this.loading = false;
+          this.passwordChanged.emit();
+        },
+        error: err => {
+          console.error('Erreur de changement de mot de passe:', err);
+          this.loading = false;
 
-        if (err.status === 422 && err.error?.errors?.current_password) {
-          this.formError.emit('Mot de passe actuel incorrect');
-        } else {
-          this.formError.emit('Impossible de changer le mot de passe');
-        }
-      }
-    });
+          if (err.status === 422 && err.error?.errors?.current_password) {
+            this.formError.emit('Mot de passe actuel incorrect');
+          } else {
+            this.formError.emit('Impossible de changer le mot de passe');
+          }
+        },
+      });
   }
 
   // Ajout de la méthode cancel
@@ -101,7 +103,7 @@ export class PasswordFormComponent {
       current_password: '',
       new_password: '',
       confirm_password: '',
-      match: ''
+      match: '',
     };
   }
 }

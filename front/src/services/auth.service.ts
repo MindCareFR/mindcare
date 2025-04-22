@@ -34,8 +34,8 @@ export class AuthService {
       console.log('Token found in localStorage, fetching user profile');
       // Récupérer les données utilisateur si le token existe
       this.loadUserProfile().subscribe({
-        next: (user) => console.log('User profile loaded:', user ? 'success' : 'no data'),
-        error: (error) => console.error('Failed to load user profile:', error)
+        next: user => console.log('User profile loaded:', user ? 'success' : 'no data'),
+        error: error => console.error('Failed to load user profile:', error),
       });
     } else {
       console.log('No token found in localStorage');
@@ -69,16 +69,16 @@ export class AuthService {
     // Définir les en-têtes
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      Accept: 'application/json',
     });
 
     console.log('Sending request to:', `${this.apiUrl}/login`);
-    console.log('Request payload:', {email, password: '********'});
+    console.log('Request payload:', { email, password: '********' });
 
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/login`, {email, password}, {headers})
+      .post<AuthResponse>(`${this.apiUrl}/login`, { email, password }, { headers })
       .pipe(
-        tap((response) => {
+        tap(response => {
           console.log('Raw login response:', response);
           if (response && response.token) {
             console.log('Token received, storing in localStorage');
@@ -94,14 +94,14 @@ export class AuthService {
             console.warn('No user data in response');
           }
         }),
-        map((response) => {
+        map(response => {
           if (response && response.token) {
             return response;
           }
           console.warn('Invalid response format, returning null');
           return null;
         }),
-        catchError((error) => {
+        catchError(error => {
           console.error('Login error:', error);
           if (error.status) {
             console.error('HTTP Status:', error.status);
@@ -136,11 +136,11 @@ export class AuthService {
     // Définir les en-têtes avec autorisation
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
     });
 
-    return this.http.get<any>(`${this.apiUrl}/user-profile`, {headers}).pipe(
+    return this.http.get<any>(`${this.apiUrl}/user-profile`, { headers }).pipe(
       tap(user => {
         console.log('User profile data received:', user ? 'success' : 'empty');
         if (user) {
@@ -199,15 +199,13 @@ export class AuthService {
   registerPatient(formData: any): Observable<AuthResponse | null> {
     console.log('Registering patient with data:', formData);
 
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/register/patient`, formData)
-      .pipe(
-        tap(response => console.log('Patient registration response:', response)),
-        catchError(error => {
-          console.error('Patient registration error:', error);
-          return of(null);
-        })
-      );
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register/patient`, formData).pipe(
+      tap(response => console.log('Patient registration response:', response)),
+      catchError(error => {
+        console.error('Patient registration error:', error);
+        return of(null);
+      })
+    );
   }
 
   /**
@@ -235,7 +233,7 @@ export class AuthService {
           const date = new Date(birthdate);
           birthdate = date.toISOString().split('T')[0];
         } catch (e) {
-          console.error('Erreur d\'analyse de date:', e);
+          console.error("Erreur d'analyse de date:", e);
         }
       }
     }
@@ -246,23 +244,21 @@ export class AuthService {
       birthdate: birthdate,
       languages: languages,
       experience: parseInt(formData.experience) || 0,
-      medical_identification_number: "1234567890", // Utiliser exactement cette valeur
-      company_identification_number: "98765432100012" // Utiliser exactement cette valeur
+      medical_identification_number: '1234567890', // Utiliser exactement cette valeur
+      company_identification_number: '98765432100012', // Utiliser exactement cette valeur
     };
 
     console.log('Payload professionnel complet:', JSON.stringify(payload, null, 2));
 
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/register/pro`, payload)
-      .pipe(
-        tap(response => console.log('Professional registration response:', response)),
-        catchError(error => {
-          console.error('Professional registration error:', error);
-          console.error('Status:', error.status);
-          console.error('Message:', error.error?.message || error.message);
-          console.error('Detailed errors:', error.error?.errors || error.error);
-          return of(null);
-        })
-      );
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register/pro`, payload).pipe(
+      tap(response => console.log('Professional registration response:', response)),
+      catchError(error => {
+        console.error('Professional registration error:', error);
+        console.error('Status:', error.status);
+        console.error('Message:', error.error?.message || error.message);
+        console.error('Detailed errors:', error.error?.errors || error.error);
+        return of(null);
+      })
+    );
   }
 }

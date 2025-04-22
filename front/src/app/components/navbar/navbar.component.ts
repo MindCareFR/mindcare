@@ -96,7 +96,11 @@ export class NavbarComponent implements OnInit {
   setupOutsideClickListener(): void {
     if (this.navBackground && this.navBackground.nativeElement) {
       this.renderer.listen(this.navBackground.nativeElement, 'click', () => {
-        if (this.navToggle && this.navToggle.nativeElement && this.navToggle.nativeElement.checked) {
+        if (
+          this.navToggle &&
+          this.navToggle.nativeElement &&
+          this.navToggle.nativeElement.checked
+        ) {
           this.navToggle.nativeElement.checked = false;
         }
       });

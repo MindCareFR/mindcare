@@ -62,12 +62,12 @@ export class FormComponent implements OnInit, OnChanges {
   createForm(): void {
     const group: FormGroups = {};
 
-    this.config.fields.forEach((fieldGroup) => {
+    this.config.fields.forEach(fieldGroup => {
       if (!group[fieldGroup.group]) {
         group[fieldGroup.group] = this.fb.group({});
       }
 
-      fieldGroup.fields.forEach((field) => {
+      fieldGroup.fields.forEach(field => {
         let defaultValue: string | number | boolean = field.defaultValue || '';
 
         if (field.type === 'select' && field.options && field.options.length > 0 && !defaultValue) {
@@ -186,7 +186,10 @@ export class FormComponent implements OnInit, OnChanges {
 
     if (groupControl && groupControl.invalid) {
       this.markFormGroupTouched(groupControl as FormGroup);
-      console.log(`Groupe ${currentGroup} invalide:`, this.getFormValidationErrors().filter(err => err.group === currentGroup));
+      console.log(
+        `Groupe ${currentGroup} invalide:`,
+        this.getFormValidationErrors().filter(err => err.group === currentGroup)
+      );
     } else {
       this.currentGroupIndex++;
       this.currentGroupIndexChange.emit(this.currentGroupIndex);
@@ -259,7 +262,7 @@ export class FormComponent implements OnInit, OnChanges {
               group: groupKey,
               control: controlKey,
               errors: control.errors,
-              value: control.value
+              value: control.value,
             });
           }
         });
@@ -269,17 +272,11 @@ export class FormComponent implements OnInit, OnChanges {
     return errors;
   }
 
-  passwordMatchValidator: ValidatorFn = (
-    form: AbstractControl,
-  ): ValidationErrors | null => {
+  passwordMatchValidator: ValidatorFn = (form: AbstractControl): ValidationErrors | null => {
     const password = this.getNestedControl(form as FormGroup, 'password');
     const confirmPassword = this.getNestedControl(form as FormGroup, 'password_confirmation');
 
-    if (
-      password &&
-      confirmPassword &&
-      password.value !== confirmPassword.value
-    ) {
+    if (password && confirmPassword && password.value !== confirmPassword.value) {
       confirmPassword.setErrors({ mismatch: true });
       return { passwordMismatch: true };
     }

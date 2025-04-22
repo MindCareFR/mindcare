@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  Validators,
-  FormBuilder,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@services/auth.service';
@@ -78,7 +73,7 @@ export class AuthLoginComponent implements OnInit {
       if (params['status'] === 'success') {
         this.successMessage = params['message'] || 'Votre email a été vérifié avec succès !';
       } else if (params['status'] === 'error') {
-        this.errorMessage = params['message'] || 'Erreur lors de la vérification de l\'email.';
+        this.errorMessage = params['message'] || "Erreur lors de la vérification de l'email.";
       }
     });
   }
@@ -101,7 +96,7 @@ export class AuthLoginComponent implements OnInit {
 
       if (email && password) {
         this.authService.login(email, password).subscribe({
-          next: (response) => {
+          next: response => {
             if (response && response.token) {
               this.successMessage = 'Connexion réussie!';
               setTimeout(() => {
@@ -112,10 +107,10 @@ export class AuthLoginComponent implements OnInit {
               this.errorMessage = 'Email ou mot de passe incorrect.';
             }
           },
-          error: (err) => {
+          error: err => {
             form.setErrors({ invalidCredentials: true });
             this.errorMessage = 'Erreur de connexion. Veuillez réessayer.';
-          }
+          },
         });
       } else {
         this.errorMessage = 'Veuillez entrer votre email et votre mot de passe.';

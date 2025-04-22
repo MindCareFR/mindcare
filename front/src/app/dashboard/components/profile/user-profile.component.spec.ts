@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import {AuthResponse, AuthService} from '@services/auth.service';
+import { AuthResponse, AuthService } from '@services/auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -9,7 +9,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AuthService]
+      providers: [AuthService],
     });
 
     service = TestBed.inject(AuthService);
@@ -27,8 +27,8 @@ describe('AuthService', () => {
       token: 'mock_token_123',
       user: {
         email: 'test@example.com',
-        role: { name: 'ROLE_PATIENT' }
-      }
+        role: { name: 'ROLE_PATIENT' },
+      },
     };
 
     service.login('test@example.com', 'password123').subscribe(response => {
@@ -43,7 +43,7 @@ describe('AuthService', () => {
   it('should retrieve user profile', () => {
     const mockUserProfile = {
       email: 'test@example.com',
-      role: { name: 'ROLE_PATIENT' }
+      role: { name: 'ROLE_PATIENT' },
     };
 
     localStorage.setItem('token', 'mock_token_123');
@@ -73,11 +73,11 @@ describe('AuthService', () => {
   it('should register a patient', () => {
     const patientData = {
       email: 'jane@example.com',
-      password: 'password123'
+      password: 'password123',
     };
 
     const mockRegistrationResponse: AuthResponse = {
-      message: 'Patient registered successfully'
+      message: 'Patient registered successfully',
     };
 
     service.registerPatient(patientData).subscribe(response => {

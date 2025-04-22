@@ -3,7 +3,7 @@ import * as CryptoJS from 'crypto-js';
 import { encryptionKey } from '../app/config/encryption.config';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DecryptionService {
   private readonly key: string = encryptionKey.KEY;
@@ -29,10 +29,7 @@ export class DecryptionService {
       const ivSize = 16;
 
       // Extraire l'IV (premiers 16 bytes)
-      const iv = CryptoJS.lib.WordArray.create(
-        ciphertextWA.words.slice(0, ivSize / 4),
-        ivSize
-      );
+      const iv = CryptoJS.lib.WordArray.create(ciphertextWA.words.slice(0, ivSize / 4), ivSize);
 
       // Extraire le texte chiffré (tout le reste)
       const ciphertext = CryptoJS.lib.WordArray.create(
@@ -42,19 +39,15 @@ export class DecryptionService {
 
       // Créer l'objet CipherParams
       const cipherParams = CryptoJS.lib.CipherParams.create({
-        ciphertext: ciphertext
+        ciphertext: ciphertext,
       });
 
       // Déchiffrer
-      const decrypted = CryptoJS.AES.decrypt(
-        cipherParams,
-        keyBytes,
-        {
-          iv: iv,
-          mode: CryptoJS.mode.CBC,
-          padding: CryptoJS.pad.Pkcs7
-        }
-      );
+      const decrypted = CryptoJS.AES.decrypt(cipherParams, keyBytes, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      });
 
       const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
 
@@ -77,11 +70,19 @@ export class DecryptionService {
 
     // Liste des champs à déchiffrer
     const fieldsToDecrypt = [
-      'company_name', 'medical_identification_number',
-      'company_identification_number', 'biography',
-      'certification', 'firstname', 'lastname',
-      'email', 'phone', 'address', 'zipcode',
-      'city', 'country'
+      'company_name',
+      'medical_identification_number',
+      'company_identification_number',
+      'biography',
+      'certification',
+      'firstname',
+      'lastname',
+      'email',
+      'phone',
+      'address',
+      'zipcode',
+      'city',
+      'country',
     ];
 
     // Parcourir tous les champs de l'objet

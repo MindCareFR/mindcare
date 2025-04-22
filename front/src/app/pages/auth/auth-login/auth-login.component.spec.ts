@@ -29,24 +29,20 @@ describe('AuthLoginComponent', (): void => {
 
   beforeEach(async (): Promise<void> => {
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        CommonModule,
-        AuthLoginComponent
-      ],
+      imports: [ReactiveFormsModule, CommonModule, AuthLoginComponent],
       providers: [
         { provide: AuthService, useClass: MockAuthService },
         { provide: Router, useClass: MockRouter },
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
-        FormBuilder
+        FormBuilder,
       ],
     })
       .overrideComponent(AuthLoginComponent, {
         set: {
           imports: [ReactiveFormsModule, CommonModule],
           // Mock les composants que vous n'avez pas besoin de tester
-          providers: []
-        }
+          providers: [],
+        },
       })
       .compileComponents();
 
@@ -78,7 +74,7 @@ describe('AuthLoginComponent', (): void => {
         email: new FormBuilder().control('test@example.com'),
         password: new FormBuilder().control('password123'),
         remember: new FormBuilder().control(true),
-      })
+      }),
     });
 
     formGroup.markAsTouched();
@@ -100,7 +96,7 @@ describe('AuthLoginComponent', (): void => {
         email: ['', Validators.required],
         password: ['', Validators.required],
         remember: [false],
-      })
+      }),
     });
 
     spyOn(formGroup, 'markAllAsTouched');
@@ -122,7 +118,7 @@ describe('AuthLoginComponent', (): void => {
         email: new FormBuilder().control('test@example.com'),
         password: new FormBuilder().control('wrongpassword'),
         remember: new FormBuilder().control(false),
-      })
+      }),
     });
 
     spyOn(formGroup, 'setErrors');

@@ -22,23 +22,37 @@ export interface Professional {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfessionalsService {
   private apiUrl = 'http://localhost:8000/api';
 
   // Données des filtres (pour développement)
   private symptomsData: string[] = [
-    'Anxiété', 'Dépression', 'Stress', 'Traumatisme',
-    'Burn-out', 'Troubles du sommeil', 'Phobie', 'Dépendance émotionnelle',
-    'Crise d\'angoisse', 'Troubles alimentaires', 'Gestion de la colère'
+    'Anxiété',
+    'Dépression',
+    'Stress',
+    'Traumatisme',
+    'Burn-out',
+    'Troubles du sommeil',
+    'Phobie',
+    'Dépendance émotionnelle',
+    "Crise d'angoisse",
+    'Troubles alimentaires',
+    'Gestion de la colère',
   ];
 
   private approachesData: string[] = [
-    'Thérapie cognitivo-comportementale', 'Gestalt-thérapie',
-    'Psychanalyse', 'Thérapie systémique', 'EMDR',
-    'Hypnose', 'Pleine conscience', 'Approche humaniste',
-    'Approche systémique de la famille', 'Thérapie brève'
+    'Thérapie cognitivo-comportementale',
+    'Gestalt-thérapie',
+    'Psychanalyse',
+    'Thérapie systémique',
+    'EMDR',
+    'Hypnose',
+    'Pleine conscience',
+    'Approche humaniste',
+    'Approche systémique de la famille',
+    'Thérapie brève',
   ];
 
   // Données mockées pour le développement
@@ -51,14 +65,15 @@ export class ProfessionalsService {
       experience: 5,
       verified_diplomas: true,
       approaches: ['Gestalt-thérapie', 'Approche systémique de la famille'],
-      themes: ['Peur et crises d\'angoisse', 'Dépendance émotionnelle', 'Stress'],
+      themes: ["Peur et crises d'angoisse", 'Dépendance émotionnelle', 'Stress'],
       specialties: ['Thérapie de couple'],
       avatar: '',
       gender: 'M',
-      biography: 'Psychologue clinicien avec 5 ans d\'expérience, je vous accompagne dans votre chemin vers le bien-être émotionnel. Spécialisé dans la gestion du stress et de l\'anxiété.',
+      biography:
+        "Psychologue clinicien avec 5 ans d'expérience, je vous accompagne dans votre chemin vers le bien-être émotionnel. Spécialisé dans la gestion du stress et de l'anxiété.",
       company_name: 'Cabinet de Psychologie Jean Dupont',
       medical_identification_number: '123456',
-      languages: ['Français', 'Anglais']
+      languages: ['Français', 'Anglais'],
     },
     {
       id: 2,
@@ -72,10 +87,11 @@ export class ProfessionalsService {
       specialties: ['Troubles anxieux'],
       avatar: '',
       gender: 'F',
-      biography: 'Psychologue spécialisée en TCC, j\'utilise des approches scientifiquement validées pour traiter l\'anxiété et la dépression.',
+      biography:
+        "Psychologue spécialisée en TCC, j'utilise des approches scientifiquement validées pour traiter l'anxiété et la dépression.",
       company_name: 'Centre Psychologique Parisien',
       medical_identification_number: '654321',
-      languages: ['Français']
+      languages: ['Français'],
     },
     {
       id: 3,
@@ -89,21 +105,22 @@ export class ProfessionalsService {
       specialties: ['Thérapie des traumatismes'],
       avatar: '',
       gender: 'M',
-      biography: 'Psychologue et psychanalyste avec une expertise dans le traitement des traumatismes. J\'utilise également l\'EMDR pour aider mes patients à surmonter les événements difficiles.',
+      biography:
+        "Psychologue et psychanalyste avec une expertise dans le traitement des traumatismes. J'utilise également l'EMDR pour aider mes patients à surmonter les événements difficiles.",
       company_name: 'Cabinet Leroy',
       medical_identification_number: '789012',
-      languages: ['Français', 'Allemand']
-    }
+      languages: ['Français', 'Allemand'],
+    },
   ];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
     });
   }
 
@@ -154,7 +171,7 @@ export class ProfessionalsService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);
-      console.error('Détails complets de l\'erreur:', error);
+      console.error("Détails complets de l'erreur:", error);
       return of(result as T);
     };
   }

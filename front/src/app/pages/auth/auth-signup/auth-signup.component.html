@@ -21,16 +21,8 @@
           class="text-gray-900 text-center dark:text-white font-bold text-4xl md:text-5xl xl:text-6xl"
         >
           <div class="flex items-center justify-center -space-x-2 mb-6">
-            <img
-              src="/logo_black.webp"
-              alt="logo"
-              class="block h-20 w-20 dark:hidden"
-            />
-            <img
-              src="/logo_white.png"
-              alt="logo"
-              class="hidden h-20 w-20 dark:block"
-            />
+            <img src="/logo_black.webp" alt="logo" class="block h-20 w-20 dark:hidden" />
+            <img src="/logo_white.png" alt="logo" class="hidden h-20 w-20 dark:block" />
           </div>
           Commencez <span class="text-indigo-600 font-bold">dès aujourd'hui</span> votre aventure
           spirituelle avec <span class="text-primary font-bold">{{ appName }}</span
@@ -41,11 +33,13 @@
           <ng-container *ngFor="let field of signupConfig[selectedAccount].fields; let i = index">
             <div
               class="h-2 rounded-full w-28"
-              [ngClass]="{'bg-primary': i <= currentGroupIndex, 'bg-gray-300 dark:bg-gray-600': i > currentGroupIndex}"
+              [ngClass]="{
+                'bg-primary': i <= currentGroupIndex,
+                'bg-gray-300 dark:bg-gray-600': i > currentGroupIndex,
+              }"
             ></div>
           </ng-container>
         </div>
-
 
         <div
           class="w-full max-w-2xl mx-auto p-[2.5px] bg-gradient-to-br from-indigo-600 to-purple-400 dark:from-indigo-700 rounded-lg shadow-lg"
@@ -64,9 +58,8 @@
               <button
                 class="flex items-center justify-center h-12 px-4 font-semibold rounded-lg hover:bg-opacity-90 transition-colors"
                 [ngClass]="{
-                  'border-primary border-2 text-primary':
-                    selectedAccount === 'user',
-                  'bg-primary text-white': selectedAccount !== 'user'
+                  'border-primary border-2 text-primary': selectedAccount === 'user',
+                  'bg-primary text-white': selectedAccount !== 'user',
                 }"
                 (click)="onSelectAccount('user')"
               >
@@ -91,7 +84,7 @@
                 [ngClass]="{
                   'border-indigo-600 border-2 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400':
                     selectedAccount === 'professional',
-                  'bg-primary text-white': selectedAccount !== 'professional'
+                  'bg-primary text-white': selectedAccount !== 'professional',
                 }"
                 (click)="onSelectAccount('professional')"
               >
@@ -114,12 +107,22 @@
             </div>
             <hr class="border-t border-gray-300 dark:border-gray-700" />
 
-            <div *ngIf="formError" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+            <div
+              *ngIf="formError"
+              class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded"
+            >
               <div class="flex">
                 <div class="flex-shrink-0">
-
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                    path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-red-500"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0
+                    00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1
+                    1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707
+                    7.293z" clip-rule="evenodd" />
                   </svg>
                 </div>
                 <div class="ml-3">
@@ -128,12 +131,23 @@
               </div>
             </div>
 
-            <div *ngIf="formSuccess" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
+            <div
+              *ngIf="formSuccess"
+              class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded"
+            >
               <div class="flex">
                 <div class="flex-shrink-0">
-
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-green-500"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    />
                   </svg>
                 </div>
                 <div class="ml-3">
@@ -143,7 +157,9 @@
             </div>
 
             <div *ngIf="isLoading" class="flex justify-center items-center p-4">
-              <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
+              <div
+                class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"
+              ></div>
             </div>
 
             <app-form
@@ -160,7 +176,9 @@
                 Mot de passe oublié ?
               </a>
               <div>
-                <span class="text-md text-gray-700 dark:text-gray-300">Vous avez déjà un compte ?</span>
+                <span class="text-md text-gray-700 dark:text-gray-300"
+                  >Vous avez déjà un compte ?</span
+                >
                 <a href="/auth/login" class="text-md text-primary hover:underline">
                   Je me connecte
                 </a>

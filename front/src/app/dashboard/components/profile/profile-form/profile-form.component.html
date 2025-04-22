@@ -2,22 +2,38 @@
 <div class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-xl w-full max-w-5xl max-h-screen overflow-hidden">
     <!-- En-tête du modal -->
-    <div class="bg-indigo-50 px-6 py-4 border-b border-indigo-100 flex justify-between items-center">
+    <div
+      class="bg-indigo-50 px-6 py-4 border-b border-indigo-100 flex justify-between items-center"
+    >
       <h2 class="text-xl font-semibold text-gray-800">Modifier mon profil</h2>
       <button (click)="cancel()" class="text-gray-500 hover:text-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
       </button>
     </div>
 
     <!-- Corps du formulaire -->
-    <div class="p-6 overflow-y-auto" style="max-height: 80vh;">
+    <div class="p-6 overflow-y-auto" style="max-height: 80vh">
       <form (ngSubmit)="saveChanges()">
         <!-- Onglets pour les sections -->
         <div class="border-b border-gray-200 mb-6">
           <nav class="-mb-px flex space-x-8">
-            <a href="#informations-personnelles" class="border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+            <a
+              href="#informations-personnelles"
+              class="border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+            >
               Informations personnelles
             </a>
           </nav>
@@ -30,7 +46,9 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Prénom -->
             <div>
-              <label for="firstname" class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+              <label for="firstname" class="block text-sm font-medium text-gray-700 mb-1"
+                >Prénom</label
+              >
               <input
                 type="text"
                 id="firstname"
@@ -38,7 +56,7 @@
                 [(ngModel)]="editableProfile.basic.firstname"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
-              >
+              />
             </div>
 
             <!-- Nom -->
@@ -51,67 +69,77 @@
                 [(ngModel)]="editableProfile.basic.lastname"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
-              >
+              />
             </div>
 
             <!-- Date de naissance -->
             <div>
-              <label for="birthdate" class="block text-sm font-medium text-gray-700 mb-1">Date de naissance</label>
+              <label for="birthdate" class="block text-sm font-medium text-gray-700 mb-1"
+                >Date de naissance</label
+              >
               <input
                 type="date"
                 id="birthdate"
                 name="birthdate"
                 [(ngModel)]="editableProfile.basic.birthdate"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- Téléphone -->
             <div>
-              <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+              <label for="phone" class="block text-sm font-medium text-gray-700 mb-1"
+                >Téléphone</label
+              >
               <input
                 type="tel"
                 id="phone"
                 name="phone"
                 [(ngModel)]="editableProfile.basic.phone"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- Adresse -->
             <div class="md:col-span-2">
-              <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+              <label for="address" class="block text-sm font-medium text-gray-700 mb-1"
+                >Adresse</label
+              >
               <input
                 type="text"
                 id="address"
                 name="address"
                 [(ngModel)]="editableProfile.basic.address"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- Complément d'adresse -->
             <div class="md:col-span-2">
-              <label for="address_complement" class="block text-sm font-medium text-gray-700 mb-1">Complément d'adresse</label>
+              <label for="address_complement" class="block text-sm font-medium text-gray-700 mb-1"
+                >Complément d'adresse</label
+              >
               <input
                 type="text"
                 id="address_complement"
                 name="address_complement"
                 [(ngModel)]="editableProfile.basic.address_complement"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- Code postal -->
             <div>
-              <label for="zipcode" class="block text-sm font-medium text-gray-700 mb-1">Code postal</label>
+              <label for="zipcode" class="block text-sm font-medium text-gray-700 mb-1"
+                >Code postal</label
+              >
               <input
                 type="text"
                 id="zipcode"
                 name="zipcode"
                 [(ngModel)]="editableProfile.basic.zipcode"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- Ville -->
@@ -123,7 +151,7 @@
                 name="city"
                 [(ngModel)]="editableProfile.basic.city"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- Pays -->
@@ -135,7 +163,7 @@
                 name="country"
                 [(ngModel)]="editableProfile.basic.country"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
           </div>
         </div>
@@ -147,19 +175,23 @@
           <div class="space-y-6">
             <!-- Nom du cabinet -->
             <div>
-              <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1">Nom du cabinet</label>
+              <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1"
+                >Nom du cabinet</label
+              >
               <input
                 type="text"
                 id="company_name"
                 name="company_name"
                 [(ngModel)]="editableProfile.professional.company_name"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- Années d'expérience -->
             <div>
-              <label for="experience" class="block text-sm font-medium text-gray-700 mb-1">Années d'expérience</label>
+              <label for="experience" class="block text-sm font-medium text-gray-700 mb-1"
+                >Années d'expérience</label
+              >
               <input
                 type="number"
                 id="experience"
@@ -167,36 +199,46 @@
                 [(ngModel)]="editableProfile.professional.experience"
                 min="0"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- Numéro professionnel -->
             <div>
-              <label for="medical_identification_number" class="block text-sm font-medium text-gray-700 mb-1">Numéro professionnel</label>
+              <label
+                for="medical_identification_number"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Numéro professionnel</label
+              >
               <input
                 type="text"
                 id="medical_identification_number"
                 name="medical_identification_number"
                 [(ngModel)]="editableProfile.professional.medical_identification_number"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- SIRET -->
             <div>
-              <label for="company_identification_number" class="block text-sm font-medium text-gray-700 mb-1">SIRET</label>
+              <label
+                for="company_identification_number"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >SIRET</label
+              >
               <input
                 type="text"
                 id="company_identification_number"
                 name="company_identification_number"
                 [(ngModel)]="editableProfile.professional.company_identification_number"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              />
             </div>
 
             <!-- Certifications -->
             <div>
-              <label for="certification" class="block text-sm font-medium text-gray-700 mb-1">Certifications</label>
+              <label for="certification" class="block text-sm font-medium text-gray-700 mb-1"
+                >Certifications</label
+              >
               <textarea
                 id="certification"
                 name="certification"
@@ -208,7 +250,9 @@
 
             <!-- Biographie -->
             <div>
-              <label for="biography" class="block text-sm font-medium text-gray-700 mb-1">Biographie</label>
+              <label for="biography" class="block text-sm font-medium text-gray-700 mb-1"
+                >Biographie</label
+              >
               <textarea
                 id="biography"
                 name="biography"
@@ -222,14 +266,32 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Langues parlées</label>
               <div class="flex flex-wrap gap-2 mb-2">
-    <span *ngFor="let lang of editableProfile.professional.languages" class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium flex items-center">
-      {{ lang }}
-      <button type="button" (click)="removeLanguage(lang)" class="ml-1 text-indigo-500 hover:text-indigo-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </span>
+                <span
+                  *ngFor="let lang of editableProfile.professional.languages"
+                  class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium flex items-center"
+                >
+                  {{ lang }}
+                  <button
+                    type="button"
+                    (click)="removeLanguage(lang)"
+                    class="ml-1 text-indigo-500 hover:text-indigo-700"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </span>
               </div>
               <div class="flex">
                 <input
@@ -238,7 +300,7 @@
                   name="newLanguage"
                   placeholder="Ajouter une langue"
                   class="flex-grow px-3 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                >
+                />
                 <button
                   type="button"
                   (click)="addLanguage()"
@@ -252,11 +314,29 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Spécialités</label>
               <div class="flex flex-wrap gap-2 mb-2">
-                <span *ngFor="let specialty of editableProfile.professional.specialties" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium flex items-center">
+                <span
+                  *ngFor="let specialty of editableProfile.professional.specialties"
+                  class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium flex items-center"
+                >
                   {{ specialty }}
-                  <button type="button" (click)="removeSpecialty(specialty)" class="ml-1 text-blue-500 hover:text-blue-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  <button
+                    type="button"
+                    (click)="removeSpecialty(specialty)"
+                    class="ml-1 text-blue-500 hover:text-blue-700"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                 </span>
@@ -268,7 +348,7 @@
                   name="newSpecialty"
                   placeholder="Ajouter une spécialité"
                   class="flex-grow px-3 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                >
+                />
                 <button
                   type="button"
                   (click)="addSpecialty()"
@@ -297,9 +377,25 @@
           >
             <span *ngIf="!loading">Enregistrer</span>
             <span *ngIf="loading" class="flex items-center">
-              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <svg
+                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
               Enregistrement...
             </span>

@@ -8,7 +8,7 @@ import { ProfileData } from '../user-profile.component';
   selector: 'app-profile-form',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './profile-form.component.html'
+  templateUrl: './profile-form.component.html',
 })
 export class ProfileFormComponent implements OnInit {
   @Input() profileData!: ProfileData;
@@ -20,7 +20,7 @@ export class ProfileFormComponent implements OnInit {
   editableProfile: any = {
     basic: {},
     professional: {},
-    patient: {}
+    patient: {},
   };
 
   // Variables pour les listes dynamiques
@@ -55,7 +55,7 @@ export class ProfileFormComponent implements OnInit {
       zipcode: this.profileData.zipcode || '',
       city: this.profileData.city || '',
       country: this.profileData.country || '',
-      birthdate: this.profileData.birthdate || ''
+      birthdate: this.profileData.birthdate || '',
     };
 
     // Informations professionnelles (si applicable)
@@ -64,13 +64,13 @@ export class ProfileFormComponent implements OnInit {
       const professionalData = JSON.parse(JSON.stringify(this.profileData.professional));
 
       // S'assurer que les tableaux sont correctement initialisés
-      const languages = Array.isArray(professionalData.languages) ?
-        [...professionalData.languages] :
-        ['Français'];
+      const languages = Array.isArray(professionalData.languages)
+        ? [...professionalData.languages]
+        : ['Français'];
 
-      const specialties = Array.isArray(professionalData.specialties) ?
-        [...professionalData.specialties] :
-        [];
+      const specialties = Array.isArray(professionalData.specialties)
+        ? [...professionalData.specialties]
+        : [];
 
       this.editableProfile.professional = {
         company_name: professionalData.company_name || '',
@@ -81,7 +81,7 @@ export class ProfileFormComponent implements OnInit {
         certification: professionalData.certification || '',
         languages: languages,
         specialties: specialties,
-        is_anonymous: professionalData.is_anonymous || false
+        is_anonymous: professionalData.is_anonymous || false,
       };
 
       console.log('Profil professionnel initialisé:', this.editableProfile.professional);
@@ -93,7 +93,7 @@ export class ProfileFormComponent implements OnInit {
       this.editableProfile.patient = {
         gender: this.profileData.patient.gender || '',
         birthdate: this.profileData.patient.birthdate || '',
-        is_anonymous: this.profileData.patient.is_anonymous || false
+        is_anonymous: this.profileData.patient.is_anonymous || false,
       };
     }
   }
@@ -163,36 +163,40 @@ export class ProfileFormComponent implements OnInit {
 
     // Envoi des informations de base
     this.profileService.updateBasicInfo(this.editableProfile.basic).subscribe({
-      next: (basicResponse) => {
+      next: basicResponse => {
         console.log('Informations de base mises à jour:', basicResponse);
 
         // Si professionnel, mettre à jour les informations professionnelles
         if (this.isProfessional()) {
-          this.profileService.updateProfessionalProfile(this.editableProfile.professional).subscribe({
-            next: (proResponse) => {
-              console.log('Informations professionnelles mises à jour:', proResponse);
-              this.loading = false;
-              this.formSubmitted.emit({
-                basic: basicResponse,
-                professional: proResponse
-              });
-            },
-            error: (err) => {
-              console.error('Erreur lors de la mise à jour professionnelle:', err);
-              this.loading = false;
-              this.formError.emit('Impossible de mettre à jour les informations professionnelles');
-            }
-          });
+          this.profileService
+            .updateProfessionalProfile(this.editableProfile.professional)
+            .subscribe({
+              next: proResponse => {
+                console.log('Informations professionnelles mises à jour:', proResponse);
+                this.loading = false;
+                this.formSubmitted.emit({
+                  basic: basicResponse,
+                  professional: proResponse,
+                });
+              },
+              error: err => {
+                console.error('Erreur lors de la mise à jour professionnelle:', err);
+                this.loading = false;
+                this.formError.emit(
+                  'Impossible de mettre à jour les informations professionnelles'
+                );
+              },
+            });
         } else {
           this.loading = false;
           this.formSubmitted.emit({ basic: basicResponse });
         }
       },
-      error: (err) => {
+      error: err => {
         console.error('Erreur lors de la mise à jour de base:', err);
         this.loading = false;
         this.formError.emit('Impossible de mettre à jour les informations de base');
-      }
+      },
     });
   }
 
