@@ -1,5 +1,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api', // url du backend
+  apiUrl: 'http://localhost:8000/api',
+  frontendUrl: 'http://localhost:4200',
+  encryptionKey: '09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7'
 };

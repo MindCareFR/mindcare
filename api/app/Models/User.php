@@ -8,54 +8,88 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-	use HasApiTokens, HasUuids, Notifiable, SoftDeletes;
+    use HasApiTokens, HasUuids, Notifiable, SoftDeletes;
 
-	protected $table = 'users';
+    protected $table = 'users';
 
-	protected $primaryKey = 'uuid';
+    protected $primaryKey = 'uuid';
 
-	protected $fillable = [
-		'firstname',
-		'lastname',
-		'email',
-		'email_verified',
-		'password',
-		'birthdate',
-		'phone',
-		'token',
-		'address',
-		'address_complement',
-		'zipcode',
-		'city',
-		'country',
-		'role_id'
-	];
+    protected $keyType = 'string';
 
-	protected $hidden = [
-		'password',
-		'token',
-	];
+    public $incrementing = false;
 
-	protected $casts = [
-		'email_verified' => 'boolean',
-		'birthdate' => 'date',
-		'created_at' => 'datetime',
-		'updated_at' => 'datetime',
-		'deleted_at' => 'datetime',
-	];
+    protected $fillable = [
+        'firstname',
+        'lastname',
+        'email',
+        'email_verified',
+        'password',
+        'birthdate',
+        'phone',
+        'token',
+        'address',
+        'address_complement',
+        'zipcode',
+        'city',
+        'country',
+        'role_id'
+    ];
 
-	public function notifications(): HasMany
-	{
-		return $this->hasMany(Notification::class);
-	}
+    protected $hidden = [
+        'password',
+        'token',
+    ];
 
-	public function role(): BelongsTo
-	{
-		return $this->belongsTo(Role::class);
-	}
+    protected $casts = [
+        'email_verified' => 'boolean',
+        'birthdate' => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
+
+    /**
+     * Relation avec les notifications
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'user_uuid', 'uuid');
+    }
+
+    /**
+     * Relation avec le rôle
+     */
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Relation avec le profil professionnel
+     */
+    public function professional(): HasOne
+    {
+        return $this->hasOne(UserProfessional::class, 'uuid', 'uuid');
+    }
+
+    /**
+     * Relation avec le profil patient
+     */
+    public function patient(): HasOne
+    {
+        return $this->hasOne(UserPatient::class, 'uuid', 'uuid');
+    }
+
+    /**
+     * Relation avec les préférences
+     */
+    public function preference(): HasOne
+    {
+        return $this->hasOne(Preference::class, 'user_uuid', 'uuid');
+    }
 }

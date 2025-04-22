@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   userProfile = {
     name: '',
     email: '',
-    avatar: 'assets/images/avatar.jpg',
+    avatar: '',
     notifications: 3,
   };
 

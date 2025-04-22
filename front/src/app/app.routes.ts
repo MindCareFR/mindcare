@@ -7,24 +7,23 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { NotFoundComponent } from './pages/page404/page404.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
-import {UserProfileComponent} from './dashboard/components/profile/user-profile.component';
+import { UserProfileComponent } from './dashboard/components/profile/user-profile.component';
+import {ProfessionalsComponent} from './pages/professionnel-profile/professionnel-liste.component';
 
 export const routes: Routes = [
   { path: 'auth/login', component: AuthLoginComponent },
   { path: 'auth/signup', component: AuthSignupComponent },
   { path: 'conference', component: ConferenceComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'professionals', component:  ProfessionalsComponent },
   {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [AuthGuard],
-
     children: [
-
       { path: 'profile', component: UserProfileComponent },
-
+      { path: '', redirectTo: 'profile', pathMatch: 'full' }
     ]
-
   },
   { path: '', component: AppHomeComponent },
   { path: '404', component: NotFoundComponent },

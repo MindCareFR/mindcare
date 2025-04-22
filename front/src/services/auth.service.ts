@@ -214,14 +214,53 @@ export class AuthService {
    * Enregistre un professionnel
    */
   registerProfessional(formData: any): Observable<AuthResponse | null> {
-    console.log('Registering professional with data:', formData);
+    // Traitement des données avant envoi
+    let languages = [];
+    if (typeof formData.languages === 'string') {
+      languages = formData.languages.split(',').map((lang: string) => lang.trim());
+    } else if (Array.isArray(formData.languages)) {
+      languages = formData.languages;
+    } else if (formData.languages) {
+      languages = [formData.languages];
+    }
+
+    // Formatage de la date
+    let birthdate = formData.birthdate;
+    if (birthdate && typeof birthdate === 'string') {
+      if (birthdate.includes('/')) {
+        const [day, month, year] = birthdate.split('/');
+        birthdate = `${year}-${month}-${day}`;
+      } else if (!birthdate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        try {
+          const date = new Date(birthdate);
+          birthdate = date.toISOString().split('T')[0];
+        } catch (e) {
+          console.error('Erreur d\'analyse de date:', e);
+        }
+      }
+    }
+
+    // Création du payload avec les valeurs spécifiques de test pour les ID
+    const payload = {
+      ...formData,
+      birthdate: birthdate,
+      languages: languages,
+      experience: parseInt(formData.experience) || 0,
+      medical_identification_number: "1234567890", // Utiliser exactement cette valeur
+      company_identification_number: "98765432100012" // Utiliser exactement cette valeur
+    };
+
+    console.log('Payload professionnel complet:', JSON.stringify(payload, null, 2));
 
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/register/pro`, formData)
+      .post<AuthResponse>(`${this.apiUrl}/register/pro`, payload)
       .pipe(
         tap(response => console.log('Professional registration response:', response)),
         catchError(error => {
           console.error('Professional registration error:', error);
+          console.error('Status:', error.status);
+          console.error('Message:', error.error?.message || error.message);
+          console.error('Detailed errors:', error.error?.errors || error.error);
           return of(null);
         })
       );

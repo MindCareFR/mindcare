@@ -15,11 +15,11 @@ class EncryptionService
         $this->key = config('app.encryption_key');
         if (empty($this->key)) {
             $this->key = env('APP_ENCRYPTION_KEY');
-            
+
             if (empty($this->key)) {
                 if (app()->environment(['local', 'testing'])) {
                     Log::warning('No encryption key found, using development key');
-                    $this->key = str_repeat('dev_key_', 4); 
+                    $this->key = str_repeat('dev_key_', 4);
                 } else {
                     throw new RuntimeException('Encryption key not found in configuration');
                 }
@@ -36,7 +36,7 @@ class EncryptionService
         try {
             $ivLength = openssl_cipher_iv_length($this->method);
             $iv = openssl_random_pseudo_bytes($ivLength);
-            
+
             $encrypted = openssl_encrypt(
                 $data,
                 $this->method,
@@ -65,7 +65,7 @@ class EncryptionService
         try {
             $ivLength = openssl_cipher_iv_length($this->method);
             $data = base64_decode($encryptedData);
-            
+
             $iv = substr($data, 0, $ivLength);
             $encrypted = substr($data, $ivLength);
 

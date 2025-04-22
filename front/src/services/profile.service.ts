@@ -1,110 +1,169 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, tap, finalize } from 'rxjs/operators';
+import { DecryptionService } from './decryption.service';
+import {environment} from "../../environnement";
+
+export interface PasswordChangeRequest {
+    current_password: string;
+    new_password: string;
+}
+
+export interface PasswordChangeResponse {
+    message?: string;
+}
+
+export interface AnonymousModeResponse {
+    is_anonymous: boolean;
+    message?: string;
+}
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ProfileService {
-  // URL de base pour les endpoints d'authentification
-  private authUrl = 'http://localhost:8000/api/auth';
-  // URL de base pour les endpoints de mise à jour du profil et autres actions
-  private profileUrl = 'http://localhost:8000/api/profile';
+    private readonly apiUrl = environment.apiUrl;
+    private readonly authUrl = `${this.apiUrl}/auth`;
+    private readonly profileUrl = `${this.apiUrl}/profile`;
 
-  constructor(private http: HttpClient) { }
+    constructor(
+        private readonly http: HttpClient,
+        private readonly decryptionService: DecryptionService
+    ) {}
 
-  // Helpers privés
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-  }
+    private getHeaders(): HttpHeaders {
+        const token = localStorage.getItem('token');
+        return new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+    }
 
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      console.error('Error details:', error);
-      return of(result as T);
-    };
-  }
+    getProfile(): Observable<any> {
+        console.group('Récupération du profil');
+        console.log('URL de la requête:', `${this.authUrl}/user-profile`);
 
-  // Méthode de récupération du profil via l'endpoint d'authentification
-  getProfile(): Observable<any> {
-    return this.http.get(`${this.authUrl}/user-profile`, { headers: this.getHeaders() })
-        .pipe(
-            tap(data => console.log('Profile data received:', data)),
-            catchError(this.handleError('getProfile', null))
+        return this.http.get(`${this.authUrl}/user-profile`, {
+            headers: this.getHeaders(),
+            observe: 'response'
+        }).pipe(
+            map((response: any) => {
+                console.log('Statut de la réponse:', response.status);
+                console.log('En-têtes de la réponse:', response.headers);
+                console.log('Données brutes:', response.body);
+
+                if (!response.body) {
+                    console.error('Aucune donnée reçue');
+                    throw new Error('No user data');
+                }
+
+                try {
+                    // Déchiffrer les données sensibles
+                    const decryptedUserData = this.decryptionService.decryptObject(response.body);
+                    console.log('Données déchiffrées:', decryptedUserData);
+
+                    const userRole = decryptedUserData.role?.name || 'ROLE_PATIENT';
+
+                    const result: any = {
+                        ...decryptedUserData,
+                        phone: decryptedUserData.phone || '',
+                        address: decryptedUserData.address || '',
+                        address_complement: decryptedUserData.address_complement || '',
+                        zipcode: decryptedUserData.zipcode || '',
+                        city: decryptedUserData.city || '',
+                        country: decryptedUserData.country || '',
+                        role: { name: userRole },
+                        avatar: decryptedUserData.avatar || '/avatar.png'
+                    };
+
+                    if (userRole === 'ROLE_PRO') {
+                        result.professional = decryptedUserData.professional || {
+                            company_name: '',
+                            medical_identification_number: '',
+                            biography: '',
+                            experience: 0,
+                            certification: '',
+                            languages: ['Français'],
+                            specialties: [],
+                            is_anonymous: false
+                        };
+                        result.patient = null;
+                    } else if (userRole === 'ROLE_PATIENT') {
+                        result.patient = decryptedUserData.patient || {
+                            gender: '',
+                            birthdate: null,
+                            is_anonymous: false
+                        };
+                        result.professional = null;
+                    }
+
+                    return result;
+                } catch (error) {
+                    console.error('Erreur de déchiffrement:', error);
+                    throw error;
+                }
+            }),
+            catchError((error) => {
+                console.error('Erreur détaillée:', {
+                    status: error.status,
+                    message: error.message,
+                    body: error.error
+                });
+                return throwError(() => error);
+            }),
+            finalize(() => console.groupEnd())
         );
-  }
+    }
 
-  getReviews(): Observable<any> {
-    return this.http.get(`${this.profileUrl}/reviews`, { headers: this.getHeaders() })
-        .pipe(
-            tap(data => console.log('Reviews data received:', data)),
-            catchError(this.handleError('getReviews', []))
-        );
-  }
+    changePassword(data: PasswordChangeRequest): Observable<PasswordChangeResponse> {
+        return this.http.post<PasswordChangeResponse>(`${this.profileUrl}/change-password`, data, { headers: this.getHeaders() })
+            .pipe(
+                catchError((error) => {
+                    console.error('Erreur lors du changement de mot de passe:', error);
+                    return throwError(() => error);
+                })
+            );
+    }
 
-  updateBasicInfo(data: any): Observable<any> {
-    return this.http.put(`${this.profileUrl}/basic`, data, { headers: this.getHeaders() })
-        .pipe(
-            tap(response => console.log('Basic info updated:', response)),
-            catchError(this.handleError('updateBasicInfo', null))
-        );
-  }
+    toggleAnonymousMode(): Observable<AnonymousModeResponse> {
+        return this.http.post<AnonymousModeResponse>(`${this.profileUrl}/toggle-anonymous`, {}, { headers: this.getHeaders() })
+            .pipe(
+                catchError((error) => {
+                    console.error('Erreur lors du basculement du mode anonyme:', error);
+                    return throwError(() => error);
+                })
+            );
+    }
 
-  updatePatientProfile(data: any): Observable<any> {
-    return this.http.put(`${this.profileUrl}/patient`, data, { headers: this.getHeaders() })
-        .pipe(
-            tap(response => console.log('Patient profile updated:', response)),
-            catchError(this.handleError('updatePatientProfile', null))
-        );
-  }
+    updateBasicInfo(data: any): Observable<any> {
+        return this.http.put(`${this.profileUrl}/basic`, data, { headers: this.getHeaders() })
+            .pipe(
+                catchError((error) => {
+                    console.error('Erreur lors de la mise à jour des informations de base:', error);
+                    return throwError(() => error);
+                })
+            );
+    }
 
-  updateProfessionalProfile(data: any): Observable<any> {
-    return this.http.put(`${this.profileUrl}/professional`, data, { headers: this.getHeaders() })
-        .pipe(
-            tap(response => console.log('Professional profile updated:', response)),
-            catchError(this.handleError('updateProfessionalProfile', null))
-        );
-  }
+    updatePatientProfile(data: any): Observable<any> {
+        return this.http.put(`${this.profileUrl}/patient`, data, { headers: this.getHeaders() })
+            .pipe(
+                catchError((error) => {
+                    console.error('Erreur lors de la mise à jour du profil patient:', error);
+                    return throwError(() => error);
+                })
+            );
+    }
 
-  initPreferences(): Observable<any> {
-    return this.http.get(`${this.profileUrl}/preferences/init`, { headers: this.getHeaders() })
-        .pipe(
-            tap(data => console.log('Preferences initialized:', data)),
-            catchError(this.handleError('initPreferences', null))
-        );
-  }
-
-  updatePreferences(data: any): Observable<any> {
-    return this.http.put(`${this.profileUrl}/preferences`, data, { headers: this.getHeaders() })
-        .pipe(
-            tap(response => console.log('Preferences updated:', response)),
-            catchError(this.handleError('updatePreferences', null))
-        );
-  }
-
-  submitReview(professionalUuid: string, reviewData: any): Observable<any> {
-    return this.http.post(
-        `${this.profileUrl}/professional/${professionalUuid}/review`,
-        reviewData,
-        { headers: this.getHeaders() }
-    ).pipe(
-        tap(response => console.log('Review submitted:', response)),
-        catchError(this.handleError('submitReview', null))
-    );
-  }
-
-  getPublicProfile(userUuid: string): Observable<any> {
-    return this.http.get(`${this.profileUrl}/${userUuid}`)
-        .pipe(
-            tap(data => console.log('Public profile received:', data)),
-            catchError(this.handleError('getPublicProfile', null))
-        );
-  }
+    updateProfessionalProfile(data: any): Observable<any> {
+        return this.http.put(`${this.profileUrl}/professional`, data, { headers: this.getHeaders() })
+            .pipe(
+                catchError((error) => {
+                    console.error('Erreur lors de la mise à jour du profil professionnel:', error);
+                    return throwError(() => error);
+                })
+            );
+    }
 }

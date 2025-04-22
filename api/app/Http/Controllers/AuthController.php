@@ -189,25 +189,115 @@ class AuthController extends Controller
 
     public function userProfile(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
+            if (!$user) {
+                return response()->json(['message' => 'Unauthenticated'], 401);
+            }
+
+            // Charger la relation de rôle
+            $user->load('role');
+
+            // Préparer les données de base de l'utilisateur
+            $userData = [
+                'uuid' => $user->uuid,
+                'id' => $user->id,
+                'email' => $user->email,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'birthdate' => $user->birthdate,
+                'language' => $user->language,
+                'role' => $user->role,
+                'phone' => $user->phone,
+                'address' => $user->address,
+                'address_complement' => $user->address_complement,
+                'zipcode' => $user->zipcode,
+                'city' => $user->city,
+                'country' => $user->country,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at
+            ];
+
+            // Charger et ajouter les données spécifiques au rôle
+            if ($user->role && $user->role->name === 'ROLE_PRO') {
+                // Charger la relation professional avec tous ses attributs
+                $user->load('professional');
+
+                if ($user->professional) {
+                    $userData['professional'] = [
+                        'uuid' => $user->professional->uuid,
+                        'company_name' => $user->professional->company_name,
+                        'medical_identification_number' => $user->professional->medical_identification_number,
+                        'company_identification_number' => $user->professional->company_identification_number,
+                        'biography' => $user->professional->biography,
+                        'experience' => $user->professional->experience,
+                        'certification' => $user->professional->certification,
+                        'languages' => $user->professional->languages,
+                        'is_anonymous' => $user->professional->is_anonymous ?? false
+                    ];
+
+                    // Charger les domaines de thérapie si nécessaire
+                    if (method_exists($user->professional, 'therapyDomains')) {
+                        $user->professional->load('therapyDomains');
+                        $userData['professional']['therapy_domains'] = $user->professional->therapyDomains;
+
+                        // Extraire les spécialités des domaines de thérapie
+                        $specialties = [];
+                        foreach ($user->professional->therapyDomains as $domain) {
+                            $specialties[] = $domain->name;
+                        }
+                        $userData['professional']['specialties'] = $specialties;
+                    }
+                }
+            } elseif ($user->role && $user->role->name === 'ROLE_PATIENT') {
+                // Charger la relation patient
+                $user->load('patient');
+
+                if ($user->patient) {
+                    $userData['patient'] = [
+                        'uuid' => $user->patient->uuid,
+                        'gender' => $user->patient->gender,
+                        'is_anonymous' => $user->patient->is_anonymous ?? false
+                    ];
+                }
+            }
+
+            return response()->json($userData);
+        } catch (\Exception $e) {
+            // Log l'erreur
+            Log::error('Erreur lors de la récupération du profil utilisateur', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'message' => 'Une erreur est survenue lors de la récupération du profil',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        // Supprimer cette ligne qui cause l'erreur:
+        // return response()->json($userData);
+    }
+
+    // Ajout de la méthode logout si elle n'existe pas
+    public function logout(Request $request)
+    {
+        try {
+            $request->user()->currentAccessToken()->delete();
+            return response()->json(['message' => 'Déconnexion réussie']);
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la déconnexion', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'message' => 'Une erreur est survenue lors de la déconnexion',
+                'error' => $e->getMessage()
+            ], 500);
         }
 
-        $userData = [
-            'id' => $user->id,
-            'email' => $user->email,
-            'firstname' => $user->firstname,
-            'lastname' => $user->lastname,
-            'role' => $user->role,
-            'phone' => $user->phone,
-            'address' => $user->address,
-            'address_complement' => $user->address_complement,
-            'zipcode' => $user->zipcode,
-            'city' => $user->city,
-            'country' => $user->country
-        ];
 
         return response()->json($userData);
     }}

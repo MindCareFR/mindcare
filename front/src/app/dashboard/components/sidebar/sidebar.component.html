@@ -9,7 +9,16 @@
     <!-- Bloc utilisateur (avatar + nom + role) -->
     <div class="flex items-center space-x-3 mb-16 pb-4 border-b border-gray-200 dark:border-gray-700">
       <div class="relative">
+        <!-- Avatar avec initiales comme dans le composant profil -->
+        <div
+          *ngIf="!userAvatar"
+          class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white text-sm font-bold border-2 border-indigo-500"
+        >
+          {{ getInitials() }}
+        </div>
+        <!-- Avatar avec image si disponible -->
         <img
+          *ngIf="userAvatar"
           [src]="userAvatar"
           alt="Avatar utilisateur"
           class="w-10 h-10 rounded-full object-cover border-2 border-indigo-500"
