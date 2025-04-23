@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  Validators,
-  FormBuilder,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router'; 
+import { FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@services/auth.service';
-import { NavbarComponent } from '@components/header/header.component';
+import { NavbarComponent } from '@components/navbar/navbar.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
 import type { IFormConfig, IFormField, IFormGroup, ValidatorFn } from '@interfaces/form.interface';
@@ -57,7 +52,7 @@ export class AuthLoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
-    private route: ActivatedRoute 
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -78,15 +73,19 @@ export class AuthLoginComponent implements OnInit {
       if (params['status'] === 'success') {
         this.successMessage = params['message'] || 'Votre email a été vérifié avec succès !';
       } else if (params['status'] === 'error') {
-        this.errorMessage = params['message'] || 'Erreur lors de la vérification de l\'email.';
+        this.errorMessage = params['message'] || "Erreur lors de la vérification de l'email.";
       }
     });
   }
 
-  onFormSubmit(form: FormGroup): void {
-    console.log('Form submitted');
-    if (form.valid) {
-      const { email, password, remember } = form.value;
+  onFormSubmit(form: FormGroup | any): void {
+    if (form instanceof FormGroup && form.valid) {
+      // Accéder aux informations d'identification correctement
+      const credentials = form.value.credentials || {};
+      const email = credentials.email;
+      const password = credentials.password;
+      const remember = credentials.remember;
+
       if (remember) {
         localStorage.setItem('email', email);
         localStorage.setItem('password', password);
@@ -94,18 +93,33 @@ export class AuthLoginComponent implements OnInit {
         localStorage.removeItem('email');
         localStorage.removeItem('password');
       }
+
       if (email && password) {
-        this.authService.login(email, password).subscribe(response => {
-          if (response) {
-            this.router.navigate(['/dashboard']);
-          } else {
+        this.authService.login(email, password).subscribe({
+          next: response => {
+            if (response && response.token) {
+              this.successMessage = 'Connexion réussie!';
+              setTimeout(() => {
+                this.router.navigate(['/dashboard']);
+              }, 1000);
+            } else {
+              form.setErrors({ invalidCredentials: true });
+              this.errorMessage = 'Email ou mot de passe incorrect.';
+            }
+          },
+          error: err => {
             form.setErrors({ invalidCredentials: true });
-          }
+            this.errorMessage = 'Erreur de connexion. Veuillez réessayer.';
+          },
         });
+      } else {
+        this.errorMessage = 'Veuillez entrer votre email et votre mot de passe.';
       }
     } else {
-      console.log('Form is invalid');
-      form.markAllAsTouched();
+      if (form instanceof FormGroup) {
+        form.markAllAsTouched();
+      }
+      this.errorMessage = 'Veuillez corriger les erreurs dans le formulaire.';
     }
   }
 }

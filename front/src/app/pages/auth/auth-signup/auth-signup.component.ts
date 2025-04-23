@@ -1,14 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-} from '@angular/forms';
-import { HeaderComponent } from 'src/app/dashboard/components/header/header.component';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NavbarComponent } from '@components/navbar/navbar.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
 import { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
@@ -20,7 +13,7 @@ import type { ValidatorFn } from '@interfaces/form.interface';
   selector: 'app-auth-signup',
   standalone: true,
   templateUrl: './auth-signup.component.html',
-  imports: [CommonModule, HeaderComponent, FooterComponent, FormComponent, ReactiveFormsModule],
+  imports: [CommonModule, NavbarComponent, FooterComponent, FormComponent, ReactiveFormsModule],
 })
 export class AuthSignupComponent implements OnInit {
   appName = 'MindCare';
@@ -73,7 +66,7 @@ export class AuthSignupComponent implements OnInit {
               placeholder: 'Entrez votre mot de passe',
               validators: [
                 Validators.required as unknown as ValidatorFn,
-                Validators.minLength(8) as unknown as ValidatorFn
+                Validators.minLength(8) as unknown as ValidatorFn,
               ],
             },
             {
@@ -81,9 +74,7 @@ export class AuthSignupComponent implements OnInit {
               type: 'password',
               label: 'Confirmation du mot de passe',
               placeholder: 'Confirmez votre mot de passe',
-              validators: [
-                Validators.required as unknown as ValidatorFn
-              ],
+              validators: [Validators.required as unknown as ValidatorFn],
             },
           ],
           styles: 'grid grid-cols-1 gap-4 lg:grid-cols-2',
@@ -203,7 +194,7 @@ export class AuthSignupComponent implements OnInit {
               placeholder: 'Entrez votre mot de passe',
               validators: [
                 Validators.required as unknown as ValidatorFn,
-                Validators.minLength(8) as unknown as ValidatorFn
+                Validators.minLength(8) as unknown as ValidatorFn,
               ],
             },
             {
@@ -211,9 +202,7 @@ export class AuthSignupComponent implements OnInit {
               type: 'password',
               label: 'Confirmation du mot de passe',
               placeholder: 'Confirmez votre mot de passe',
-              validators: [
-                Validators.required as unknown as ValidatorFn
-              ],
+              validators: [Validators.required as unknown as ValidatorFn],
             },
             {
               name: 'phone',
@@ -276,14 +265,14 @@ export class AuthSignupComponent implements OnInit {
             'Vos informations professionnelles sont nécessaires pour vous mettre en relation avec des patients. Votre inscription sera soumise à validation.',
           fields: [
             {
-              name: 'medical_identification_number', 
+              name: 'medical_identification_number',
               type: 'text',
               label: 'Numéro Adeli ou RPPS',
               placeholder: 'Entrez votre numéro Adeli ou RPPS',
               validators: [Validators.required as unknown as ValidatorFn],
             },
             {
-              name: 'certification', 
+              name: 'certification',
               type: 'text',
               label: 'Spécialité / Certification',
               placeholder: 'Entrez votre spécialité',
@@ -309,7 +298,7 @@ export class AuthSignupComponent implements OnInit {
             {
               name: 'company_name',
               type: 'text',
-              label: 'Nom de l\'entreprise',
+              label: "Nom de l'entreprise",
               placeholder: 'Entrez le nom de votre entreprise',
               validators: [Validators.required as unknown as ValidatorFn],
             },
@@ -413,44 +402,47 @@ export class AuthSignupComponent implements OnInit {
     this.formSuccess = null;
     this.isLoading = true;
     console.log('Formulaire soumis', form.value);
-    
+
     const legalGroup = form.get('legal');
-    
+
     const cguValue = legalGroup?.get('cgu')?.value;
     const contractValue = legalGroup?.get('contract')?.value;
-    
+
     console.log('État du groupe legal:', legalGroup);
     console.log('Valeur de cgu:', cguValue);
     console.log('Valeur de contract:', contractValue);
-    
+
     if (!cguValue || !contractValue) {
-      this.formError = "Veuillez accepter les conditions générales et les règles de la plateforme pour continuer.";
+      this.formError =
+        'Veuillez accepter les conditions générales et les règles de la plateforme pour continuer.';
       this.isLoading = false;
-      
-      const legalGroupIndex = this.signupConfig[this.selectedAccount].fields.findIndex(field => field.group === 'legal');
+
+      const legalGroupIndex = this.signupConfig[this.selectedAccount].fields.findIndex(
+        field => field.group === 'legal'
+      );
       if (legalGroupIndex !== -1) {
         this.currentGroupIndex = legalGroupIndex;
       }
-      
+
       return;
     }
-    
+
     const password = this.getNestedFormValue(form, 'password');
     const passwordConfirmation = this.getNestedFormValue(form, 'password_confirmation');
-    
+
     if (password !== passwordConfirmation) {
-      this.formError = "Les mots de passe ne correspondent pas.";
+      this.formError = 'Les mots de passe ne correspondent pas.';
       form.setErrors({ passwordMismatch: true });
       form.markAllAsTouched();
       this.isLoading = false;
-      
-      this.currentGroupIndex = 0; 
-      
+
+      this.currentGroupIndex = 0;
+
       return;
     }
 
     const formData: { [key: string]: any } = {};
-    
+
     Object.keys(form.controls).forEach(key => {
       if (form.get(key) instanceof FormGroup) {
         const group = form.get(key) as FormGroup;
@@ -461,88 +453,90 @@ export class AuthSignupComponent implements OnInit {
         formData[key] = form.get(key)!.value;
       }
     });
-    
+
     console.log('Données de formulaire traitées:', formData);
-    
+
     if (this.selectedAccount === 'user') {
       this.authService.registerPatient(formData).subscribe({
-        next: (response) => {
-          console.log('Réponse d\'inscription :', response);
+        next: response => {
+          console.log("Réponse d'inscription :", response);
           if (response) {
             console.log('Inscription réussie');
-            this.formSuccess = "Inscription réussie ! Vous allez être redirigé vers la page de connexion.";
-            
+            this.formSuccess =
+              'Inscription réussie ! Vous allez être redirigé vers la page de connexion.';
+
             setTimeout(() => {
               this.router.navigate(['/auth/login']);
             }, 3000);
           } else {
-            console.error('Échec de l\'inscription (réponse null)');
+            console.error("Échec de l'inscription (réponse null)");
             this.formError = "Échec de l'inscription. Veuillez réessayer.";
             form.setErrors({ registrationFailed: true });
           }
           this.isLoading = false;
         },
-        error: (error) => {
-          console.error('Erreur d\'inscription :', error);
+        error: error => {
+          console.error("Erreur d'inscription :", error);
           this.isLoading = false;
-          
+
           if (error.status === 422 && error.error?.errors) {
             console.log('Erreurs de validation:', error.error.errors);
-            
+
             const errorMessages = [];
             for (const field in error.error.errors) {
               errorMessages.push(`${field}: ${error.error.errors[field].join(', ')}`);
             }
-            
+
             this.formError = `Erreurs de validation: ${errorMessages.join('; ')}`;
           } else if (error.error?.message) {
             this.formError = error.error.message;
           } else {
             this.formError = "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.";
           }
-          
+
           form.setErrors({ registrationFailed: true });
-        }
+        },
       });
     } else {
       this.authService.registerProfessional(formData).subscribe({
-        next: (response) => {
-          console.log('Réponse d\'inscription professionnelle :', response);
+        next: response => {
+          console.log("Réponse d'inscription professionnelle :", response);
           if (response) {
             console.log('Inscription professionnelle réussie');
-            this.formSuccess = "Inscription professionnelle réussie ! Vous allez être redirigé vers la page de connexion.";
-            
+            this.formSuccess =
+              'Inscription professionnelle réussie ! Vous allez être redirigé vers la page de connexion.';
+
             setTimeout(() => {
               this.router.navigate(['/auth/login']);
             }, 3000);
           } else {
-            console.error('Échec de l\'inscription professionnelle (réponse null)');
+            console.error("Échec de l'inscription professionnelle (réponse null)");
             this.formError = "Échec de l'inscription. Veuillez réessayer.";
             form.setErrors({ registrationFailed: true });
           }
           this.isLoading = false;
         },
-        error: (error) => {
-          console.error('Erreur d\'inscription professionnelle :', error);
+        error: error => {
+          console.error("Erreur d'inscription professionnelle :", error);
           this.isLoading = false;
-          
+
           if (error.status === 422 && error.error?.errors) {
             console.log('Erreurs de validation:', error.error.errors);
-            
+
             const errorMessages = [];
             for (const field in error.error.errors) {
               errorMessages.push(`${field}: ${error.error.errors[field].join(', ')}`);
             }
-            
+
             this.formError = `Erreurs de validation: ${errorMessages.join('; ')}`;
           } else if (error.error?.message) {
             this.formError = error.error.message;
           } else {
             this.formError = "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.";
           }
-          
+
           form.setErrors({ registrationFailed: true });
-        }
+        },
       });
     }
   }
@@ -551,14 +545,14 @@ export class AuthSignupComponent implements OnInit {
     if (form.get(fieldName)) {
       return form.get(fieldName)?.value;
     }
-    
+
     for (const key of Object.keys(form.controls)) {
       const control = form.get(key);
       if (control instanceof FormGroup && control.get(fieldName)) {
         return control.get(fieldName)?.value;
       }
     }
-    
+
     return null;
   }
 }

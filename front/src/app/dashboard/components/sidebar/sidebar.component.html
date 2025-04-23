@@ -3,29 +3,48 @@
   [class.translate-x-0]="isOpen"
   [class.-translate-x-full]="!isOpen"
 >
+  <!-- Conteneur principal -->
   <div class="flex flex-col h-full pt-16 p-4 rounded-r-2xl overflow-y-auto">
+    <!-- Bloc utilisateur (avatar + nom + role) -->
     <div
       class="flex items-center space-x-3 mb-16 pb-4 border-b border-gray-200 dark:border-gray-700"
     >
       <div class="relative">
+        <!-- Avatar avec initiales comme dans le composant profil -->
+        <div
+          *ngIf="!userAvatar"
+          class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white text-sm font-bold border-2 border-indigo-500"
+        >
+          {{ getInitials() }}
+        </div>
+        <!-- Avatar avec image si disponible -->
         <img
-          src="avatar.png"
+          *ngIf="userAvatar"
+          [src]="userAvatar"
           alt="Avatar utilisateur"
           class="w-10 h-10 rounded-full object-cover border-2 border-indigo-500"
         />
         <span
           class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"
-        >
-        </span>
+        ></span>
       </div>
       <div class="flex-1 min-w-0">
         <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
-          {{ userName }}
+          {{ userName || firstName + ' ' + lastName }}
         </p>
-        <p class="text-xs text-gray-500 dark:text-gray-400">Utilisateur</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">
+          {{
+            role === 'ROLE_PATIENT'
+              ? 'Patient'
+              : role === 'ROLE_PRO'
+                ? 'Professionnel'
+                : 'Utilisateur'
+          }}
+        </p>
       </div>
     </div>
 
+    <!-- Menu principal -->
     <nav class="flex-1 overflow-y-auto space-y-8 mb-6">
       <div class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2 px-3">
         Menu Principal
@@ -38,6 +57,7 @@
         class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 group"
       >
         <span class="w-5 h-5 mr-3 flex items-center justify-center">
+          <!-- Icônes selon item.icon -->
           <svg
             *ngIf="item.icon === 'home'"
             class="w-5 h-5"
@@ -176,7 +196,9 @@
         </span>
       </a>
     </nav>
+    <!-- /Menu principal -->
 
+    <!-- Menu "secondaire" / Autres -->
     <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
       <div class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2 px-3">
         Autres
@@ -230,9 +252,11 @@
         {{ item.label }}
       </a>
 
+      <!-- Bouton de déconnexion -->
       <a
         class="flex items-center px-3 py-2 mt-2 text-sm font-medium rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700"
-        routerLink="/auth/login"
+        (click)="logout()"
+        style="cursor: pointer"
       >
         <span class="w-5 h-5 mr-3 flex items-center justify-center">
           <svg
@@ -253,5 +277,7 @@
         Se déconnecter
       </a>
     </div>
+    <!-- /Menu secondaire -->
   </div>
+  <!-- /div.flex.flex-col -->
 </aside>

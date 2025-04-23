@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class UserProfessional extends Model
 {
     use HasUuids;
-    
+
     protected $table = 'user_professionals';
-    
+
     protected $primaryKey = 'uuid';
-    
+
     public $timestamps = false;
 
     protected $fillable = [

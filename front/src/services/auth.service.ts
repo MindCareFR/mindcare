@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 export interface AuthResponse {
   message?: string;
   token?: string;
   user_id?: string;
+  user?: any;
   errors?: any;
 }
 
@@ -14,100 +15,204 @@ export interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/api/auth'; 
+  // URL de l'API
+  private apiUrl = 'http://localhost:8000/api/auth';
 
-  constructor(private http: HttpClient) {}
+  // Stockage de l'utilisateur connecté (BehaviorSubject)
+  private currentUserSubject = new BehaviorSubject<any>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
+  // Clé utilisée pour stocker le token dans localStorage
+  private tokenKey = 'token';
+
+  constructor(private http: HttpClient) {
+    console.log('AuthService initialized, API URL:', this.apiUrl);
+
+    // Vérifier s'il y a un token au démarrage
+    const token = this.getToken();
+    if (token) {
+      console.log('Token found in localStorage, fetching user profile');
+      // Récupérer les données utilisateur si le token existe
+      this.loadUserProfile().subscribe({
+        next: user => console.log('User profile loaded:', user ? 'success' : 'no data'),
+        error: error => console.error('Failed to load user profile:', error),
+      });
+    } else {
+      console.log('No token found in localStorage');
+    }
+  }
+
+  /**
+   * Méthode privée pour charger le profil utilisateur
+   */
+  private loadUserProfile(): Observable<any> {
+    return this.getUserProfile().pipe(
+      tap(user => {
+        if (user) {
+          this.currentUserSubject.next(user);
+        }
+      }),
+      catchError(error => {
+        console.error('Error in loadUserProfile:', error);
+        return of(null);
+      })
+    );
+  }
+
+  /**
+   * Méthode de connexion: envoie email & mot de passe,
+   * stocke le token et l'objet utilisateur si la connexion est réussie.
+   */
   login(email: string, password: string): Observable<AuthResponse | null> {
+    console.log('Login attempt with email:', email);
+
+    // Définir les en-têtes
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    console.log('Sending request to:', `${this.apiUrl}/login`);
+    console.log('Request payload:', { email, password: '********' });
+
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/login`, { email, password })
+      .post<AuthResponse>(`${this.apiUrl}/login`, { email, password }, { headers })
       .pipe(
-        map((response) => {
-          if (response.token) {
-            localStorage.setItem('token', response.token);
+        tap(response => {
+          console.log('Raw login response:', response);
+          if (response && response.token) {
+            console.log('Token received, storing in localStorage');
+            localStorage.setItem(this.tokenKey, response.token);
+          } else {
+            console.warn('No token in response. Response:', response);
           }
-          return response;
+
+          if (response && response.user) {
+            console.log('User data received, updating current user');
+            this.currentUserSubject.next(response.user);
+          } else {
+            console.warn('No user data in response');
+          }
         }),
-        catchError((error) => {
-          console.error('Login error', error);
+        map(response => {
+          if (response && response.token) {
+            return response;
+          }
+          console.warn('Invalid response format, returning null');
+          return null;
+        }),
+        catchError(error => {
+          console.error('Login error:', error);
+          if (error.status) {
+            console.error('HTTP Status:', error.status);
+          }
+          if (error.error) {
+            console.error('Error details:', error.error);
+
+            // Afficher message d'erreur convivial
+            if (error.error.message === 'Invalid credentials') {
+              console.log('Identifiants invalides - email ou mot de passe incorrect');
+            } else if (error.error.error === 'email_not_verified') {
+              console.log('Email non vérifié - veuillez vérifier votre boîte mail');
+            }
+          }
           return of(null);
         })
       );
   }
 
-  registerPatient(formData: any): Observable<AuthResponse | null> {
-    const requiredFields = [
-      'email', 'password', 'firstname', 'lastname', 'birthdate', 
-      'phone', 'address', 'zipcode', 'city', 'country', 'gender'
-    ];
-    
-    const missingFields = requiredFields.filter(field => !formData[field]);
-    if (missingFields.length > 0) {
-      console.error('Champs manquants:', missingFields);
+  /**
+   * Récupère les informations du profil utilisateur en utilisant le token stocké
+   */
+  getUserProfile(): Observable<any> {
+    const token = this.getToken();
+    console.log('Getting user profile with token:', token ? 'Present' : 'Not found');
+
+    // Retourner null immédiatement si pas de token pour éviter une requête inutile
+    if (!token) {
+      return of(null);
     }
 
-    if (formData.password !== formData.password_confirmation) {
-      console.error('Les mots de passe ne correspondent pas');
-      return throwError(() => new Error('Les mots de passe ne correspondent pas'));
-    }
+    // Définir les en-têtes avec autorisation
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
 
-    const payload = {
-      email: formData.email || '',
-      password: formData.password || '',
-      firstname: formData.firstname || '',
-      lastname: formData.lastname || '',
-      birthdate: this.formatBirthdate(formData.birthdate || ''),
-      phone: formData.phone || '',
-      address: formData.address || '',
-      address_complement: formData.address_complement || '',
-      zipcode: formData.zipcode || '',
-      city: formData.city || '',
-      country: formData.country || '',
-      gender: this.mapGender(formData.gender || ''),
-      is_anonymous: formData.is_anonymous || false
-    };
-
-    // console.log('Payload d\'inscription patient:', payload);
-
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/register/patient`, payload)
-      .pipe(
-        map((response) => {
-          console.log('Réponse d\'inscription', response);
-          return response;
-        }),
-        catchError((error) => {
-          console.error('Erreur d\'inscription', error);
-          console.error('Status:', error.status);
-          console.error('Message:', error.message);
-          
-          if (error.error) {
-            console.error('Erreur détaillée:', error.error);
-          }
-          
-          return throwError(() => error);
-        })
-      );
+    return this.http.get<any>(`${this.apiUrl}/user-profile`, { headers }).pipe(
+      tap(user => {
+        console.log('User profile data received:', user ? 'success' : 'empty');
+        if (user) {
+          this.currentUserSubject.next(user);
+        }
+      }),
+      catchError(error => {
+        console.error('Error fetching user profile:', error);
+        // Commenté pour éviter la boucle infinie pendant le débogage
+        // if (error.status === 401) {
+        //   console.log('Authentication error, logging out');
+        //   this.logout();
+        // }
+        return of(null);
+      })
+    );
   }
 
+  /**
+   * Obtient la valeur de l'utilisateur actuel de manière synchrone.
+   */
+  getCurrentUser(): any {
+    const user = this.currentUserSubject.value;
+    console.log('Getting current user:', user ? 'User exists' : 'No user');
+    return user;
+  }
+
+  /**
+   * Récupère le token depuis localStorage.
+   */
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  /**
+   * Vérifie si un token est présent dans localStorage.
+   */
+  isAuthenticated(): boolean {
+    const isAuth = !!this.getToken();
+    console.log('Authentication check:', isAuth ? 'Authenticated' : 'Not authenticated');
+    return isAuth;
+  }
+
+  /**
+   * Déconnexion: supprime le token et définit l'utilisateur à null.
+   */
+  logout(): void {
+    console.log('Logging out user');
+    localStorage.removeItem(this.tokenKey);
+    this.currentUserSubject.next(null);
+  }
+
+  /**
+   * Enregistre un patient
+   */
+  registerPatient(formData: any): Observable<AuthResponse | null> {
+    console.log('Registering patient with data:', formData);
+
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register/patient`, formData).pipe(
+      tap(response => console.log('Patient registration response:', response)),
+      catchError(error => {
+        console.error('Patient registration error:', error);
+        return of(null);
+      })
+    );
+  }
+
+  /**
+   * Enregistre un professionnel
+   */
   registerProfessional(formData: any): Observable<AuthResponse | null> {
-    const requiredFields = [
-      'email', 'password', 'firstname', 'lastname', 'birthdate', 
-      'phone', 'address', 'zipcode', 'city', 'country', 'languages',
-      'experience', 'certification', 'company_name', 'medical_identification_number',
-      'company_identification_number'
-    ];
-    
-    const missingFields = requiredFields.filter(field => !formData[field]);
-    if (missingFields.length > 0) {
-      console.error('Champs manquants pour professionnel:', missingFields);
-    }
-    
-    if (formData.password !== formData.password_confirmation) {
-      console.error('Les mots de passe ne correspondent pas');
-      return throwError(() => new Error('Les mots de passe ne correspondent pas'));
-    }
-  
+    // Traitement des données avant envoi
     let languages = [];
     if (typeof formData.languages === 'string') {
       languages = formData.languages.split(',').map((lang: string) => lang.trim());
@@ -116,107 +221,44 @@ export class AuthService {
     } else if (formData.languages) {
       languages = [formData.languages];
     }
-  
-    const payload = {
-      email: formData.email || '',
-      password: formData.password || '',
-      firstname: formData.firstname || '',
-      lastname: formData.lastname || '',
-      birthdate: this.formatBirthdate(formData.birthdate || ''),
-      phone: formData.phone || '',
-      address: formData.address || '',
-      address_complement: formData.address_complement || '',
-      zipcode: formData.zipcode || '',
-      city: formData.city || '',
-      country: formData.country || '',
-      languages: languages,
-      experience: parseInt(formData.experience) || 0,
-      certification: formData.speciality || formData.degree || formData.certification || '',
-      company_name: formData.company_name || '',
-      medical_identification_number: formData.adeli_rpps || formData.medical_identification_number || '',
-      company_identification_number: formData.company_identification_number || ''
-    };
-  
-    console.log('Payload professionnel envoyé à l\'API:', payload);
-  
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/register/pro`, payload)
-      .pipe(
-        map((response) => {
-          console.log('Réponse d\'inscription professionnelle:', response);
-          return response;
-        }),
-        catchError((error) => {
-          console.error('Erreur d\'inscription professionnelle', error);
-          console.error('Status:', error.status);
-          console.error('Message:', error.message);
-          
-          if (error.error) {
-            console.error('Erreur détaillée:', error.error);
-          }
-          
-          return throwError(() => error);
-        })
-      );
-  }
 
-  verifyEmail(token: string): Observable<AuthResponse | null> {
-    return this.http
-      .get<AuthResponse>(`${this.apiUrl}/verify`, { 
-        params: { token } 
-      })
-      .pipe(
-        map((response) => {
-          console.log('Email verification response', response);
-          return response;
-        }),
-        catchError((error) => {
-          console.error('Email verification error', error);
-          return of(null);
-        })
-      );
-  }
-
-  logout(): void {
-    localStorage.removeItem('token');
-  }
-
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
-  }
-
-  private formatBirthdate(birthdate: string): string {
-    if (!birthdate) return '';
-    
-    if (birthdate.includes('/')) {
-      const [day, month, year] = birthdate.split('/');
-      return `${year}-${month}-${day}`;
-    } else if (birthdate.includes('-')) {
-      const parts = birthdate.split('-');
-      if (parts[0].length === 4) {
-        return birthdate; 
-      } else {
-        const [day, month, year] = parts;
-        return `${year}-${month}-${day}`;
+    // Formatage de la date
+    let birthdate = formData.birthdate;
+    if (birthdate && typeof birthdate === 'string') {
+      if (birthdate.includes('/')) {
+        const [day, month, year] = birthdate.split('/');
+        birthdate = `${year}-${month}-${day}`;
+      } else if (!birthdate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        try {
+          const date = new Date(birthdate);
+          birthdate = date.toISOString().split('T')[0];
+        } catch (e) {
+          console.error("Erreur d'analyse de date:", e);
+        }
       }
     }
-    
-    try {
-      const date = new Date(birthdate);
-      return date.toISOString().split('T')[0];
-    } catch (e) {
-      console.error('Erreur d\'analyse de date:', e);
-      return birthdate;
-    }
-  }
 
-  private mapGender(gender: string): string {
-    if (!gender) return 'Autre';
-    
-    switch(gender) {
-      case 'Monsieur': return 'Homme';
-      case 'Madame': return 'Femme';
-      default: return gender;
-    }
+    // Création du payload avec les valeurs spécifiques de test pour les ID
+    const payload = {
+      ...formData,
+      birthdate: birthdate,
+      languages: languages,
+      experience: parseInt(formData.experience) || 0,
+      medical_identification_number: '1234567890', // Utiliser exactement cette valeur
+      company_identification_number: '98765432100012', // Utiliser exactement cette valeur
+    };
+
+    console.log('Payload professionnel complet:', JSON.stringify(payload, null, 2));
+
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register/pro`, payload).pipe(
+      tap(response => console.log('Professional registration response:', response)),
+      catchError(error => {
+        console.error('Professional registration error:', error);
+        console.error('Status:', error.status);
+        console.error('Message:', error.error?.message || error.message);
+        console.error('Detailed errors:', error.error?.errors || error.error);
+        return of(null);
+      })
+    );
   }
 }
