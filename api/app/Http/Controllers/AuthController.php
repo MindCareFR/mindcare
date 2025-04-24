@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use \Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -368,5 +369,41 @@ class AuthController extends Controller
 
         Log::info('Password reset successfully for user: ' . $user->email);
         return response()->json(['message' => 'Password reset successful. You can now login with your new password.']);
+    }
+
+    public function renewPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required',
+            'password' => 'required|min:8|confirmed|different:current_password'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = $request->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['message' => 'Le mot de passe actuel est incorrect'], 422);
+        }
+
+        $user->update(['password' => bcrypt($request->password)]);
+        
+        Log::info('Password changed successfully for user: ' . $user->email);
+
+        try {
+            $this->emailService->sendPasswordChangeNotification([
+                'email' => $user->email,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname
+            ]);
+            
+            Log::info('Password change notification sent to: ' . $user->email);
+        } catch (\Exception $e) {
+            Log::error('Failed to send password change notification', ['error' => $e->getMessage()]);
+        }
+
+        return response()->json(['message' => 'Votre mot de passe a été modifié avec succès']);
     }
 }
