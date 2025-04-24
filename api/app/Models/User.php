@@ -85,11 +85,11 @@ class User extends Authenticatable
         return $this->hasOne(UserPatient::class, 'uuid', 'uuid');
     }
 
-    /**
-     * Relation avec les préférences
-     */
-    public function preference(): HasOne
-    {
-        return $this->hasOne(Preference::class, 'user_uuid', 'uuid');
-    }
+    // /**
+    //  * Relation avec les préférences
+    //  */
+    // public function preference(): HasOne
+    // {
+    //     return $this->hasOne(Preference::class, 'user_uuid', 'uuid');
+    // }
 }

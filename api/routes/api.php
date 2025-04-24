@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
@@ -17,7 +16,10 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register/patient', [AuthController::class, 'registerPatient']);
     Route::post('/register/pro', [AuthController::class, 'registerPro']);
-    Route::get('/verify/{token}', [AuthController::class, 'verify']);
+    Route::get('/verify', [AuthController::class, 'verify']);
+
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
     // Routes protégées par authentification
     Route::middleware('auth:sanctum')->group(function () {
@@ -27,7 +29,7 @@ Route::prefix('auth')->group(function () {
 });
 
 // Route de déchiffrement (protégée par authentification)
-Route::middleware('auth:sanctum')->post('/decrypt', [DecryptionController::class, 'decrypt']);
+// Route::middleware('auth:sanctum')->post('/decrypt', [DecryptionController::class, 'decrypt']);
 
 // Routes de profil protégées par authentification
 Route::middleware('auth:sanctum')->prefix('profile')->group(function () {

@@ -280,7 +280,6 @@ class AuthController extends Controller
         // return response()->json($userData);
     }
 
-    // Ajout de la méthode logout si elle n'existe pas
     public function logout(Request $request)
     {
         try {
@@ -300,4 +299,74 @@ class AuthController extends Controller
 
 
         return response()->json($userData);
-    }}
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        Log::info('Password reset request for: ' . $request->email);
+
+        $user = User::where('email', $request->email)->first();
+        $token = $user->createToken('password-reset', ['*'], now()->addHours(24))->plainTextToken;
+
+        try {
+            $this->emailService->sendPasswordResetEmail([
+                'email' => $user->email,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname
+            ], $token);
+            
+            Log::info('Password reset email sent to: ' . $user->email);
+            return response()->json(['message' => 'Password reset email sent. Please check your email.']);
+        } catch (\Exception $e) {
+            Log::error('Failed to send password reset email', ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Error sending password reset email'], 500);
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required|string',
+            'password' => 'required|min:8|confirmed'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        Log::info('Password reset attempt with token');
+
+        $token = explode('|', $request->token)[1] ?? null;
+        if (!$token) {
+            return response()->json(['message' => 'Invalid token format'], 400);
+        }
+
+        $accessToken = \Laravel\Sanctum\PersonalAccessToken::where('token', hash('sha256', $token))
+            ->where('name', 'password-reset')
+            ->where(function ($query) {
+                $query->where('expires_at', '>', now())
+                    ->orWhereNull('expires_at');
+            })
+            ->first();
+
+        if (!$accessToken) {
+            Log::warning('Invalid or expired password reset token');
+            return response()->json(['message' => 'Invalid or expired reset token'], 400);
+        }
+
+        $user = $accessToken->tokenable;
+        $user->update(['password' => bcrypt($request->password)]);
+        $accessToken->delete();
+
+        Log::info('Password reset successfully for user: ' . $user->email);
+        return response()->json(['message' => 'Password reset successful. You can now login with your new password.']);
+    }
+}
