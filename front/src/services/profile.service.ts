@@ -43,10 +43,10 @@ export class ProfileService {
 
   getProfile(): Observable<any> {
     console.group('Récupération du profil');
-    console.log('URL de la requête:', `${this.authUrl}/user-profile`);
+    console.log('URL de la requête:', `${this.authUrl}/me`);
 
     return this.http
-      .get(`${this.authUrl}/user-profile`, {
+      .get(`${this.profileUrl}/me`, {
         headers: this.getHeaders(),
         observe: 'response',
       })

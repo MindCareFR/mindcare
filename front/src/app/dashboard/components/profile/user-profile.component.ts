@@ -5,6 +5,7 @@ import { ProfileService } from '@services/profile.service';
 import { Router } from '@angular/router';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { PasswordFormComponent } from './password-form/password-form.component';
+import { DecryptionService } from '@services/decryption.service';
 
 export interface ProfileData {
   firstname: string;
@@ -65,7 +66,8 @@ export class UserProfileComponent implements OnInit {
 
   constructor(
     private readonly profileService: ProfileService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly decryptionService: DecryptionService 
   ) {}
 
   ngOnInit(): void {
@@ -103,20 +105,9 @@ export class UserProfileComponent implements OnInit {
       next: data => {
         console.log('Données du profil chargées:', data);
 
-        if (!data) {
-          this.errorMessage = 'Impossible de récupérer les données du profil';
-          this.loadFailed = true;
-          this.loading = false;
-          return;
-        }
-
-        this.profileData = data;
-
-        // Log des détails pour le débogage
-        if (this.isProfessional() && this.profileData.professional) {
-          console.log('Données professionnelles:', this.profileData.professional);
-        }
-
+        this.profileData = this.decryptionService.decryptObject(data);
+    
+        console.log('Données du profil déchiffrées:', this.profileData);
         this.loading = false;
       },
       error: err => {
