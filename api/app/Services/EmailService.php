@@ -64,4 +64,20 @@ class EmailService
                 ->subject('Réinitialisation de votre mot de passe MindCare');
         });
     }
+
+    public function sendPasswordChangeNotification(array $userData)
+    {
+        $changeDate = now()->format('d/m/Y H:i');
+        $logoUrl = env('APP_URL', 'http://localhost:8000') . '/images/logo.png';
+
+        Mail::send('emails.password_change', [
+            'firstName' => $userData['firstname'],
+            'lastName' => $userData['lastname'],
+            'changeDate' => $changeDate,
+            'logoUrl' => $logoUrl
+        ], function ($message) use ($userData) {
+            $message->to($userData['email'])
+                ->subject('Votre mot de passe MindCare a été modifié');
+        });
+    }
 }

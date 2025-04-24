@@ -23,39 +23,17 @@ Route::prefix('auth')->group(function () {
 
     // Routes protégées par authentification
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/user-profile', [AuthController::class, 'userProfile']);
+        Route::post('/renew-password', [AuthController::class, 'renewPassword']);
         Route::post('/logout', [AuthController::class, 'logout']);
+
+        Route::prefix('profile')->group(function () {
+            Route::get('/me', [ProfileController::class, 'showMe']);
+        });
     });
 });
 
-// Route de déchiffrement (protégée par authentification)
-// Route::middleware('auth:sanctum')->post('/decrypt', [DecryptionController::class, 'decrypt']);
-
-// Routes de profil protégées par authentification
-Route::middleware('auth:sanctum')->prefix('profile')->group(function () {
-    // Informations de base
-    Route::get('/', [ProfileController::class, 'show']);
-    Route::put('/basic', [ProfileController::class, 'updateBasicInfo']);
-
-    // Routes spécifiques patient
-    Route::get('/patient/{uuid}', [ProfileController::class, 'showPatientDetails']);
-    Route::put('/patient', [ProfileController::class, 'updatePatientProfile']);
-
-    // Routes spécifiques professionnel
-    Route::get('/professional/{uuid}', [ProfileController::class, 'showProfessionalDetails']);
-    Route::put('/professional', [ProfileController::class, 'updateProfessionalProfile']);
-
-    // Avis et évaluations
-    Route::get('/reviews', [ProfileController::class, 'getReviews']);
-    Route::post('/professional/{uuid}/review', [ProfileController::class, 'submitReview']);
-
-    // Préférences
-    Route::get('/preferences/init', [ProfileController::class, 'initPreferences']);
-    Route::put('/preferences', [ProfileController::class, 'updatePreferences']);
-
-    // Mode anonyme
-    Route::post('/toggle-anonymous', [ProfileController::class, 'toggleAnonymousMode']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('profile')->group(function () {
+        Route::get('/me', [ProfileController::class, 'showMe']);
+    });
 });
-
-// Profil public
-Route::get('/profile/{uuid}', [ProfileController::class, 'showPublic']);
