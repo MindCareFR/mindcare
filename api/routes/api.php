@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DecryptionController;
+use App\Http\Controllers\AppointmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,17 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::prefix('profile')->group(function () {
-        Route::get('/me', [ProfileController::class, 'showMe']);
+    
+    
+    Route::prefix('appointments')->group(function () {
+        Route::get('/', [AppointmentController::class, 'index']);
+        Route::get('/user', [AppointmentController::class, 'getUserAppointments']);
+        Route::post('/', [AppointmentController::class, 'store']);
+        Route::get('/{id}', [AppointmentController::class, 'show']);
+        Route::put('/{id}', [AppointmentController::class, 'update']);
+        Route::get('/{id}/export', [AppointmentController::class, 'exportPdf']);
     });
+
+    // Route::post('/admin/create', [AdminController::class, 'createAdmin']);
 });
+
