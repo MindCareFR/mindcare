@@ -25,11 +25,14 @@ class UserProfessional extends Model
         'company_name',
         'medical_identification_number',
         'company_identification_number',
+        'biography',
+        'is_anonymous',
     ];
 
     protected $casts = [
         'languages' => 'array',
         'experience' => 'integer',
+        'is_anonymous' => 'boolean',
     ];
 
     public function user(): BelongsTo

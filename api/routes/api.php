@@ -25,15 +25,16 @@ Route::prefix('auth')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/renew-password', [AuthController::class, 'renewPassword']);
         Route::post('/logout', [AuthController::class, 'logout']);
-
-        Route::prefix('profile')->group(function () {
-            Route::get('/me', [ProfileController::class, 'showMe']);
-        });
     });
 });
 
+// Routes de profil protégées par authentification
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/me', [ProfileController::class, 'showMe']);
+        Route::put('/basic', [ProfileController::class, 'updateBasic']);
+        Route::put('/professional', [ProfileController::class, 'updateProfessional']);
+        Route::put('/patient', [ProfileController::class, 'updatePatient']);
+        Route::post('/toggle-anonymous', [ProfileController::class, 'toggleAnonymous']);
     });
 });

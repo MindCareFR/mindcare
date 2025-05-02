@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { filter, takeUntil } from 'rxjs/operators';
+import { ProfileService } from '@services/profile.service';
 import { AuthService } from '@services/auth.service';
+import { Subject } from 'rxjs';
+import {UserStateService} from '@services/user-state.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,16 +13,30 @@ import { AuthService } from '@services/auth.service';
   imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   @Input() isOpen = true;
-  @Input() userName = '';
-  @Input() userAvatar = '';
   @Input() notifications = 0;
-  @Input() role = '';
+  @Input() userName = '';
+  @Input() userAvatar: string | null = null;
+  @Output() toggleSidebar = new EventEmitter<void>(); // New output for mobile toggle
 
-  // Ajout des propriétés pour le nom et prénom
+  // User data
   firstName: string = '';
   lastName: string = '';
+  email: string = '';
+  role: string = '';
+  isDarkMode: boolean = false;
+
+  // For subscription management
+  private destroy$ = new Subject<void>();
+
+  // Injected services
+  constructor(
+    private router: Router,
+    private profileService: ProfileService,
+    private authService: AuthService,
+    private userStateService: UserStateService // Inject the new service
+  ) {}
 
   navItems = [
     {
@@ -67,10 +83,10 @@ export class SidebarComponent implements OnInit {
     },
   ];
 
-  // Second group
+  // Secondary links with route to settings
   secondaryNavItems = [
     {
-      label: 'Réglages',
+      label: 'Paramètres',
       icon: 'settings',
       route: '/dashboard/settings',
       active: false,
@@ -83,85 +99,185 @@ export class SidebarComponent implements OnInit {
     },
   ];
 
-  constructor(
-    private router: Router,
-    private authService: AuthService // Injecter le service d'authentification
-  ) {}
-
   ngOnInit() {
-    // Mettre à jour l'élément actif en fonction de l'URL actuelle
+    // Update the active item based on the current URL
     this.updateActiveItems(this.router.url);
 
-    // S'abonner aux changements de route
+    // Subscribe to route changes
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
       .subscribe((event: any) => {
         this.updateActiveItems(event.url);
       });
 
-    // Récupérer les informations de l'utilisateur connecté
-    this.loadUserInfo();
-  }
-
-  // Méthode pour obtenir les initiales (similaire à celle du composant profil)
-  getInitials(): string {
-    const firstname = this.firstName || '';
-    const lastname = this.lastName || '';
-
-    const firstInitial = firstname.charAt(0).toUpperCase();
-    const lastInitial = lastname.charAt(0).toUpperCase();
-
-    return firstInitial + lastInitial || 'U';
-  }
-
-  // Nouvelle méthode pour charger les informations de l'utilisateur
-  loadUserInfo() {
-    // Observer les changements d'utilisateur
-    this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        this.firstName = user.firstname || '';
-        this.lastName = user.lastname || '';
-        this.role = user.role?.name || '';
-
-        // Si input userName est vide, on le remplace par prénom + nom
-        if (!this.userName) {
-          this.userName = `${this.firstName} ${this.lastName}`;
+    // Subscribe to user profile changes
+    this.userStateService.currentUserProfile$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(profile => {
+        if (profile) {
+          this.updateUserData(profile);
+        } else {
+          this.loadProfileData();
         }
+      });
 
-        // On peut aussi récupérer l'avatar si disponible
-        this.userAvatar = user.avatar || '';
-      } else {
-        // Si pas d'utilisateur, on peut appeler getProfile pour récupérer les infos
-        this.authService.getUserProfile().subscribe(
-          profile => {
-            if (profile) {
-              this.firstName = profile.firstname || '';
-              this.lastName = profile.lastname || '';
-              this.userName = `${this.firstName} ${this.lastName}`;
-              this.userAvatar = profile.avatar || '';
-            }
-          },
-          error => {
-            console.error('Erreur lors de la récupération du profil', error);
-          }
-        );
-      }
-    });
+    // If input data is provided, use it
+    if (this.userName) {
+      const nameParts = this.userName.split(' ');
+      this.firstName = nameParts[0] || '';
+      this.lastName = nameParts.slice(1).join(' ') || '';
+    } else {
+      // Otherwise load from the service
+      this.loadProfileData();
+    }
   }
 
-  // Méthode pour se déconnecter
+  ngOnDestroy() {
+    // Clean up subscriptions
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // Method to load user profile data
+  loadProfileData() {
+    // Use ProfileService which calls profile/me
+    this.profileService.getProfile()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (profileData) => {
+          console.log('Profile successfully loaded in sidebar:', profileData);
+          this.updateUserData(profileData);
+          // Update the shared state
+          this.userStateService.updateUserProfile(profileData);
+        },
+        error: (error) => {
+          console.error('Error while loading profile in sidebar:', error);
+        }
+      });
+  }
+
+  // Update user data
+  private updateUserData(userData: any) {
+    if (!userData) {
+      console.warn('Empty profile data received in sidebar');
+      return;
+    }
+
+    // Assign values while securing against null or undefined values
+    this.firstName = userData.firstname || '';
+    this.lastName = userData.lastname || '';
+    this.email = userData.email || '';
+
+    // Retrieve role (may be in different structures depending on the API)
+    if (userData.role && typeof userData.role === 'object' && userData.role.name) {
+      this.role = userData.role.name;
+    } else if (typeof userData.role === 'string') {
+      this.role = userData.role;
+    } else {
+      this.role = '';
+    }
+
+    // Make sure the avatar is properly defined
+    if (userData.avatar && typeof userData.avatar === 'string' && userData.avatar.trim() !== '') {
+      this.userAvatar = userData.avatar;
+    }
+  }
+
+  // Method to get initials from names
+  getInitials(): string {
+    // If userName is defined, use it for initials
+    if (this.userName) {
+      const parts = this.userName.split(' ');
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      } else if (parts.length === 1 && parts[0]) {
+        return parts[0][0].toUpperCase();
+      }
+    }
+
+    // If first and last name are empty, try to take initials from email
+    if ((!this.firstName || this.firstName.trim() === '') &&
+      (!this.lastName || this.lastName.trim() === '') &&
+      this.email) {
+      const emailParts = this.email.split('@');
+      if (emailParts.length > 0) {
+        const namePart = emailParts[0];
+        // Take the first two letters of the email or the first if there's only one letter
+        return namePart.substring(0, Math.min(2, namePart.length)).toUpperCase();
+      }
+      return 'U'; // Fallback
+    }
+
+    // Standard initials
+    const firstInitial = this.firstName && this.firstName.trim() !== ''
+      ? this.firstName.charAt(0).toUpperCase()
+      : '';
+
+    const lastInitial = this.lastName && this.lastName.trim() !== ''
+      ? this.lastName.charAt(0).toUpperCase()
+      : '';
+
+    // Return initials or 'U' if no initials available
+    return (firstInitial + lastInitial) || 'U';
+  }
+
+  // Method to get the user's full name
+  getFullName(): string {
+    // If userName is provided, use it directly
+    if (this.userName) {
+      return this.userName;
+    }
+
+    // Check if name and first name are defined
+    if ((this.firstName && this.firstName.trim() !== '') ||
+      (this.lastName && this.lastName.trim() !== '')) {
+      return `${this.firstName || ''} ${this.lastName || ''}`.trim();
+    }
+
+    // If no name/first name, use email without domain
+    if (this.email) {
+      const emailParts = this.email.split('@');
+      if (emailParts.length > 0) {
+        // Format email identifier by capitalizing the first letter
+        let namePart = emailParts[0];
+        namePart = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+        return namePart;
+      }
+    }
+
+    // Fallback
+    return 'Utilisateur';
+  }
+
+  // Method to get role label
+  getRoleLabel(): string {
+    switch (this.role) {
+      case 'ROLE_PATIENT':
+        return 'Patient';
+      case 'ROLE_PRO':
+        return 'Professionnel';
+      default:
+        return 'Utilisateur';
+    }
+  }
+
+  // Method to logout
   logout() {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
   }
 
+  // Method to update active items in navigation
   updateActiveItems(url: string) {
-    // Mettre à jour les éléments de navigation principale
+    // Update main navigation elements
     this.navItems.forEach(item => {
       item.active = url === item.route || url.startsWith(item.route + '/');
     });
 
-    // Mettre à jour les éléments secondaires
+    // Update secondary elements
     this.secondaryNavItems.forEach(item => {
       item.active = url === item.route || url.startsWith(item.route + '/');
     });

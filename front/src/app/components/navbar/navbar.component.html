@@ -14,7 +14,8 @@
           #navToggle
         />
         <div class="relative z-20 w-full flex justify-between lg:w-max md:px-0">
-          <a href="/" aria-label="logo" class="flex space-x-2 items-center">
+          <!-- Logo - toujours affiché -->
+          <a href="{{ isDashboard ? '/dashboard' : '/' }}" aria-label="logo" class="flex space-x-2 items-center">
             <div aria-hidden="true" class="flex space-x-1">
               <img src="/logo_black.webp" alt="logo" class="block h-8 w-8 dark:hidden" />
               <img src="/logo_white.png" alt="logo" class="hidden h-8 w-8 dark:block" />
@@ -22,6 +23,7 @@
             <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ appName }}</span>
           </a>
 
+          <!-- Pour les pages standards (non-dashboard) - Hamburger mobile -->
           <div class="relative flex items-center lg:hidden max-h-10" *ngIf="!isDashboard">
             <label
               role="button"
@@ -42,8 +44,31 @@
               ></div>
             </label>
           </div>
+
+          <!-- Pour le dashboard - bouton hamburger uniquement en mode petit écran -->
+          <div class="relative flex items-center lg:hidden max-h-10" *ngIf="isDashboard">
+            <button
+              (click)="toggleSidebar.emit()"
+              aria-label="toggle sidebar"
+              class="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            >
+              <div
+                aria-hidden="true"
+                class="m-auto h-0.5 w-5 rounded bg-sky-900 dark:bg-gray-300 transition duration-300"
+              ></div>
+              <div
+                aria-hidden="true"
+                class="m-auto mt-2 h-0.5 w-5 rounded bg-sky-900 dark:bg-gray-300 transition duration-300"
+              ></div>
+              <div
+                aria-hidden="true"
+                class="m-auto mt-2 h-0.5 w-5 rounded bg-sky-900 dark:bg-gray-300 transition duration-300"
+              ></div>
+            </button>
+          </div>
         </div>
 
+        <!-- Background pour le menu mobile - seulement pour les pages non-dashboard -->
         <div
           *ngIf="!isDashboard"
           aria-hidden="true"
@@ -51,6 +76,7 @@
           #navBackground
         ></div>
 
+        <!-- Menu de navigation - seulement pour les pages non-dashboard -->
         <div
           *ngIf="!isDashboard"
           class="flex-col z-20 flex-wrap gap-6 p-8 rounded-3xl border border-gray-100 bg-white shadow-2xl shadow-gray-600/10 justify-end w-full invisible opacity-0 translate-y-1 absolute top-full left-0 transition-all duration-300 scale-95 origin-top lg:relative lg:scale-100 lg:peer-checked:translate-y-0 lg:translate-y-0 lg:flex lg:flex-row lg:items-center lg:gap-0 lg:p-0 lg:bg-transparent lg:w-max lg:visible lg:opacity-100 lg:border-none peer-checked:scale-100 peer-checked:opacity-100 peer-checked:visible lg:shadow-none dark:shadow-none dark:bg-gray-800 dark:border-gray-700"
@@ -94,26 +120,9 @@
             >
               <span class="relative text-sm font-semibold text-white">Mon compte</span>
             </a>
-            <button
-              (click)="toggleTheme()"
-              class="flex items-center justify-center w-9 h-9 rounded-2xl bg-gray-100 hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:hover:bg-gray-700"
-            >
-              <fa-icon *ngIf="checked" [icon]="faSun" class="w-5 h-5 text-yellow-500"></fa-icon>
-              <fa-icon *ngIf="!checked" [icon]="faMoon" class="w-5 h-5 text-blue-500"></fa-icon>
-            </button>
           </div>
         </div>
 
-        <!-- Le bouton de thème est toujours affiché, même sur le dashboard -->
-        <div *ngIf="isDashboard" class="flex items-center">
-          <button
-            (click)="toggleTheme()"
-            class="flex items-center justify-center w-9 h-9 rounded-2xl bg-gray-100 hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:hover:bg-gray-700"
-          >
-            <fa-icon *ngIf="checked" [icon]="faSun" class="w-5 h-5 text-yellow-500"></fa-icon>
-            <fa-icon *ngIf="!checked" [icon]="faMoon" class="w-5 h-5 text-blue-500"></fa-icon>
-          </button>
-        </div>
       </div>
     </div>
   </nav>

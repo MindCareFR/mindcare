@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import { FormComponent } from '@shared/form/form.component';
 import { IFormConfig } from '@interfaces/form.interface';
 import { ContactService } from '@services/contact.service';
 import { ToastService } from '@services/toast.service';
+import { ThemeService } from '@services/theme.service';
 
 @Component({
   selector: 'app-contact',
@@ -15,8 +16,9 @@ import { ToastService } from '@services/toast.service';
   imports: [CommonModule, NavbarComponent, FooterComponent, FormComponent, ReactiveFormsModule],
   templateUrl: './contact.component.html',
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit {
   appName = 'MindCare';
+  isDarkMode = false;
 
   contactConfig: IFormConfig = {
     fields: [
@@ -82,8 +84,16 @@ export class ContactComponent {
 
   constructor(
     private contactService: ContactService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private themeService: ThemeService
   ) {}
+
+  ngOnInit(): void {
+    // S'abonner aux changements de thème
+    this.themeService.darkMode$.subscribe(isDark => {
+      this.isDarkMode = isDark;
+    });
+  }
 
   onFormSubmit(form: FormGroup): void {
     if (form.valid) {

@@ -1,20 +1,52 @@
-<!-- Modification du layout principal -->
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-  <!-- Header -->
-  <app-navbar></app-navbar>
+  <!-- Header avec fond adapté - Navbar uniquement avec logo et hamburger mobile -->
+  <app-navbar
+    class="dark:bg-gray-900 fixed top-0 left-0 right-0 z-20"
+    [isDashboard]="true"
+    (toggleSidebar)="toggleSidebar()"
+  ></app-navbar>
 
-  <div class="flex pt-16">
+  <div class="flex pt-16 relative">
+    <!-- Sidebar avec thème sombre -->
     <app-sidebar
+      class="dark:bg-gray-900 dark:text-white"
       [isOpen]="isSidebarOpen"
       [userName]="userProfile.name"
       [userAvatar]="userProfile.avatar"
       [notifications]="userProfile.notifications"
+      (toggleSidebar)="toggleSidebar()"
     ></app-sidebar>
 
-    <!-- Modifier cette div pour réduire l'espacement -->
-    <div class="flex-1 transition-all duration-300" [ngClass]="{ 'lg:ml-0': !isSidebarOpen }">
+    <!-- Contenu principal avec espacement -->
+    <div
+      class="flex-1 transition-all duration-300 ml-0 lg:ml-64 p-4"
+      [ngClass]="{ 'lg:ml-0': !isSidebarOpen }"
+      [class.dark:text-white]="isDarkMode"
+    >
       <router-outlet></router-outlet>
     </div>
+
+    <!-- Bouton de basculement visible uniquement sur mobile et quand la sidebar est fermée -->
+    <button
+      *ngIf="!isSidebarOpen"
+      class="lg:hidden fixed bottom-4 left-4 z-20 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg"
+      (click)="toggleSidebar()"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        ></path>
+      </svg>
+    </button>
   </div>
 </div>
 <app-footer></app-footer>
