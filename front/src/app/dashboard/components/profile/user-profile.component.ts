@@ -1,13 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { PasswordChangeRequest, ProfileService } from '@services/profile.service';
 import { ThemeService } from '@services/theme.service';
 
 enum UserRole {
   PROFESSIONAL = 'ROLE_PRO',
-  PATIENT = 'ROLE_PATIENT'
+  PATIENT = 'ROLE_PATIENT',
 }
 
 export interface ProfileData {
@@ -47,7 +55,7 @@ export interface ProfileData {
   selector: 'app-user-profile',
   standalone: true,
   templateUrl: './user-profile.component.html',
-  imports: [CommonModule, RouterModule, ReactiveFormsModule]
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
 })
 export class UserProfileComponent implements OnInit {
   profileData: ProfileData = {
@@ -55,7 +63,7 @@ export class UserProfileComponent implements OnInit {
     lastname: '',
     email: '',
     role: { name: 'ROLE_PATIENT' },
-    avatar: '/avatar.png'
+    avatar: '/avatar.png',
   };
 
   loading = true;
@@ -64,7 +72,14 @@ export class UserProfileComponent implements OnInit {
   loadFailed = false;
 
   showEditModal = false;
-  activeEditSection: 'name' | 'contact' | 'address' | 'profile' | 'professional' | 'avatar' | 'personal-info' = 'profile';
+  activeEditSection:
+    | 'name'
+    | 'contact'
+    | 'address'
+    | 'profile'
+    | 'professional'
+    | 'avatar'
+    | 'personal-info' = 'profile';
   editForm: FormGroup;
   isSubmitting = false;
 
@@ -80,11 +95,14 @@ export class UserProfileComponent implements OnInit {
     private themeService: ThemeService
   ) {
     this.editForm = this.fb.group({});
-    this.passwordForm = this.fb.group({
-      currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', Validators.required]
-    }, { validators: this.passwordMatchValidator() });
+    this.passwordForm = this.fb.group(
+      {
+        currentPassword: ['', Validators.required],
+        newPassword: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', Validators.required],
+      },
+      { validators: this.passwordMatchValidator() }
+    );
   }
 
   private passwordMatchValidator(): ValidatorFn {
@@ -132,7 +150,7 @@ export class UserProfileComponent implements OnInit {
 
         this.loading = false;
       },
-      error: (err: any) => this.handleProfileError(err)
+      error: (err: any) => this.handleProfileError(err),
     });
   }
 
@@ -164,7 +182,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   getRoleLabel(): string {
-    switch(this.profileData?.role?.name) {
+    switch (this.profileData?.role?.name) {
       case UserRole.PROFESSIONAL:
         return 'Professionnel de santé';
       case UserRole.PATIENT:
@@ -201,14 +219,14 @@ export class UserProfileComponent implements OnInit {
       case 'name':
         this.editForm = this.fb.group({
           firstname: [this.profileData.firstname, [Validators.required, Validators.minLength(2)]],
-          lastname: [this.profileData.lastname, [Validators.required, Validators.minLength(2)]]
+          lastname: [this.profileData.lastname, [Validators.required, Validators.minLength(2)]],
         });
         break;
 
       case 'contact':
         this.editForm = this.fb.group({
           email: [this.profileData.email, [Validators.required, Validators.email]],
-          phone: [this.profileData.phone, [Validators.pattern(/^[0-9+\s()-]*$/)]]
+          phone: [this.profileData.phone, [Validators.pattern(/^[0-9+\s()-]*$/)]],
         });
         break;
 
@@ -218,7 +236,7 @@ export class UserProfileComponent implements OnInit {
           address_complement: [this.profileData.address_complement],
           zipcode: [this.profileData.zipcode, [Validators.pattern(/^[0-9]{5}$/)]],
           city: [this.profileData.city],
-          country: [this.profileData.country || 'France']
+          country: [this.profileData.country || 'France'],
         });
         break;
 
@@ -228,28 +246,37 @@ export class UserProfileComponent implements OnInit {
           lastname: [this.profileData.lastname, [Validators.required, Validators.minLength(2)]],
           email: [this.profileData.email, [Validators.required, Validators.email]],
           phone: [this.profileData.phone, [Validators.pattern(/^[0-9+\s()-]*$/)]],
-          birthdate: [birthdate] // Utiliser la date récupérée par la méthode helper
+          birthdate: [birthdate], // Utiliser la date récupérée par la méthode helper
         });
         break;
 
       case 'professional':
         // Transformer le tableau de langues en chaîne de caractères pour l'édition
-        const languagesString = this.profileData.professional?.languages ?
-          this.profileData.professional.languages.join(', ') : '';
+        const languagesString = this.profileData.professional?.languages
+          ? this.profileData.professional.languages.join(', ')
+          : '';
 
         // Transformer le tableau des spécialités en chaîne de caractères pour l'édition
-        const specialtiesString = this.profileData.professional?.specialties ?
-          this.profileData.professional.specialties.join(', ') : '';
+        const specialtiesString = this.profileData.professional?.specialties
+          ? this.profileData.professional.specialties.join(', ')
+          : '';
 
         this.editForm = this.fb.group({
           company_name: [this.profileData.professional?.company_name, Validators.required],
-          medical_identification_number: [this.profileData.professional?.medical_identification_number],
-          company_identification_number: [this.profileData.professional?.company_identification_number],
-          experience: [this.profileData.professional?.experience || 0, [Validators.min(0), Validators.max(50)]],
+          medical_identification_number: [
+            this.profileData.professional?.medical_identification_number,
+          ],
+          company_identification_number: [
+            this.profileData.professional?.company_identification_number,
+          ],
+          experience: [
+            this.profileData.professional?.experience || 0,
+            [Validators.min(0), Validators.max(50)],
+          ],
           certification: [this.profileData.professional?.certification],
           biography: [this.profileData.professional?.biography, Validators.maxLength(500)],
           languages: [languagesString],
-          specialties: [specialtiesString]
+          specialties: [specialtiesString],
         });
         break;
 
@@ -257,7 +284,7 @@ export class UserProfileComponent implements OnInit {
         this.editForm = this.fb.group({
           firstname: [this.profileData.firstname, [Validators.required, Validators.minLength(2)]],
           lastname: [this.profileData.lastname, [Validators.required, Validators.minLength(2)]],
-          birthdate: [birthdate] // Utiliser la date récupérée par la méthode helper
+          birthdate: [birthdate], // Utiliser la date récupérée par la méthode helper
         });
         break;
 
@@ -284,7 +311,7 @@ export class UserProfileComponent implements OnInit {
       // Pour éviter d'envoyer des propriétés undefined ou null qui peuvent causer l'erreur 422
       const professionalData: any = {
         company_name: updateData.company_name || '',
-        experience: updateData.experience || 0
+        experience: updateData.experience || 0,
       };
 
       // Ajouter uniquement les champs non vides
@@ -330,8 +357,11 @@ export class UserProfileComponent implements OnInit {
     }
 
     // Traitement spécifique pour les mises à jour de date de naissance selon le rôle
-    if ((this.activeEditSection === 'profile' || this.activeEditSection === 'personal-info')
-      && this.isPatient() && updateData.birthdate) {
+    if (
+      (this.activeEditSection === 'profile' || this.activeEditSection === 'personal-info') &&
+      this.isPatient() &&
+      updateData.birthdate
+    ) {
       // Si c'est un patient, mettre à jour la date dans patient.birthdate également
       updateData.patient = { birthdate: updateData.birthdate };
     }
@@ -342,15 +372,15 @@ export class UserProfileComponent implements OnInit {
 
   updateBasicInfo(data: any): void {
     this.profileService.updateBasicInfo(data).subscribe({
-      next: (response) => this.handleUpdateSuccess(response),
-      error: (error) => this.handleUpdateError(error)
+      next: response => this.handleUpdateSuccess(response),
+      error: error => this.handleUpdateError(error),
     });
   }
 
   updateProfessionalInfo(data: any): void {
     this.profileService.updateProfessionalProfile(data).subscribe({
-      next: (response) => this.handleUpdateSuccess(response),
-      error: (error) => this.handleUpdateError(error)
+      next: response => this.handleUpdateSuccess(response),
+      error: error => this.handleUpdateError(error),
     });
   }
 
@@ -359,7 +389,7 @@ export class UserProfileComponent implements OnInit {
     this.successMessage = 'Informations mises à jour avec succès';
     this.closeEditModal();
     this.loadProfileData();
-    setTimeout(() => this.successMessage = null, 3000);
+    setTimeout(() => (this.successMessage = null), 3000);
   }
 
   private handleUpdateError(error: any): void {
@@ -368,24 +398,33 @@ export class UserProfileComponent implements OnInit {
       this.errorMessage = 'Session expirée. Veuillez vous reconnecter.';
       setTimeout(() => this.router.navigate(['/login']), 2000);
     } else if (error?.status === 422) {
-      this.errorMessage = 'Format des données invalide. Veuillez vérifier les informations saisies.';
+      this.errorMessage =
+        'Format des données invalide. Veuillez vérifier les informations saisies.';
       console.error('Erreur 422 :', error);
     } else {
       this.errorMessage = 'Erreur lors de la mise à jour. Veuillez réessayer.';
     }
-    setTimeout(() => this.errorMessage = null, 4000);
+    setTimeout(() => (this.errorMessage = null), 4000);
   }
 
   getModalTitle(): string {
     switch (this.activeEditSection) {
-      case 'name': return 'Modifier votre nom';
-      case 'contact': return 'Modifier vos coordonnées';
-      case 'address': return 'Modifier votre adresse';
-      case 'profile': return 'Modifier votre profil';
-      case 'professional': return 'Modifier vos informations professionnelles';
-      case 'avatar': return 'Modifier votre avatar';
-      case 'personal-info': return 'Modifier vos informations personnelles';
-      default: return 'Modifier vos informations';
+      case 'name':
+        return 'Modifier votre nom';
+      case 'contact':
+        return 'Modifier vos coordonnées';
+      case 'address':
+        return 'Modifier votre adresse';
+      case 'profile':
+        return 'Modifier votre profil';
+      case 'professional':
+        return 'Modifier vos informations professionnelles';
+      case 'avatar':
+        return 'Modifier votre avatar';
+      case 'personal-info':
+        return 'Modifier vos informations personnelles';
+      default:
+        return 'Modifier vos informations';
     }
   }
 
@@ -411,7 +450,7 @@ export class UserProfileComponent implements OnInit {
     // Ne permettre qu'aux patients de modifier leur visibilité
     if (!this.isPatient()) {
       this.errorMessage = 'Seuls les patients peuvent modifier la visibilité du profil.';
-      setTimeout(() => this.errorMessage = null, 3000);
+      setTimeout(() => (this.errorMessage = null), 3000);
       return;
     }
 
@@ -425,13 +464,13 @@ export class UserProfileComponent implements OnInit {
         this.successMessage = this.isProfileAnonymous()
           ? 'Profil rendu anonyme'
           : 'Profil rendu visible';
-        setTimeout(() => this.successMessage = null, 3000);
+        setTimeout(() => (this.successMessage = null), 3000);
       },
-      error: (error) => {
+      error: error => {
         this.errorMessage = 'Erreur de changement de visibilité';
         console.error(error);
-        setTimeout(() => this.errorMessage = null, 3000);
-      }
+        setTimeout(() => (this.errorMessage = null), 3000);
+      },
     });
   }
 
@@ -452,21 +491,21 @@ export class UserProfileComponent implements OnInit {
 
     const requestData: PasswordChangeRequest = {
       current_password: currentPassword,
-      new_password: newPassword
+      new_password: newPassword,
     };
 
     this.profileService.changePassword(requestData).subscribe({
       next: () => {
         this.successMessage = 'Mot de passe modifié avec succès';
         this.closePasswordModal();
-        setTimeout(() => this.successMessage = null, 3000);
+        setTimeout(() => (this.successMessage = null), 3000);
       },
-      error: (error) => {
+      error: error => {
         this.errorMessage = 'Erreur lors du changement de mot de passe';
         console.error(error);
-        setTimeout(() => this.errorMessage = null, 3000);
+        setTimeout(() => (this.errorMessage = null), 3000);
       },
-      complete: () => this.isPasswordSubmitting = false
+      complete: () => (this.isPasswordSubmitting = false),
     });
   }
 

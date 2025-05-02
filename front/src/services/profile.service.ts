@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap, finalize } from 'rxjs/operators';
 import { environment } from '../../environnement';
-import {AnonymousModeResponse} from '@interfaces/anonymous.interface';
-import {DecryptionService} from '@services/decryption.service';
+import { AnonymousModeResponse } from '@interfaces/anonymous.interface';
+import { DecryptionService } from '@services/decryption.service';
 
 export interface PasswordChangeRequest {
   current_password: string;
@@ -120,12 +120,17 @@ export class ProfileService {
   }
   changePassword(data: PasswordChangeRequest): Observable<PasswordChangeResponse> {
     return this.http
-      .post<PasswordChangeResponse>(`${this.authUrl}/renew-password`, { // Changement ici
-        currentPassword: data.current_password,
-        newPassword: data.new_password
-      }, {
-        headers: this.getHeaders(),
-      })
+      .post<PasswordChangeResponse>(
+        `${this.authUrl}/renew-password`,
+        {
+          // Changement ici
+          currentPassword: data.current_password,
+          newPassword: data.new_password,
+        },
+        {
+          headers: this.getHeaders(),
+        }
+      )
       .pipe(
         catchError(error => {
           console.error('Erreur lors du changement de mot de passe:', error);
@@ -141,9 +146,13 @@ export class ProfileService {
    */
   deleteAccount(password: string): Observable<any> {
     return this.http
-      .post<any>(`${this.profileUrl}/delete`, { password }, {
-        headers: this.getHeaders(),
-      })
+      .post<any>(
+        `${this.profileUrl}/delete`,
+        { password },
+        {
+          headers: this.getHeaders(),
+        }
+      )
       .pipe(
         catchError(error => {
           console.error('Erreur lors de la suppression du compte:', error);

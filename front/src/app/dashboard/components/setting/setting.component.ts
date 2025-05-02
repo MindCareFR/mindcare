@@ -12,7 +12,7 @@ import { ThemeService } from '@services/theme.service';
   selector: 'app-settings',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './setting.component.html'
+  templateUrl: './setting.component.html',
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   deleteAccountForm!: FormGroup;
@@ -42,17 +42,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.isDarkMode = this.themeService.isDarkMode;
 
     // Abonnement aux changements de thème
-    this.themeService.darkMode$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(isDark => {
-        this.isDarkMode = isDark;
-      });
+    this.themeService.darkMode$.pipe(takeUntil(this.destroy$)).subscribe(isDark => {
+      this.isDarkMode = isDark;
+    });
 
     this.loadProfileVisibility();
   }
 
   loadProfileVisibility() {
-    this.profileService.getProfile()
+    this.profileService
+      .getProfile()
       .pipe(takeUntil(this.destroy$))
       .subscribe(userData => {
         if (userData) {
@@ -78,10 +77,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.isProfileVisible = !this.isProfileVisible;
 
-    this.profileService.toggleAnonymousMode()
+    this.profileService
+      .toggleAnonymousMode()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: response => {
           if (response?.is_anonymous !== undefined) {
             this.isProfileVisible = !response.is_anonymous;
           }
@@ -95,12 +95,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
             this.submissionSuccess = false;
           }, 3000);
         },
-        error: (error) => {
+        error: error => {
           this.isProfileVisible = !this.isProfileVisible;
-          this.errorMessage = error.message || 'Une erreur est survenue lors du changement de visibilité.';
+          this.errorMessage =
+            error.message || 'Une erreur est survenue lors du changement de visibilité.';
           this.submissionError = true;
           this.submissionSuccess = false;
-        }
+        },
       });
   }
 
@@ -112,7 +113,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   initForms() {
     this.deleteAccountForm = this.fb.group({
       password: ['', [Validators.required]],
-      confirmation: [false, [Validators.requiredTrue]]
+      confirmation: [false, [Validators.requiredTrue]],
     });
   }
 
@@ -122,28 +123,34 @@ export class SettingsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!confirm('Êtes-vous certain de vouloir supprimer votre compte ? Cette action est irréversible.')) {
+    if (
+      !confirm(
+        'Êtes-vous certain de vouloir supprimer votre compte ? Cette action est irréversible.'
+      )
+    ) {
       return;
     }
 
     this.isSubmitting = true;
     this.submissionError = false;
 
-    this.profileService.deleteAccount(this.deleteAccountForm.value.password)
+    this.profileService
+      .deleteAccount(this.deleteAccountForm.value.password)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.isSubmitting = false;
           this.authService.logout();
           this.router.navigate(['/auth/login'], {
-            queryParams: { message: 'Votre compte a été supprimé avec succès.' }
+            queryParams: { message: 'Votre compte a été supprimé avec succès.' },
           });
         },
-        error: (error) => {
+        error: error => {
           this.isSubmitting = false;
           this.submissionError = true;
-          this.errorMessage = error.message || 'Une erreur est survenue lors de la suppression du compte.';
-        }
+          this.errorMessage =
+            error.message || 'Une erreur est survenue lors de la suppression du compte.';
+        },
       });
   }
 

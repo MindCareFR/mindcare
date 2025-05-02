@@ -12,7 +12,7 @@ export interface UserProfile {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserStateService {
   // BehaviorSubject to maintain the current user profile state

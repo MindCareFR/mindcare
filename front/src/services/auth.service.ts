@@ -68,22 +68,20 @@ export class AuthService {
     // Reste du code inchangé...
     // ...
     // Retourner le résultat
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/login`, { email, password })
-      .pipe(
-        tap(response => {
-          if (response && response.token) {
-            localStorage.setItem(this.tokenKey, response.token);
-          }
-          if (response && response.user) {
-            this.currentUserSubject.next(response.user);
-          }
-        }),
-        catchError(error => {
-          console.error('Login error:', error);
-          return of(null);
-        })
-      );
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap(response => {
+        if (response && response.token) {
+          localStorage.setItem(this.tokenKey, response.token);
+        }
+        if (response && response.user) {
+          this.currentUserSubject.next(response.user);
+        }
+      }),
+      catchError(error => {
+        console.error('Login error:', error);
+        return of(null);
+      })
+    );
   }
 
   /**
@@ -123,7 +121,7 @@ export class AuthService {
   /**
    * Change le mot de passe de l'utilisateur
    */
-  changePassword(data: { currentPassword: string, newPassword: string }): Observable<any> {
+  changePassword(data: { currentPassword: string; newPassword: string }): Observable<any> {
     const token = this.getToken();
     if (!token) {
       return of({ success: false, message: 'Non authentifié' });
@@ -135,11 +133,7 @@ export class AuthService {
       Authorization: `Bearer ${token}`,
     });
 
-    return this.http.post(
-      `${this.profileUrl}/change-password`,
-      data,
-      { headers }
-    ).pipe(
+    return this.http.post(`${this.profileUrl}/change-password`, data, { headers }).pipe(
       catchError(error => {
         console.error('Erreur lors du changement de mot de passe:', error);
         return of({ success: false, message: error.message || 'Une erreur est survenue' });

@@ -22,7 +22,8 @@ export const routes: Routes = [
       { path: 'profile', component: UserProfileComponent },
       {
         path: 'settings',
-        loadChildren: () => import('./dashboard/components/setting/setting.module').then(m => m.SettingsModule)
+        loadChildren: () =>
+          import('./dashboard/components/setting/setting.module').then(m => m.SettingsModule),
       },
       { path: '', redirectTo: 'profile', pathMatch: 'full' },
     ],

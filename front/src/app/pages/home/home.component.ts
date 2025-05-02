@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
@@ -12,7 +11,7 @@ import { ProfessionelSectionComponent } from './components/professionel-section/
 import { AvisSectionComponent } from './components/avis-section/avis-section.component';
 import { FaqSectionComponent } from './components/faq-section/faq-section.component';
 import { ThemeService } from '@services/theme.service';
-import {FooterComponent} from '@components/footer/footer.component';
+import { FooterComponent } from '@components/footer/footer.component';
 
 interface FaqItem {
   question: string;

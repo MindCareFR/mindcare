@@ -11,12 +11,7 @@ import { UserStateService } from '@services/user-state.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    SidebarComponent,
-    NavbarComponent,
-  ],
+  imports: [CommonModule, RouterModule, SidebarComponent, NavbarComponent],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
@@ -57,19 +52,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Subscribe to profile changes from UserStateService
   subscribeToProfileChanges(): void {
-    this.userStateService.currentUserProfile$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(profile => {
-        if (profile) {
-          const firstName = profile.firstname || '';
-          const lastName = profile.lastname || '';
-          this.userProfile.name = `${firstName} ${lastName}`.trim();
-          this.userProfile.email = profile.email || '';
-          if (profile.avatar) {
-            this.userProfile.avatar = profile.avatar;
-          }
+    this.userStateService.currentUserProfile$.pipe(takeUntil(this.destroy$)).subscribe(profile => {
+      if (profile) {
+        const firstName = profile.firstname || '';
+        const lastName = profile.lastname || '';
+        this.userProfile.name = `${firstName} ${lastName}`.trim();
+        this.userProfile.email = profile.email || '';
+        if (profile.avatar) {
+          this.userProfile.avatar = profile.avatar;
         }
-      });
+      }
+    });
   }
 
   initDarkMode(): void {
@@ -104,7 +97,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           lastname: user.lastname || '',
           email: user.email || '',
           avatar: user.avatar || null,
-          role: user.role || ''
+          role: user.role || '',
         };
 
         // Update the shared state service

@@ -260,10 +260,7 @@
 </aside>
 
 <!-- Mobile sidebar toggle button -->
-<div
-  class="lg:hidden fixed bottom-4 right-4 z-20"
-  *ngIf="!isOpen"
->
+<div class="lg:hidden fixed bottom-4 right-4 z-20" *ngIf="!isOpen">
   <button
     class="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg"
     (click)="toggleSidebar.emit()"

@@ -5,7 +5,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { ProfileService } from '@services/profile.service';
 import { AuthService } from '@services/auth.service';
 import { Subject } from 'rxjs';
-import {UserStateService} from '@services/user-state.service';
+import { UserStateService } from '@services/user-state.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -114,15 +114,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
       });
 
     // Subscribe to user profile changes
-    this.userStateService.currentUserProfile$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(profile => {
-        if (profile) {
-          this.updateUserData(profile);
-        } else {
-          this.loadProfileData();
-        }
-      });
+    this.userStateService.currentUserProfile$.pipe(takeUntil(this.destroy$)).subscribe(profile => {
+      if (profile) {
+        this.updateUserData(profile);
+      } else {
+        this.loadProfileData();
+      }
+    });
 
     // If input data is provided, use it
     if (this.userName) {
@@ -144,18 +142,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
   // Method to load user profile data
   loadProfileData() {
     // Use ProfileService which calls profile/me
-    this.profileService.getProfile()
+    this.profileService
+      .getProfile()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (profileData) => {
+        next: profileData => {
           console.log('Profile successfully loaded in sidebar:', profileData);
           this.updateUserData(profileData);
           // Update the shared state
           this.userStateService.updateUserProfile(profileData);
         },
-        error: (error) => {
+        error: error => {
           console.error('Error while loading profile in sidebar:', error);
-        }
+        },
       });
   }
 
@@ -199,9 +198,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
 
     // If first and last name are empty, try to take initials from email
-    if ((!this.firstName || this.firstName.trim() === '') &&
+    if (
+      (!this.firstName || this.firstName.trim() === '') &&
       (!this.lastName || this.lastName.trim() === '') &&
-      this.email) {
+      this.email
+    ) {
       const emailParts = this.email.split('@');
       if (emailParts.length > 0) {
         const namePart = emailParts[0];
@@ -212,16 +213,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
 
     // Standard initials
-    const firstInitial = this.firstName && this.firstName.trim() !== ''
-      ? this.firstName.charAt(0).toUpperCase()
-      : '';
+    const firstInitial =
+      this.firstName && this.firstName.trim() !== '' ? this.firstName.charAt(0).toUpperCase() : '';
 
-    const lastInitial = this.lastName && this.lastName.trim() !== ''
-      ? this.lastName.charAt(0).toUpperCase()
-      : '';
+    const lastInitial =
+      this.lastName && this.lastName.trim() !== '' ? this.lastName.charAt(0).toUpperCase() : '';
 
     // Return initials or 'U' if no initials available
-    return (firstInitial + lastInitial) || 'U';
+    return firstInitial + lastInitial || 'U';
   }
 
   // Method to get the user's full name
@@ -232,8 +231,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
 
     // Check if name and first name are defined
-    if ((this.firstName && this.firstName.trim() !== '') ||
-      (this.lastName && this.lastName.trim() !== '')) {
+    if (
+      (this.firstName && this.firstName.trim() !== '') ||
+      (this.lastName && this.lastName.trim() !== '')
+    ) {
       return `${this.firstName || ''} ${this.lastName || ''}`.trim();
     }
 

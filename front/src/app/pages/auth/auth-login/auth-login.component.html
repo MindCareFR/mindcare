@@ -2,7 +2,10 @@
 
 <div class="relative">
   <!-- Message de succès -->
-  <div *ngIf="successMessage" class="bg-green-100 dark:bg-green-900/20 border-l-4 border-green-500 dark:border-green-800 text-green-700 dark:text-green-300 p-4 mb-4 rounded">
+  <div
+    *ngIf="successMessage"
+    class="bg-green-100 dark:bg-green-900/20 border-l-4 border-green-500 dark:border-green-800 text-green-700 dark:text-green-300 p-4 mb-4 rounded"
+  >
     <div class="flex">
       <div class="flex-shrink-0">
         <svg
@@ -93,14 +96,14 @@
           <app-form [config]="loginConfig" (formSubmit)="onFormSubmit($event)"></app-form>
           <hr class="border-t border-gray-300 dark:border-gray-700" />
           <div class="flex justify-between flex-col gap-y-2">
-
-           <a href="/auth/forgot-password"
-            class="text-md text-indigo-600 hover:underline dark:text-indigo-400 font-semibold"
-            >Mot de passe oublié ?</a
+            <a
+              href="/auth/forgot-password"
+              class="text-md text-indigo-600 hover:underline dark:text-indigo-400 font-semibold"
+              >Mot de passe oublié ?</a
             >
             <div>
               <span class="text-md text-gray-700 dark:text-gray-300"
-              >Vous n'avez pas de compte ?</span
+                >Vous n'avez pas de compte ?</span
               >
 
               <a href="/auth/signup" class="text-md text-primary hover:underline font-bold ml-1">
