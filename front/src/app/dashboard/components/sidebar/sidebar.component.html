@@ -1,13 +1,13 @@
 <!-- sidebar.component.html -->
 <aside
-  class="bg-white dark:bg-gray-800 w-64 shadow-lg rounded-r-2xl transition-all duration-300 fixed inset-y-0 left-0 z-10 transform lg:translate-x-0 mt-16"
+  class="bg-white dark:bg-gray-800 w-64 shadow-lg rounded-r-2xl transition-all duration-300 fixed inset-y-0 left-0 z-10 transform lg:translate-x-0 mt-0"
   [class.translate-x-0]="isOpen"
   [class.-translate-x-full]="!isOpen"
 >
   <!-- Main container with fixed height and scroll for menu only -->
-  <div class="flex flex-col h-[calc(100vh-4rem)]">
+  <div class="flex flex-col h-screen">
     <!-- User block (fixed at top) -->
-    <div class="px-4 pt-4">
+    <div class="px-4 pt-20">
       <div
         class="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700"
       >

@@ -23,6 +23,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   successMessage = '';
   isDarkMode = false;
   isProfileVisible = true;
+  isPatient = false; // Nouvelle propriété pour vérifier si l'utilisateur est un patient
 
   private destroy$ = new Subject<void>();
 
@@ -55,6 +56,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(userData => {
         if (userData) {
+          // Détermine si l'utilisateur est un patient
+          this.isPatient = !!userData.patient;
+
           if (userData.patient?.is_anonymous !== undefined) {
             this.isProfileVisible = !userData.patient.is_anonymous;
           } else if (userData.professional?.is_anonymous !== undefined) {
@@ -65,6 +69,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   toggleProfileVisibility() {
+    // Vérifie si l'utilisateur est un patient avant de permettre la modification
+    if (!this.isPatient) {
+      this.errorMessage = 'Seuls les patients peuvent modifier la visibilité du profil.';
+      this.submissionError = true;
+      return;
+    }
+
     this.isProfileVisible = !this.isProfileVisible;
 
     this.profileService.toggleAnonymousMode()

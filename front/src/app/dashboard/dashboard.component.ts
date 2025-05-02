@@ -7,7 +7,6 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NavbarComponent } from '@components/navbar/navbar.component';
 import { AuthService } from '@services/auth.service';
 import { UserStateService } from '@services/user-state.service';
-import {FooterComponent} from '@components/footer/footer.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +16,6 @@ import {FooterComponent} from '@components/footer/footer.component';
     RouterModule,
     SidebarComponent,
     NavbarComponent,
-    FooterComponent
   ],
   templateUrl: './dashboard.component.html',
 })

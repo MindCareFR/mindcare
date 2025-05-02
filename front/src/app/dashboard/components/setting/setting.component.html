@@ -35,8 +35,8 @@
       </div>
     </div>
 
-    <!-- Visibilité du profil -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+    <!-- Visibilité du profil - uniquement pour les patients -->
+    <div *ngIf="isPatient" class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Visibilité du profil</h2>
