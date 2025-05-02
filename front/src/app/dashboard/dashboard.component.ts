@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { FooterComponent } from '@components/footer/footer.component';
 import { NavbarComponent } from '@components/navbar/navbar.component';
 import { AuthService } from '@services/auth.service';
+import { UserStateService } from '@services/user-state.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, SidebarComponent, NavbarComponent, FooterComponent],
+  imports: [CommonModule, RouterModule, SidebarComponent, NavbarComponent],
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   appName = 'MindCare';
   isSidebarOpen = true;
+  isDarkMode = false;
 
   userProfile = {
     name: '',
@@ -23,36 +26,98 @@ export class DashboardComponent implements OnInit {
     notifications: 3,
   };
 
-  constructor(private authService: AuthService) {}
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private authService: AuthService,
+    private userStateService: UserStateService
+  ) {}
 
   ngOnInit(): void {
     this.checkScreenSize();
     this.loadUserProfile();
+    this.initDarkMode();
+    this.subscribeToProfileChanges();
 
     window.addEventListener('resize', () => {
       this.checkScreenSize();
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    window.removeEventListener('resize', () => this.checkScreenSize());
+  }
+
+  // Subscribe to profile changes from UserStateService
+  subscribeToProfileChanges(): void {
+    this.userStateService.currentUserProfile$.pipe(takeUntil(this.destroy$)).subscribe(profile => {
+      if (profile) {
+        const firstName = profile.firstname || '';
+        const lastName = profile.lastname || '';
+        this.userProfile.name = `${firstName} ${lastName}`.trim();
+        this.userProfile.email = profile.email || '';
+        if (profile.avatar) {
+          this.userProfile.avatar = profile.avatar;
+        }
+      }
+    });
+  }
+
+  initDarkMode(): void {
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode) {
+      this.isDarkMode = savedMode === 'true';
+    } else {
+      this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    this.updateDarkModeClass();
+  }
+
+  toggleDarkMode(): void {
+    this.isDarkMode = !this.isDarkMode;
+    localStorage.setItem('darkMode', this.isDarkMode.toString());
+    this.updateDarkModeClass();
+  }
+
+  private updateDarkModeClass(): void {
+    if (this.isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }
+
   loadUserProfile(): void {
-    // Observer les changements d'utilisateur
     this.authService.currentUser$.subscribe(user => {
       if (user) {
-        const firstName = user.firstname || '';
-        const lastName = user.lastname || '';
-        this.userProfile.name = `${firstName} ${lastName}`;
-        this.userProfile.email = user.email || '';
-        if (user.avatar) {
-          this.userProfile.avatar = user.avatar;
+        const profile = {
+          firstname: user.firstname || '',
+          lastname: user.lastname || '',
+          email: user.email || '',
+          avatar: user.avatar || null,
+          role: user.role || '',
+        };
+
+        // Update the shared state service
+        this.userStateService.updateUserProfile(profile);
+
+        // Also update local component state
+        this.userProfile.name = `${profile.firstname} ${profile.lastname}`.trim();
+        this.userProfile.email = profile.email;
+        if (profile.avatar) {
+          this.userProfile.avatar = profile.avatar;
         }
       } else {
-        // Si pas d'utilisateur, on peut appeler getProfile pour récupérer les infos
         this.authService.getUserProfile().subscribe(
           profile => {
             if (profile) {
-              const firstName = profile.firstname || '';
-              const lastName = profile.lastname || '';
-              this.userProfile.name = `${firstName} ${lastName}`;
+              // Update the shared state service
+              this.userStateService.updateUserProfile(profile);
+
+              // Also update local component state
+              this.userProfile.name = `${profile.firstname || ''} ${profile.lastname || ''}`.trim();
               this.userProfile.email = profile.email || '';
               if (profile.avatar) {
                 this.userProfile.avatar = profile.avatar;
@@ -60,7 +125,7 @@ export class DashboardComponent implements OnInit {
             }
           },
           error => {
-            console.error('Erreur lors de la récupération du profil', error);
+            console.error('Error retrieving profile', error);
           }
         );
       }

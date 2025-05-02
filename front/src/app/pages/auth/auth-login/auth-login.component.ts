@@ -6,6 +6,7 @@ import { AuthService } from '@services/auth.service';
 import { NavbarComponent } from '@components/navbar/navbar.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FormComponent } from '@shared/form/form.component';
+import { ThemeService } from '@services/theme.service';
 import type { IFormConfig, IFormField, IFormGroup, ValidatorFn } from '@interfaces/form.interface';
 
 @Component({
@@ -15,6 +16,8 @@ import type { IFormConfig, IFormField, IFormGroup, ValidatorFn } from '@interfac
   imports: [CommonModule, NavbarComponent, FooterComponent, FormComponent, ReactiveFormsModule],
 })
 export class AuthLoginComponent implements OnInit {
+  isDarkMode = false;
+
   loginConfig: IFormConfig = {
     fields: [
       {
@@ -52,10 +55,16 @@ export class AuthLoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
+    // S'abonner aux changements de thème
+    this.themeService.darkMode$.subscribe(isDark => {
+      this.isDarkMode = isDark;
+    });
+
     const email: string | null = localStorage.getItem('email');
     const password: string | null = localStorage.getItem('password');
     if (email && password) {

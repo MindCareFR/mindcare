@@ -7,6 +7,7 @@ import { FormComponent } from '@shared/form/form.component';
 import { IFormConfig, IFormField, IFormGroup } from '@interfaces/form.interface';
 import { AuthService } from '@services/auth.service';
 import { Router } from '@angular/router';
+import { ThemeService } from '@services/theme.service';
 import type { ValidatorFn } from '@interfaces/form.interface';
 
 @Component({
@@ -17,6 +18,7 @@ import type { ValidatorFn } from '@interfaces/form.interface';
 })
 export class AuthSignupComponent implements OnInit {
   appName = 'MindCare';
+  isDarkMode = false;
 
   signupConfig: Record<string, IFormConfig> = {
     user: {
@@ -349,10 +351,16 @@ export class AuthSignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
+    // S'abonner aux changements de thème
+    this.themeService.darkMode$.subscribe(isDark => {
+      this.isDarkMode = isDark;
+    });
+
     this.setInitialFormValues();
   }
 

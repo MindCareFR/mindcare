@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '@services/profile.service';
 import { ProfileData } from '../user-profile.component';
+import { UserStateService } from '@services/user-state.service'; // Importation du UserStateService
 
 @Component({
   selector: 'app-profile-form',
@@ -30,7 +31,10 @@ export class ProfileFormComponent implements OnInit {
   // États
   loading = false;
 
-  constructor(private profileService: ProfileService) {}
+  constructor(
+    private profileService: ProfileService,
+    private userStateService: UserStateService // Injection du UserStateService
+  ) {}
 
   ngOnInit(): void {
     console.log('Initialisation du formulaire de profil');
@@ -46,16 +50,16 @@ export class ProfileFormComponent implements OnInit {
   resetForm(): void {
     // Informations de base
     this.editableProfile.basic = {
-      firstname: this.profileData.firstname || '',
-      lastname: this.profileData.lastname || '',
-      email: this.profileData.email || '',
-      phone: this.profileData.phone || '',
-      address: this.profileData.address || '',
-      address_complement: this.profileData.address_complement || '',
-      zipcode: this.profileData.zipcode || '',
-      city: this.profileData.city || '',
-      country: this.profileData.country || '',
-      birthdate: this.profileData.birthdate || '',
+      firstname: this.profileData.firstname ?? '',
+      lastname: this.profileData.lastname ?? '',
+      email: this.profileData.email ?? '',
+      phone: this.profileData.phone ?? '',
+      address: this.profileData.address ?? '',
+      address_complement: this.profileData.address_complement ?? '',
+      zipcode: this.profileData.zipcode ?? '',
+      city: this.profileData.city ?? '',
+      country: this.profileData.country ?? '',
+      birthdate: this.profileData.birthdate ?? '',
     };
 
     // Informations professionnelles (si applicable)
@@ -81,7 +85,7 @@ export class ProfileFormComponent implements OnInit {
         certification: professionalData.certification || '',
         languages: languages,
         specialties: specialties,
-        is_anonymous: professionalData.is_anonymous || false,
+        is_anonymous: professionalData.is_anonymous ?? false,
       };
 
       console.log('Profil professionnel initialisé:', this.editableProfile.professional);
@@ -91,9 +95,9 @@ export class ProfileFormComponent implements OnInit {
     // Informations patient (si applicable)
     if (this.isPatient() && this.profileData.patient) {
       this.editableProfile.patient = {
-        gender: this.profileData.patient.gender || '',
-        birthdate: this.profileData.patient.birthdate || '',
-        is_anonymous: this.profileData.patient.is_anonymous || false,
+        gender: this.profileData.patient.gender ?? '',
+        birthdate: this.profileData.patient.birthdate ?? '',
+        is_anonymous: this.profileData.patient.is_anonymous ?? false,
       };
     }
   }
@@ -166,6 +170,12 @@ export class ProfileFormComponent implements OnInit {
       next: basicResponse => {
         console.log('Informations de base mises à jour:', basicResponse);
 
+        // Création d'un objet pour mise à jour du state utilisateur
+        const userProfileUpdate = {
+          ...basicResponse,
+          role: this.profileData.role, // Conserver le rôle actuel
+        };
+
         // Si professionnel, mettre à jour les informations professionnelles
         if (this.isProfessional()) {
           this.profileService
@@ -173,6 +183,11 @@ export class ProfileFormComponent implements OnInit {
             .subscribe({
               next: proResponse => {
                 console.log('Informations professionnelles mises à jour:', proResponse);
+
+                // Mettre à jour le state utilisateur avec les nouvelles données
+                userProfileUpdate.professional = proResponse;
+                this.userStateService.updateUserProfile(userProfileUpdate);
+
                 this.loading = false;
                 this.formSubmitted.emit({
                   basic: basicResponse,
@@ -188,6 +203,9 @@ export class ProfileFormComponent implements OnInit {
               },
             });
         } else {
+          // Pour les non-professionnels, mettre à jour le state utilisateur immédiatement
+          this.userStateService.updateUserProfile(userProfileUpdate);
+
           this.loading = false;
           this.formSubmitted.emit({ basic: basicResponse });
         }

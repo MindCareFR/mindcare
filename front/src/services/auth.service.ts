@@ -17,6 +17,7 @@ export interface AuthResponse {
 export class AuthService {
   // URL de l'API
   private apiUrl = 'http://localhost:8000/api/auth';
+  private profileUrl = 'http://localhost:8000/api/profile';
 
   // Stockage de l'utilisateur connecté (BehaviorSubject)
   private currentUserSubject = new BehaviorSubject<any>(null);
@@ -64,61 +65,23 @@ export class AuthService {
    * stocke le token et l'objet utilisateur si la connexion est réussie.
    */
   login(email: string, password: string): Observable<AuthResponse | null> {
-    console.log('Login attempt with email:', email);
-
-    // Définir les en-têtes
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    });
-
-    console.log('Sending request to:', `${this.apiUrl}/login`);
-    console.log('Request payload:', { email, password: '********' });
-
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/login`, { email, password }, { headers })
-      .pipe(
-        tap(response => {
-          console.log('Raw login response:', response);
-          if (response && response.token) {
-            console.log('Token received, storing in localStorage');
-            localStorage.setItem(this.tokenKey, response.token);
-          } else {
-            console.warn('No token in response. Response:', response);
-          }
-
-          if (response && response.user) {
-            console.log('User data received, updating current user');
-            this.currentUserSubject.next(response.user);
-          } else {
-            console.warn('No user data in response');
-          }
-        }),
-        map(response => {
-          if (response && response.token) {
-            return response;
-          }
-          console.warn('Invalid response format, returning null');
-          return null;
-        }),
-        catchError(error => {
-          console.error('Login error:', error);
-          if (error.status) {
-            console.error('HTTP Status:', error.status);
-          }
-          if (error.error) {
-            console.error('Error details:', error.error);
-
-            // Afficher message d'erreur convivial
-            if (error.error.message === 'Invalid credentials') {
-              console.log('Identifiants invalides - email ou mot de passe incorrect');
-            } else if (error.error.error === 'email_not_verified') {
-              console.log('Email non vérifié - veuillez vérifier votre boîte mail');
-            }
-          }
-          return of(null);
-        })
-      );
+    // Reste du code inchangé...
+    // ...
+    // Retourner le résultat
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap(response => {
+        if (response && response.token) {
+          localStorage.setItem(this.tokenKey, response.token);
+        }
+        if (response && response.user) {
+          this.currentUserSubject.next(response.user);
+        }
+      }),
+      catchError(error => {
+        console.error('Login error:', error);
+        return of(null);
+      })
+    );
   }
 
   /**
@@ -140,7 +103,8 @@ export class AuthService {
       Authorization: `Bearer ${token}`,
     });
 
-    return this.http.get<any>(`${this.apiUrl}/user-profile`, { headers }).pipe(
+    // CORRECTION: Utiliser la route correcte pour récupérer le profil
+    return this.http.get<any>(`${this.profileUrl}/me`, { headers }).pipe(
       tap(user => {
         console.log('User profile data received:', user ? 'success' : 'empty');
         if (user) {
@@ -149,12 +113,30 @@ export class AuthService {
       }),
       catchError(error => {
         console.error('Error fetching user profile:', error);
-        // Commenté pour éviter la boucle infinie pendant le débogage
-        // if (error.status === 401) {
-        //   console.log('Authentication error, logging out');
-        //   this.logout();
-        // }
         return of(null);
+      })
+    );
+  }
+
+  /**
+   * Change le mot de passe de l'utilisateur
+   */
+  changePassword(data: { currentPassword: string; newPassword: string }): Observable<any> {
+    const token = this.getToken();
+    if (!token) {
+      return of({ success: false, message: 'Non authentifié' });
+    }
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.post(`${this.profileUrl}/change-password`, data, { headers }).pipe(
+      catchError(error => {
+        console.error('Erreur lors du changement de mot de passe:', error);
+        return of({ success: false, message: error.message || 'Une erreur est survenue' });
       })
     );
   }

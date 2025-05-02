@@ -1,15 +1,16 @@
 <app-navbar></app-navbar>
 
 <div class="relative">
+  <!-- Message de succès -->
   <div
     *ngIf="successMessage"
-    class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded"
+    class="bg-green-100 dark:bg-green-900/20 border-l-4 border-green-500 dark:border-green-800 text-green-700 dark:text-green-300 p-4 mb-4 rounded"
   >
     <div class="flex">
       <div class="flex-shrink-0">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 text-green-500"
+          class="h-5 w-5 text-green-500 dark:text-green-400"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -26,15 +27,16 @@
     </div>
   </div>
 
+  <!-- Message d'erreur -->
   <div
     *ngIf="errorMessage"
-    class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded"
+    class="bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 dark:border-red-800 text-red-700 dark:text-red-300 p-4 mb-4 rounded"
   >
     <div class="flex">
       <div class="flex-shrink-0">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 text-red-500"
+          class="h-5 w-5 text-red-500 dark:text-red-400"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -51,6 +53,7 @@
     </div>
   </div>
 
+  <!-- Fond décoratif avec support du mode sombre -->
   <div
     aria-hidden="true"
     class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20"
@@ -63,6 +66,7 @@
     ></div>
   </div>
 
+  <!-- Contenu principal -->
   <div class="max-w-7xl flex justify-center mx-auto px-6 md:px-12 xl:px-6 md:min-h-screen">
     <div
       class="relative flex flex-col gap-y-20 pt-36 w-full lg:flex-row lg:gap-x-10 lg:pt-16 lg:gap-y-0"
