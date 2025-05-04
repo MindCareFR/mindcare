@@ -38,4 +38,36 @@ class Appointment extends Model
     {
         return $this->belongsTo(UserPatient::class, 'patient_uuid', 'uuid');
     }
+
+    // Scopes pour filtrer facilement
+    public function scopeUpcoming($query)
+    {
+        return $query->where('start_time', '>', now());
+    }
+
+    public function scopePast($query)
+    {
+        return $query->where('end_time', '<', now());
+    }
+
+    public function scopeStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    // Méthodes utilitaires
+    public function isPast()
+    {
+        return $this->end_time < now();
+    }
+
+    public function isUpcoming()
+    {
+        return $this->start_time > now();
+    }
+
+    public function isCanceled()
+    {
+        return $this->status === 'canceled';
+    }
 }
