@@ -30,7 +30,8 @@ export class ProfessionnelsDeSanteComponent{
   pageSize = 12;
   doctors = [
     {
-      name: 'Dr. Alice',
+      name: 'Alice',
+      lastname: 'Moireau',
       note: 9,
       ans: 15,
       diplome: 'PhD',
@@ -40,6 +41,55 @@ export class ProfessionnelsDeSanteComponent{
       image: 'https://picsum.photos/200/300',
       activeTab: 'principal'
     },
+    {
+      name: 'Alice',
+      lastname: 'Moireau',
+      note: 9,
+      ans: 15,
+      diplome: 'PhD',
+      approche: 'Cognitive Therapy',
+      travaux: 'Anxiety, Depression',
+      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
+      image: 'https://picsum.photos/200/300',
+      activeTab: 'principal'
+    },
+    {
+      name: 'Alice',
+      lastname: 'Moireau',
+      note: 9,
+      ans: 15,
+      diplome: 'PhD',
+      approche: 'Cognitive Therapy',
+      travaux: 'Anxiety, Depression',
+      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
+      image: 'https://picsum.photos/200/300',
+      activeTab: 'principal'
+    },
+    {
+      name: 'Alice',
+      lastname: 'Moireau',
+      note: 9,
+      ans: 15,
+      diplome: 'PhD',
+      approche: 'Cognitive Therapy',
+      travaux: 'Anxiety, Depression',
+      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
+      image: 'https://picsum.photos/200/300',
+      activeTab: 'principal'
+    },
+    {
+      name: 'Alice',
+      lastname: 'Moireau',
+      note: 9,
+      ans: 15,
+      diplome: 'PhD',
+      approche: 'Cognitive Therapy',
+      travaux: 'Anxiety, Depression',
+      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
+      image: 'https://picsum.photos/200/300',
+      activeTab: 'principal'
+    },
+
   ];
 
   get paginatedDoctors() {
