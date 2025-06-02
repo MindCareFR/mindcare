@@ -11,7 +11,7 @@
         <div *ngIf="dropdowns[filter.key]" class="absolute mt-2 bg-primary border rounded-xl shadow-lg z-10 w-48">
           <button *ngFor="let option of filter.options"
                   (click)="selectOption(filter.key, option)"
-                  class="block px-4 py-2 w-full text-left hover:bg-gray-100">
+                  class="block px-4 py-2 w-full text-left ">
             {{ option }}
           </button>
         </div>
