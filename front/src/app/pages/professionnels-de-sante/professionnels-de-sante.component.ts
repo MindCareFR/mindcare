@@ -41,19 +41,19 @@ export class ProfessionnelsDeSanteComponent {
   doctors = [
     {
       name: 'Alice', lastname: 'Moireau', sex: 'Femme',
-      note: 9, ans: 15, diplome: 'PhD',
+      note: "9", ans: "15", diplome: 'PhD',
       approche: 'Cognitive Therapy',
       travaux: 'Anxiety, Depression',
-      histoire: '...',
+      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
       image: 'https://picsum.photos/200/300',
       activeTab: 'principal',
     },
     {
       name: 'Bruno', lastname: 'Lacombe', sex: 'Homme',
-      note: 8, ans: 6, diplome: 'MSc',
+      note: "8", ans: "6", diplome: 'MSc',
       approche: 'Gestalt',
       travaux: 'Stress, Insomnie',
-      histoire: '...',
+      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
       image: 'https://picsum.photos/200/301',
       activeTab: 'principal',
     },
@@ -85,8 +85,7 @@ export class ProfessionnelsDeSanteComponent {
     const okTrend = !f.recommended.includes('Tendance') || d.ans  >= 10;
 
     // 👇 here are the diplomas for "Pro.")
-    const okPro   = !f.recommended.includes('Pro') ||
-      STRONG_DIPLOMAS.some(sd => lc(d.diplome).includes(sd));
+    const okPro = !f.recommended.includes('Pro') || STRONG_DIPLOMAS.some(sd => lc(d.diplome).includes(sd));
 
     if (!(okTop && okTrend && okPro)) return false;
   }
@@ -111,8 +110,8 @@ export class ProfessionnelsDeSanteComponent {
     this.currentPage = 1;
   }
 
-  truncateText(text: string, maxLength: number): string {
-    if (!text || text.length <= maxLength) return text;
-    return text.slice(0, maxLength).trimEnd() + '...';
-    }
+  truncateText(text: string, maxLength: number = 100): string {
+  if (!text || text.length <= maxLength) return text;
+  return text.slice(0, maxLength).trimEnd() + '...';
+}
 }
