@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormsModule, MaxLengthValidator } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
 import { NavbarComponent } from '@components/header/header.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FiltresComponent } from '@components/filtres/filtres.component';
+import { FiltersPayload, FilterDef } from '@interfaces/profesionnel.interface';
 
 
 @Component({
@@ -24,97 +25,81 @@ import { FiltresComponent } from '@components/filtres/filtres.component';
   ],
   templateUrl: './professionnels-de-sante.component.html',
 })
-export class ProfessionnelsDeSanteComponent{
-  activeTab: string = "principal";
+export class ProfessionnelsDeSanteComponent {
   currentPage = 1;
   pageSize = 12;
+
+  selectedFilters: FiltersPayload = {
+    symptoms: [],
+    approach: [],
+    sex: [],
+    recommended: [],
+  };
+
   doctors = [
     {
-      name: 'Alice',
-      lastname: 'Moireau',
-      note: 9,
-      ans: 15,
-      diplome: 'PhD',
+      name: 'Alice', lastname: 'Moireau', sex: 'Femme',
+      note: 9, ans: 15, diplome: 'PhD',
       approche: 'Cognitive Therapy',
       travaux: 'Anxiety, Depression',
-      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
+      histoire: '...',
       image: 'https://picsum.photos/200/300',
-      activeTab: 'principal'
+      activeTab: 'principal',
     },
     {
-      name: 'Alice',
-      lastname: 'Moireau',
-      note: 9,
-      ans: 15,
-      diplome: 'PhD',
-      approche: 'Cognitive Therapy',
-      travaux: 'Anxiety, Depression',
-      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
-      image: 'https://picsum.photos/200/300',
-      activeTab: 'principal'
+      name: 'Bruno', lastname: 'Lacombe', sex: 'Homme',
+      note: 8, ans: 6, diplome: 'MSc',
+      approche: 'Gestalt',
+      travaux: 'Stress, Insomnie',
+      histoire: '...',
+      image: 'https://picsum.photos/200/301',
+      activeTab: 'principal',
     },
-    {
-      name: 'Alice',
-      lastname: 'Moireau',
-      note: 9,
-      ans: 15,
-      diplome: 'PhD',
-      approche: 'Cognitive Therapy',
-      travaux: 'Anxiety, Depression',
-      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
-      image: 'https://picsum.photos/200/300',
-      activeTab: 'principal'
-    },
-    {
-      name: 'Alice',
-      lastname: 'Moireau',
-      note: 9,
-      ans: 15,
-      diplome: 'PhD',
-      approche: 'Cognitive Therapy',
-      travaux: 'Anxiety, Depression',
-      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
-      image: 'https://picsum.photos/200/300',
-      activeTab: 'principal'
-    },
-    {
-      name: 'Alice',
-      lastname: 'Moireau',
-      note: 9,
-      ans: 15,
-      diplome: 'PhD',
-      approche: 'Cognitive Therapy',
-      travaux: 'Anxiety, Depression',
-      histoire: "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
-      image: 'https://picsum.photos/200/300',
-      activeTab: 'principal'
-    },
-
   ];
 
+  get filteredDoctors() {
+    const f = this.selectedFilters;
+    const hasAny =
+      f.symptoms.length || f.approach.length || f.sex.length || f.recommended.length;
+    if (!hasAny) return this.doctors;
+
+    return this.doctors.filter(d => this.matchesDoctor(d, f));
+  }
+
+  private matchesDoctor(d: any, f: FiltersPayload): boolean {
+    const lc = (s: string) => (s || '').toLowerCase();
+
+    if (f.approach.length && !f.approach.some((a: string) => lc(d.approche).includes(lc(a)))) return false;
+    if (f.symptoms.length && !f.symptoms.every((s: string) => lc(d.travaux).includes(lc(s)))) return false;
+    if (f.sex.length && !f.sex.includes(d.sex)) return false;
+
+    if (f.recommended.length) {
+      const okTop   = !f.recommended.includes('Top')      || d.note >= 9;
+      const okTrend = !f.recommended.includes('Tendance') || d.ans  >= 10;
+      const okPro   = !f.recommended.includes('Pro')      || /phd/i.test(d.diplome);
+      if (!(okTop && okTrend && okPro)) return false;
+    }
+    return true;
+  }
+
   get paginatedDoctors() {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    return this.doctors.slice(startIndex, startIndex + this.pageSize);
+    const list = this.filteredDoctors;
+    const start = (this.currentPage - 1) * this.pageSize;
+    return list.slice(start, start + this.pageSize);
   }
 
-  previousPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
+  previousPage(): void { if (this.currentPage > 1) this.currentPage--; }
+  nextPage(): void {
+    if (this.currentPage * this.pageSize < this.filteredDoctors.length) this.currentPage++;
   }
 
-  nextPage() {
-    if (this.currentPage * this.pageSize < this.doctors.length) {
-      this.currentPage++;
-    }
+  onFiltersChange(payload: FiltersPayload): void {
+    this.selectedFilters = payload;
+    this.currentPage = 1;
   }
 
   truncateText(text: string, maxLength: number): string {
-    if (text.length <= maxLength) {
-      return text;
+    if (!text || text.length <= maxLength) return text;
+    return text.slice(0, maxLength).trimEnd() + '...';
     }
-    let trimmed = text.slice(0, maxLength).trimEnd();
-    return trimmed + '...';
-  }
-
 }
