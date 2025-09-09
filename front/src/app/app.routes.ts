@@ -22,7 +22,7 @@ export const routes: Routes = [
   { path: 'auth/signup', component: AuthSignupComponent },
   { path: 'conference', component: ConferenceComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'professionnels', component: ProfessionnelsDeSanteComponent },
+  { path: 'professionals', component: ProfessionnelsDeSanteComponent },
   {
     path: 'dashboard',
     component: DashboardComponent,
