@@ -4,6 +4,7 @@ export interface FiltersPayload {
   approach: string[];
   sex: string[];
   recommended: string[];
+  diplome: string[];
 }
 
 export interface FilterDef<K extends keyof FiltersPayload = keyof FiltersPayload> {

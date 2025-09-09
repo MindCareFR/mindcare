@@ -17,6 +17,7 @@ export class FiltresComponent {
     { key: 'approach',    label: 'Approche',    options: ['Cognitive Therapy', 'Gestalt', 'Méditation', 'Hypnose'] },
     { key: 'sex',         label: 'Sexe',        options: ['Femme', 'Homme', 'Autre'] },
     { key: 'recommended', label: 'Recommandé',  options: ['Top', 'Tendance', 'Pro'] },
+    { key: 'diplome',     label: 'Diplôme',     options: ['PhD', 'MSc', 'MD', 'PsyD'] },
   ];
 
   dropdowns: Partial<Record<keyof FiltersPayload, boolean>> = {};
@@ -26,6 +27,7 @@ export class FiltresComponent {
     approach: [],
     sex: [],
     recommended: [],
+    diplome: [],
   };
 
   toggleDropdown(key: keyof FiltersPayload, e?: Event): void {
@@ -69,7 +71,7 @@ export class FiltresComponent {
   }
 
   clearAll(): void {
-    this.selected = { symptoms: [], approach: [], sex: [], recommended: [] };
+    this.selected = { symptoms: [], approach: [], sex: [], recommended: [], diplome: [] };
     this.emitSelected();
   }
 

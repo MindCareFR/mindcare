@@ -25,6 +25,7 @@ import { FiltersPayload, FilterDef } from '@interfaces/profesionnel.interface';
   ],
   templateUrl: './professionnels-de-sante.component.html',
 })
+
 export class ProfessionnelsDeSanteComponent {
   currentPage = 1;
   pageSize = 12;
@@ -34,6 +35,7 @@ export class ProfessionnelsDeSanteComponent {
     approach: [],
     sex: [],
     recommended: [],
+    diplome: [],
   };
 
   doctors = [
@@ -67,20 +69,31 @@ export class ProfessionnelsDeSanteComponent {
   }
 
   private matchesDoctor(d: any, f: FiltersPayload): boolean {
-    const lc = (s: string) => (s || '').toLowerCase();
+  const lc = (s: string) => (s || '').toLowerCase();
+  const STRONG_DIPLOMAS = ['md', 'des', 'phd'];
 
-    if (f.approach.length && !f.approach.some((a: string) => lc(d.approche).includes(lc(a)))) return false;
-    if (f.symptoms.length && !f.symptoms.every((s: string) => lc(d.travaux).includes(lc(s)))) return false;
-    if (f.sex.length && !f.sex.includes(d.sex)) return false;
+  if (f.approach.length && !f.approach.some(a => lc(d.approche).includes(lc(a)))) return false;
 
-    if (f.recommended.length) {
-      const okTop   = !f.recommended.includes('Top')      || d.note >= 9;
-      const okTrend = !f.recommended.includes('Tendance') || d.ans  >= 10;
-      const okPro   = !f.recommended.includes('Pro')      || /phd/i.test(d.diplome);
-      if (!(okTop && okTrend && okPro)) return false;
-    }
-    return true;
+  if (f.symptoms.length && !f.symptoms.every(s => lc(d.travaux).includes(lc(s)))) return false;
+
+  if (f.sex.length && !f.sex.includes(d.sex)) return false;
+
+  if (f.diplome.length && !f.diplome.some(dip => lc(d.diplome).includes(lc(dip)))) return false;
+
+  if (f.recommended.length) {
+    const okTop   = !f.recommended.includes('Top')      || d.note >= 9;
+    const okTrend = !f.recommended.includes('Tendance') || d.ans  >= 10;
+
+    // 👇 here are the diplomas for "Pro.")
+    const okPro   = !f.recommended.includes('Pro') ||
+      STRONG_DIPLOMAS.some(sd => lc(d.diplome).includes(sd));
+
+    if (!(okTop && okTrend && okPro)) return false;
   }
+
+  return true;
+}
+
 
   get paginatedDoctors() {
     const list = this.filteredDoctors;
