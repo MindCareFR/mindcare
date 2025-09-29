@@ -11,7 +11,7 @@ class UserPatient extends Model
     use HasUuids;
 
     protected $table = 'user_patients';
-    
+
     protected $primaryKey = 'uuid';
 
     public $timestamps = false;

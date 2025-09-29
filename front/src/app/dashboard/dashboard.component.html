@@ -1,11 +1,7 @@
+<!-- Modification du layout principal -->
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
   <!-- Header -->
-  <app-header
-    [appName]="appName"
-    [userName]="userProfile.name"
-    (toggleSidebarEvent)="toggleSidebar()"
-  >
-  </app-header>
+  <app-navbar></app-navbar>
 
   <div class="flex pt-16">
     <app-sidebar
@@ -13,13 +9,10 @@
       [userName]="userProfile.name"
       [userAvatar]="userProfile.avatar"
       [notifications]="userProfile.notifications"
-    >
-    </app-sidebar>
+    ></app-sidebar>
 
-    <div
-      class="flex-1 p-4 md:p-6 lg:ml-64 transition-all duration-300"
-      [ngClass]="{ 'lg:ml-0': !isSidebarOpen }"
-    >
+    <!-- Modifier cette div pour réduire l'espacement -->
+    <div class="flex-1 transition-all duration-300" [ngClass]="{ 'lg:ml-0': !isSidebarOpen }">
       <router-outlet></router-outlet>
     </div>
   </div>
