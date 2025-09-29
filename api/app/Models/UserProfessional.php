@@ -2,28 +2,43 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class UserProfessional extends User
+class UserProfessional extends Model
 {
-  protected $table = 'user_professionals';
+    use HasUuids;
 
-  protected $fillable = [
-    'languages',
-    'experience',
-    'certification',
-    'company_name',
-    'medical_identification_number',
-    'company_identification_number',
-  ];
+    protected $table = 'user_professionals';
 
-  protected $casts = [
-    'languages' => 'array',
-    'experience' => 'integer',
-  ];
+    protected $primaryKey = 'uuid';
 
-  public function therapyDomains(): BelongsToMany
-  {
-    return $this->belongsToMany(TherapyDomain::class, 'professional_therapy_domain', 'professional_uuid', 'therapy_domain_id');
-  }
+    public $timestamps = false;
+
+    protected $fillable = [
+        'uuid',
+        'languages',
+        'experience',
+        'certification',
+        'company_name',
+        'medical_identification_number',
+        'company_identification_number',
+    ];
+
+    protected $casts = [
+        'languages' => 'array',
+        'experience' => 'integer',
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'uuid', 'uuid');
+    }
+
+    public function therapyDomains(): BelongsToMany
+    {
+        return $this->belongsToMany(TherapyDomain::class, 'professional_therapy_domain', 'professional_uuid', 'therapy_domain_id');
+    }
 }

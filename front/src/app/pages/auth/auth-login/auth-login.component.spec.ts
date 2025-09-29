@@ -2,8 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthLoginComponent } from './auth-login.component';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { NavbarComponent } from '@components/navbar/navbar.component';
+import { FooterComponent } from '@components/footer/footer.component';
+import { FormComponent } from '@shared/form/form.component';
 
 class MockAuthService {
   login = jasmine.createSpy('login').and.returnValue(of({ token: 'mockToken' }));
@@ -11,6 +15,10 @@ class MockAuthService {
 
 class MockRouter {
   navigate = jasmine.createSpy('navigate');
+}
+
+class MockActivatedRoute {
+  queryParams = of({});
 }
 
 describe('AuthLoginComponent', (): void => {
@@ -21,12 +29,22 @@ describe('AuthLoginComponent', (): void => {
 
   beforeEach(async (): Promise<void> => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, AuthLoginComponent],
+      imports: [ReactiveFormsModule, CommonModule, AuthLoginComponent],
       providers: [
         { provide: AuthService, useClass: MockAuthService },
         { provide: Router, useClass: MockRouter },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        FormBuilder,
       ],
-    }).compileComponents();
+    })
+      .overrideComponent(AuthLoginComponent, {
+        set: {
+          imports: [ReactiveFormsModule, CommonModule],
+          // Mock les composants que vous n'avez pas besoin de tester
+          providers: [],
+        },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(AuthLoginComponent);
     component = fixture.componentInstance;
@@ -50,10 +68,13 @@ describe('AuthLoginComponent', (): void => {
   });
 
   it('should submit the form when valid', (): void => {
+    // Créer un formulaire avec la structure attendue (credentials.email, credentials.password)
     const formGroup = new FormGroup({
-      email: new FormBuilder().control('test@example.com'),
-      password: new FormBuilder().control('password123'),
-      remember: new FormBuilder().control(true),
+      credentials: new FormGroup({
+        email: new FormBuilder().control('test@example.com'),
+        password: new FormBuilder().control('password123'),
+        remember: new FormBuilder().control(true),
+      }),
     });
 
     formGroup.markAsTouched();
@@ -69,10 +90,13 @@ describe('AuthLoginComponent', (): void => {
   it('should not submit the form when invalid', (): void => {
     const fb = new FormBuilder();
 
+    // Créer un formulaire avec la structure attendue (credentials.email, credentials.password)
     const formGroup = fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      remember: [false],
+      credentials: fb.group({
+        email: ['', Validators.required],
+        password: ['', Validators.required],
+        remember: [false],
+      }),
     });
 
     spyOn(formGroup, 'markAllAsTouched');
@@ -88,10 +112,13 @@ describe('AuthLoginComponent', (): void => {
   it('should handle login error', (): void => {
     mockAuthService.login.and.returnValue(of(null));
 
+    // Créer un formulaire avec la structure attendue (credentials.email, credentials.password)
     const formGroup = new FormGroup({
-      email: new FormBuilder().control('test@example.com'),
-      password: new FormBuilder().control('wrongpassword'),
-      remember: new FormBuilder().control(false),
+      credentials: new FormGroup({
+        email: new FormBuilder().control('test@example.com'),
+        password: new FormBuilder().control('wrongpassword'),
+        remember: new FormBuilder().control(false),
+      }),
     });
 
     spyOn(formGroup, 'setErrors');
@@ -102,5 +129,11 @@ describe('AuthLoginComponent', (): void => {
     expect(formGroup.setErrors).toHaveBeenCalledWith({
       invalidCredentials: true,
     });
+  });
+
+  afterEach(() => {
+    // Nettoyage après chaque test
+    localStorage.removeItem('email');
+    localStorage.removeItem('password');
   });
 });
