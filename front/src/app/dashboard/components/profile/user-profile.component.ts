@@ -67,7 +67,7 @@ export class UserProfileComponent implements OnInit {
   constructor(
     private readonly profileService: ProfileService,
     private readonly router: Router,
-    private readonly decryptionService: DecryptionService 
+    private readonly decryptionService: DecryptionService
   ) {}
 
   ngOnInit(): void {
@@ -106,7 +106,7 @@ export class UserProfileComponent implements OnInit {
         console.log('Données du profil chargées:', data);
 
         this.profileData = this.decryptionService.decryptObject(data);
-    
+
         console.log('Données du profil déchiffrées:', this.profileData);
         this.loading = false;
       },
