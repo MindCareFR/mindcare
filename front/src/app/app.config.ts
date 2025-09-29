@@ -17,8 +17,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(), // Ajoutez cette ligne
     providePrimeNG({
       theme: {
-        preset: Aura
-      }
-    })
+        preset: Aura,
+      },
+    }),
   ],
 };

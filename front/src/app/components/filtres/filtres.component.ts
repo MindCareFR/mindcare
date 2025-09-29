@@ -13,11 +13,19 @@ export class FiltresComponent {
   @Output() filtersChange = new EventEmitter<FiltersPayload>();
 
   filters: FilterDef[] = [
-    { key: 'symptoms',    label: 'Symptômes',   options: ['Anxiety', 'Depression', 'Stress', 'Insomnie'] },
-    { key: 'approach',    label: 'Approche',    options: ['Cognitive Therapy', 'Gestalt', 'Méditation', 'Hypnose'] },
-    { key: 'sex',         label: 'Sexe',        options: ['Femme', 'Homme', 'Autre'] },
-    { key: 'recommended', label: 'Recommandé',  options: ['Top', 'Tendance', 'Pro'] },
-    { key: 'diplome',     label: 'Diplôme',     options: ['PhD', 'MSc', 'MD', 'PsyD'] },
+    {
+      key: 'symptoms',
+      label: 'Symptômes',
+      options: ['Anxiety', 'Depression', 'Stress', 'Insomnie'],
+    },
+    {
+      key: 'approach',
+      label: 'Approche',
+      options: ['Cognitive Therapy', 'Gestalt', 'Méditation', 'Hypnose'],
+    },
+    { key: 'sex', label: 'Sexe', options: ['Femme', 'Homme', 'Autre'] },
+    { key: 'recommended', label: 'Recommandé', options: ['Top', 'Tendance', 'Pro'] },
+    { key: 'diplome', label: 'Diplôme', options: ['PhD', 'MSc', 'MD', 'PsyD'] },
   ];
 
   dropdowns: Partial<Record<keyof FiltersPayload, boolean>> = {};
@@ -40,12 +48,17 @@ export class FiltresComponent {
   }
 
   closeAll(): void {
-    (Object.keys(this.dropdowns) as Array<keyof FiltersPayload>)
-      .forEach(k => (this.dropdowns[k] = false));
+    (Object.keys(this.dropdowns) as Array<keyof FiltersPayload>).forEach(
+      k => (this.dropdowns[k] = false)
+    );
   }
 
-  @HostListener('document:click') onDocClick(): void { this.closeAll(); }
-  @HostListener('document:keydown.escape') onEsc(): void { this.closeAll(); }
+  @HostListener('document:click') onDocClick(): void {
+    this.closeAll();
+  }
+  @HostListener('document:keydown.escape') onEsc(): void {
+    this.closeAll();
+  }
 
   isSelected(key: keyof FiltersPayload, option: string): boolean {
     return this.selected[key].includes(option);
@@ -88,13 +101,16 @@ export class FiltresComponent {
   hasAnySelection(): boolean {
     return (
       this.selected.symptoms.length +
-      this.selected.approach.length +
-      this.selected.sex.length +
-      this.selected.recommended.length
-    ) > 0;
+        this.selected.approach.length +
+        this.selected.sex.length +
+        this.selected.recommended.length >
+      0
+    );
   }
 
-  trackByOption(index: number, opt: string): string { return opt; }
+  trackByOption(index: number, opt: string): string {
+    return opt;
+  }
   trackByChip(index: number, chip: { key: keyof FiltersPayload; value: string }): string {
     return `${String(chip.key)}:${chip.value}`;
   }
