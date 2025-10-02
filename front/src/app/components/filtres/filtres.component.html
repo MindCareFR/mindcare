@@ -1,0 +1,96 @@
+<div
+  class="w-4/5 mx-auto flex justify-around flex-wrap bg-indigo-300/10 dark:bg-white/10 items-center gap-4 backdrop-blur-2xl shadow-md rounded-2xl p-4"
+  (click)="$event.stopPropagation()"
+  (keydown.escape)="closeAll()"
+>
+  <div *ngFor="let filter of filters" class="relative inline-block text-left">
+    <button
+      (click)="toggleDropdown(filter.key, $event)"
+      class="bg-gray-100 font-medium rounded-xl px-6 py-3 flex items-center bg-primary hover:bg-indigo-600 space-x-2 w-full"
+      [attr.aria-expanded]="dropdowns[filter.key] || false"
+      aria-haspopup="listbox"
+    >
+      <span>{{ filter.label }}</span>
+      <span
+        *ngIf="selected[filter.key].length"
+        class="ml-2 text-xs rounded-full px-2 py-0.5 bg-indigo-600 text-white"
+      >
+        {{ selected[filter.key].length }}
+      </span>
+      <svg
+        class="w-4 h-4 ml-2 transform"
+        [class.rotate-180]="dropdowns[filter.key]"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+
+    <div
+      *ngIf="dropdowns[filter.key]"
+      class="absolute mt-2 bg-primary border rounded-xl shadow-lg z-10 w-56"
+      (mousedown)="$event.stopPropagation()"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="max-h-64 overflow-auto py-2">
+        <ul class="space-y-1">
+          <li *ngFor="let option of filter.options; trackBy: trackByOption">
+            <label class="flex items-center gap-2 px-3 py-1 hover:bg-indigo-500/20 cursor-pointer">
+              <input
+                type="checkbox"
+                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                [checked]="isSelected(filter.key, option)"
+                (click)="$event.stopPropagation()"
+                (change)="toggleOption(filter.key, option)"
+              />
+              <span class="text-sm">{{ option }}</span>
+            </label>
+          </li>
+        </ul>
+      </div>
+
+      <div class="p-3 border-t flex items-center justify-between gap-2">
+        <button type="button" class="text-xs underline" (click)="clearFilter(filter.key, $event)">
+          Сбросить
+        </button>
+        <button
+          type="button"
+          class="text-sm px-3 py-1.5 rounded-lg border"
+          (click)="closeDropdown(filter.key)"
+        >
+          Готово
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w-4/5 mx-auto mt-3 flex flex-wrap gap-2">
+  <ng-container *ngFor="let chip of chips(); trackBy: trackByChip">
+    <span
+      class="inline-flex items-center gap-2 text-sm bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200 px-3 py-1.5 rounded-full border border-indigo-200 dark:border-indigo-800"
+    >
+      <span class="opacity-70">{{ chip.label }}:</span> {{ chip.value }}
+      <button
+        type="button"
+        (click)="remove(chip.key, chip.value)"
+        class="hover:opacity-80"
+        aria-label="Удалить"
+      >
+        ×
+      </button>
+    </span>
+  </ng-container>
+
+  <button
+    *ngIf="hasAnySelection()"
+    type="button"
+    class="text-sm underline ml-2"
+    (click)="clearAll()"
+  >
+    Очистить всё
+  </button>
+</div>
