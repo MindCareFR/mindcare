@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
-import { NavbarComponent } from '@components/header/header.component';
+import { NavbarComponent } from '@components/navbar/navbar.component';
 import { FooterComponent } from '@components/footer/footer.component';
 import { FiltresComponent } from '@components/filtres/filtres.component';
 import { FiltersPayload, FilterDef } from '@interfaces/profesionnel.interface';
@@ -63,6 +63,20 @@ export class ProfessionnelsDeSanteComponent {
       histoire:
         "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
       image: 'https://picsum.photos/200/301',
+      activeTab: 'principal',
+    },
+    {
+      name: 'James ',
+      lastname: 'Dean',
+      sex: 'Homme',
+      note: '9',
+      ans: '8',
+      diplome: 'MSc',
+      approche: 'Gestalt',
+      travaux: 'Stress, Insomnie',
+      histoire:
+        "Je suis psychologue clinicienne, Gestalt thérapeute. J'aide les gens a « faire le tri », a résoudre les problémes actuels et les difficultés dans les relations avec les autres, a apporter",
+      image: 'https://picsum.photos/200/302',
       activeTab: 'principal',
     },
   ];
